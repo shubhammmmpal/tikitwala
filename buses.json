@@ -1,0 +1,162 @@
+[
+  {
+    "busNo": "MP-09-VK-4928",
+    "travelAgency": "69d0df1fd73b42f697c902e8",
+    "busType": "Sleeper",
+    "totalSeats": 36,
+    "deckType": "Double",
+    "images": ["https://busimages.com/mp09vk4928-1.jpg", "https://busimages.com/mp09vk4928-2.jpg"],
+    "amenities": ["WiFi", "Charging Point", "Blanket", "Water Bottle", "CCTV", "Reading Light"],
+    "features": ["AC", "Reclining Seats", "Emergency Exit"]
+  },
+  {
+    "busNo": "MP-04-AB-7854",
+    "travelAgency": "69d0df1fd73b42f697c902e8",
+    "busType": "Seater",
+    "totalSeats": 45,
+    "deckType": "Single",
+    "images": ["https://busimages.com/mp04ab7854.jpg"],
+    "amenities": ["WiFi", "Charging Point", "Snack Box", "GPS"],
+    "features": ["AC", "Pushback Seats"]
+  },
+  {
+    "busNo": "MH-12-XY-3344",
+    "travelAgency": "69d0df1fd73b42f697c902e8",
+    "busType": "Sleeper",
+    "totalSeats": 32,
+    "deckType": "Double",
+    "images": ["https://busimages.com/mh12xy3344.jpg"],
+    "amenities": ["WiFi", "Blanket", "CCTV", "Mobile Charging"],
+    "features": ["AC", "Luxury Interior"]
+  },
+  {
+    "busNo": "RJ-14-PQ-6677",
+    "travelAgency": "69d0df1fd73b42f697c902e8",
+    "busType": "Semi-Sleeper",
+    "totalSeats": 40,
+    "deckType": "Single",
+    "images": ["https://busimages.com/rj14pq6677.jpg"],
+    "amenities": ["WiFi", "Water Bottle", "Reading Light"],
+    "features": ["AC", "Reclining"]
+  },
+  {
+    "busNo": "MP-07-CD-1122",
+    "travelAgency": "69d0df1fd73b42f697c902e8",
+    "busType": "Seater",
+    "totalSeats": 48,
+    "deckType": "Single",
+    "images": ["https://busimages.com/mp07cd1122.jpg"],
+    "amenities": ["Charging Point", "Snack Box", "GPS Tracking"],
+    "features": ["Non-AC", "Pushback"]
+  },
+  {
+    "busNo": "MP-09-EF-9988",
+    "travelAgency": "69d0dfc9ea535be67227ce4b",
+    "busType": "Sleeper",
+    "totalSeats": 36,
+    "deckType": "Double",
+    "images": ["https://busimages.com/mp09ef9988.jpg"],
+    "amenities": ["WiFi", "Blanket", "CCTV", "Water Bottle"],
+    "features": ["AC", "Luxury"]
+  },
+  {
+    "busNo": "CG-05-GH-4455",
+    "travelAgency": "69d0dfc9ea535be67227ce4b",
+    "busType": "Seater",
+    "totalSeats": 42,
+    "deckType": "Single",
+    "images": ["https://busimages.com/cg05gh4455.jpg"],
+    "amenities": ["WiFi", "Charging"],
+    "features": ["AC"]
+  },
+  {
+    "busNo": "MP-03-IJ-7766",
+    "travelAgency": "69d0dfc9ea535be67227ce4b",
+    "busType": "Sleeper",
+    "totalSeats": 34,
+    "deckType": "Double",
+    "images": ["https://busimages.com/mp03ij7766.jpg"],
+    "amenities": ["Blanket", "CCTV", "Reading Light"],
+    "features": ["AC"]
+  },
+  {
+    "busNo": "MP-08-KL-2233",
+    "travelAgency": "69d0dfc9ea535be67227ce4b",
+    "busType": "Semi-Sleeper",
+    "totalSeats": 38,
+    "deckType": "Single",
+    "images": ["https://busimages.com/mp08kl2233.jpg"],
+    "amenities": ["WiFi", "Water Bottle"],
+    "features": ["AC", "Reclining"]
+  },
+  {
+    "busNo": "MP-10-MN-8899",
+    "travelAgency": "69d0dfc9ea535be67227ce4b",
+    "busType": "Sleeper",
+    "totalSeats": 36,
+    "deckType": "Double",
+    "images": ["https://busimages.com/mp10mn8899.jpg"],
+    "amenities": ["WiFi", "Charging Point", "Blanket", "CCTV"],
+    "features": ["AC", "Luxury Interior"]
+  },
+  
+  {
+    "busNo": "MP09AB1234",
+    "travelAgency": "69d0dfc9ea535be67227ce4c",
+    "busType": "AC",
+    "totalSeats": 40,
+    "deckType": "Single",
+    "images": [
+      "https://example.com/bus1-img1.jpg",
+      "https://example.com/bus1-img2.jpg"
+    ],
+    "amenities": ["WiFi", "Charging Point", "Water Bottle"],
+    "features": ["GPS Tracking", "CCTV"]
+  },
+  {
+    "busNo": "MP09CD5678",
+    "travelAgency": "69d0dfc9ea535be67227ce4c",
+    "busType": "Sleeper",
+    "totalSeats": 30,
+    "deckType": "Double",
+    "images": [
+      "https://example.com/bus2-img1.jpg"
+    ],
+    "amenities": ["Blanket", "Pillow"],
+    "features": ["Emergency Exit"]
+  },
+  {
+    "busNo": "MP09EF9012",
+    "travelAgency": "69d0dfc9ea535be67227ce4c",
+    "busType": "Volvo",
+    "totalSeats": 45,
+    "deckType": "Single",
+    "images": [
+      "https://example.com/bus3-img1.jpg"
+    ],
+    "amenities": ["AC", "TV"],
+    "features": ["Fire Extinguisher", "GPS Tracking"]
+  },
+  {
+    "busNo": "MP09GH3456",
+    "travelAgency": "69d0dfc9ea535be67227ce4c",
+    "busType": "Non-AC",
+    "totalSeats": 50,
+    "deckType": "Single",
+    "images": [],
+    "amenities": ["Fan"],
+    "features": []
+  },
+  {
+    "busNo": "MP09IJ7890",
+    "travelAgency": "661234abcd1234abcd123405",
+    "busType": "Luxury",
+    "totalSeats": 35,
+    "deckType": "Double",
+    "images": [
+      "https://example.com/bus5-img1.jpg"
+    ],
+    "amenities": ["Recliner Seats", "Snacks"],
+    "features": ["USB Charging", "Reading Light"]
+  }
+]

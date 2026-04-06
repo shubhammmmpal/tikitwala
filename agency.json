@@ -1,0 +1,98 @@
+[
+    {
+  "name": "VRL Travels",
+  "shortName": "VRLT",
+  "description": "VRL Travels is one of the largest and most trusted private bus operators in South India, established in 1976. With a fleet of over 350 buses, VRL operates across Karnataka, Maharashtra, Goa, Andhra Pradesh, and Telangana, offering daily services on major intercity routes.",
+  "email": "info@vrltravels.com",
+  "phone": "9243100001",
+  "secondaryPhone": "080-25531001",
+  "website": "https://www.vrltravels.in",
+  "address": {
+    "street": "42, 3rd Cross, Patel Street",
+    "city": "Hubli",
+    "state": "Karnataka",
+    "pincode": "580020",
+    "country": "India"
+  },
+  "gstNumber": "29AABCV1234A1Z5",
+  "panNumber": "AABCV1234A",
+  "registrationNumber": "KA05B1234",
+  "logo": "https://example.com/logos/vrl-travels.png",
+  "rating": 4.2,
+  "isActive": true,
+  "operatingRoutes": [
+    "Bangalore - Hubli",
+    "Bangalore - Goa",
+    "Bangalore - Pune",
+    "Mangalore - Bangalore",
+    "Hubli - Mumbai",
+    "Bangalore - Hyderabad",
+    "Belgaum - Bangalore"
+  ]
+},
+{
+  "name": "SRS Travels",
+  "shortName": "SRST",
+  "description": "SRS Travels is a premium intercity bus service provider operating primarily in South India. Known for its Volvo multi-axle fleet and luxury sleeper coaches, SRS connects major cities across Karnataka, Tamil Nadu, Kerala, Andhra Pradesh, and Maharashtra with punctual and comfortable services.",
+  "email": "support@srstravels.in",
+  "phone": "9740100022",
+  "secondaryPhone": "080-41220022",
+  "website": "https://www.srstravels.in",
+  "address": {
+    "street": "No. 18, Shanti Nagar, Mysore Road",
+    "city": "Bangalore",
+    "state": "Karnataka",
+    "pincode": "560025",
+    "country": "India"
+  },
+  "gstNumber": "29AABCS5678B2Z9",
+  "panNumber": "AABCS5678B",
+  "registrationNumber": "KA01C5678",
+  "logo": "https://example.com/logos/srs-travels.png",
+  "rating": 3.9,
+  "isActive": true,
+  "operatingRoutes": [
+    "Bangalore - Chennai",
+    "Bangalore - Coimbatore",
+    "Bangalore - Trivandrum",
+    "Bangalore - Kochi",
+    "Bangalore - Salem",
+    "Bangalore - Madurai",
+    "Bangalore - Vijayawada",
+    "Bangalore - Tirupati"
+  ]
+},
+{
+  "name": "KPN Travels",
+  "shortName": "KPNT",
+  "description": "KPN Travels India is a well-established bus operator headquartered in Salem, Tamil Nadu. Founded in 1989, KPN has grown to become one of the most recognized names in South Indian road transport, offering seater, semi-sleeper, and air-conditioned Volvo buses across Tamil Nadu, Karnataka, Kerala, and Andhra Pradesh.",
+  "email": "bookings@kpntravels.in",
+  "phone": "9842200033",
+  "secondaryPhone": "0427-2440033",
+  "website": "https://www.kpntravels.in",
+  "address": {
+    "street": "52, Five Roads Circle, Omalur Main Road",
+    "city": "Salem",
+    "state": "Tamil Nadu",
+    "pincode": "636004",
+    "country": "India"
+  },
+  "gstNumber": "33AABCK9012C3Z7",
+  "panNumber": "AABCK9012C",
+  "registrationNumber": "TN33D9012",
+  "logo": "https://example.com/logos/kpn-travels.png",
+  "rating": 4.0,
+  "isActive": true,
+  "operatingRoutes": [
+    "Salem - Chennai",
+    "Salem - Bangalore",
+    "Salem - Coimbatore",
+    "Chennai - Coimbatore",
+    "Chennai - Madurai",
+    "Bangalore - Madurai",
+    "Bangalore - Coimbatore",
+    "Coimbatore - Kochi",
+    "Chennai - Trichy"
+  ]
+}
+]

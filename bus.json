@@ -1,0 +1,91 @@
+{
+    "platformType":"BUS",
+    "travelAgency":"abhi travels",
+    "busNo":"MP-09-VK-4928",
+    "seatType":"",
+    "startPoint":"Indore",
+    "endPoint":"Bhopal",
+    "arrivalTime":"",
+    "arrivalDate":"",
+    "departureTime":"",
+    "departureDate":"",
+    "travelDuration":"",
+    "seatAvailble":{
+        type: BusSeatDatabase
+    }
+    "pickUpPoint"[
+        pickupPointName,
+        pickUpTime,
+        pickUpDate,
+    ]
+    dropPoint[
+        DropPoint,
+        DropTime,
+        DropDate
+    ]
+    busImages[
+
+    ]
+    amenities[
+        
+    ]
+    features[
+
+    ]
+    ratings{
+        1: {
+            count,
+            percentage 
+        },
+        2: {
+            count,
+            percentage 
+        },
+        3: {
+            count,
+            percentage 
+        },
+        4: {
+            count,
+            percentage 
+        },
+        5: {
+            count,
+            percentage 
+        }
+    }
+}
+
+bus seats databases
+
+{
+    busId:
+    seats:[
+        {
+            seatType,
+            seatStatus: reserved/unresreved,
+            seatbookedby: M/F/nome
+            seatNo,
+            deck: Upper/Lower,
+            seatFor: M/F/none
+        }
+    ]
+}
+
+
+
+i don wnat to make multiple models i want single model which will contain all of the bus and seats related detail when user register his bus he will submit 
+busNo: 
+travelAgency id 
+busType: ['Seater', 'Sleeper','AC Sleeper' , 'Non-AC Sleeper', 'AC Seater' , 'Non-AC Seater' ,], 
+if user select seater so we dont have to select deckType
+seat type [2+2,]
+then user fill row count
+suppose user type 7 rows 
+then user fill last row seat count 
+if user select sleeper so user have to select give seat type 
+[2+2]or[2+1]
+now i have to select row count for lowerDeck  upperDeck 
+
+deckType: ['Single', 'Double'] 
+images: [{ type: String }] amenities: [{ type: String }], features: [{ type: String }],
