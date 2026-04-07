@@ -8,23 +8,33 @@ const userSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-    required: [true, 'Please add an email'],
     unique: true,
-    match: [
-      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-      'Please add a valid email'
-    ]
+    sparse: true,           // Allows null values
   },
+  // email: {
+  //   type: String,
+  //   required: [true, 'Please add an email'],
+  //   unique: true,
+  //   match: [
+  //     /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+  //     'Please add a valid email'
+  //   ]
+  // },
   phone: {
     type: String,
     required: [true, 'Please add a phone number'],
     unique: true
   },
+  // password: {
+  //   type: String,
+  //   required: [true, 'Please add a password'],
+  //   minlength: 6,
+  //   select: false
+  // },
   password: {
     type: String,
-    required: [true, 'Please add a password'],
-    minlength: 6,
-    select: false
+    select: false,
+    sparse: true            // Optional now
   },
   role: {
     type: String,
@@ -35,6 +45,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     unique: true,
     sparse: true
+  },
+  otp: {
+    type: String,
+    select: false
+  },
+  otpExpiry: {
+    type: Date,
+    select: false
   },
   devices: [{
     deviceId: { type: String, required: true },

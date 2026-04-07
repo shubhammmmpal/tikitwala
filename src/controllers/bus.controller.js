@@ -286,7 +286,7 @@ export const generateBusSeats = async (req, res) => {
         return res.status(400).json({ success: false, message: "seatType and totalRows are required for Seater buses" });
       }
 
-      const [leftSeats, rightSeats] = seatType.split("+").map(Number); // e.g., "2+2" → [2,2]
+      const [rightSeats,leftSeats] = seatType.split("+").map(Number); // e.g., "2+2" → [2,2]
 
       for (let row = 1; row <= totalRows; row++) {
         const currentLeft = leftSeats;
@@ -327,7 +327,7 @@ export const generateBusSeats = async (req, res) => {
         return res.status(400).json({ success: false, message: "seatType, lowerDeckRows and upperDeckRows are required for Sleeper buses" });
       }
 
-      const [leftSeats, rightSeats] = seatType.split("+").map(Number);
+      const [rightSeats,leftSeats ] = seatType.split("+").map(Number);
 
       // Lower Deck
       for (let row = 1; row <= lowerDeckRows; row++) {

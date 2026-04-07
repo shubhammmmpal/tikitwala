@@ -119,6 +119,106 @@ export const signin = async (req, res) => {
   }
 };
 
+export const sendOTP = async (req, res) => {
+  try {
+    const { phone, device } = req.body;
+
+    if (!phone) {
+      return res.status(400).json({ success: false, message: 'Phone number is required' });
+    }
+
+    let user = await User.findOne({ phone });
+
+    // Generate 6 digit OTP
+    const otp = Math.floor(1000 + Math.random() * 9000).toString();
+
+    if (!user) {
+      // Register new user (we'll ask name later or in next step)
+      user = await User.create({
+        phone,
+        name: `User_${phone.slice(-4)}`, // temporary name
+        otp,
+        otpExpiry: new Date(Date.now() + 10 * 60 * 1000), // 10 minutes
+        devices: device ? [device] : []
+      });
+    } else {
+      // Existing user
+      user.otp = otp;
+      user.otpExpiry = new Date(Date.now() + 10 * 60 * 1000);
+      
+      if (device) {
+        const existingDevice = user.devices.find(d => d.deviceId === device.deviceId);
+        if (!existingDevice) {
+          user.devices.push(device);
+        } else {
+          existingDevice.lastLogin = new Date();
+        }
+      }
+      await user.save();
+    }
+
+    // TODO: Send OTP via SMS (Twilio / MSG91 / Fast2SMS etc.)
+    console.log(`OTP for ${phone} is: ${otp}`); // Remove in production
+
+    res.status(200).json({
+      success: true,
+      message: 'OTP sent successfully',
+      data: { phone,otp }
+    });
+
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Verify OTP
+export const verifyOTP = async (req, res) => {
+  try {
+    const { phone, otp, device } = req.body;
+
+    const user = await User.findOne({ phone }).select('+otp +otpExpiry');
+
+    if (!user || !user.otp || !user.otpExpiry) {
+      return res.status(400).json({ success: false, message: 'Invalid request' });
+    }
+
+    if (user.otpExpiry < new Date()) {
+      return res.status(400).json({ success: false, message: 'OTP has expired' });
+    }
+
+    if (user.otp !== otp) {
+      return res.status(400).json({ success: false, message: 'Invalid OTP' });
+    }
+
+    // Clear OTP after successful verification
+    user.otp = undefined;
+    user.otpExpiry = undefined;
+
+    if (device) {
+      const existingDevice = user.devices.find(d => d.deviceId === device.deviceId);
+      if (!existingDevice) user.devices.push(device);
+      else existingDevice.lastLogin = new Date();
+    }
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'Login successful',
+      data: {
+        _id: user._id,
+        name: user.name,
+        phone: user.phone,
+        role: user.role,
+        token: generateToken(user)
+      }
+    });
+
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 // @desc    Auth with Google
 // @route   POST /api/auth/google
 // @access  Public
