@@ -55,7 +55,20 @@ const bookingSchema = new mongoose.Schema({
   arrivalDate: String,
   arrivalTime: String,
 
-  travelDuration: String,        // e.g., "15hr 30min"
+  travelDuration: String, 
+         // e.g., "15hr 30min"
+  pickupPoints: {
+    name: { type: String, required: true },
+    datetime: { type: Date, required: true },
+    order: { type: Number } // sequence of stop
+  },
+
+  // Drop Points
+  dropPoints: {
+    name: { type: String, required: true },
+    datetime: { type: Date, required: true },
+    order: { type: Number }
+  },
 
   // Passengers
   passengers: [passengerSchema],

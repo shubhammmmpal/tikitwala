@@ -17,8 +17,8 @@ const getAdjacentSeat = (seatNo) => {
 
 // ================= BOOK BUS TRIP =================
 export const bookBusTrip = async (req, res) => {
-  const session = await mongoose.startSession();
-  session.startTransaction();
+//   const session = await mongoose.startSession();
+//   session.startTransaction();
 
   try {
     const {
@@ -26,7 +26,9 @@ export const bookBusTrip = async (req, res) => {
       passengers,
       contactEmail,
       contactPhone,
-      selectedSeats
+      selectedSeats,
+      pickupPoint,   
+  dropPoint  
     } = req.body;
 
     const userId = req.user?.id || null;
@@ -43,13 +45,17 @@ export const bookBusTrip = async (req, res) => {
     }
 
     // ================= FETCH TRIP =================
-    const busTrip = await BusTrip.findById(busTripId).session(session);
+    const busTrip = await BusTrip.findById(busTripId);
 
     if (!busTrip) throw new Error("Bus trip not found");
 
     if (busTrip.status !== "active") {
       throw new Error("Trip is not available for booking");
     }
+
+    if (!pickupPoint || !dropPoint) {
+        throw new Error("Pickup and Drop point are required");
+        }
 
     let totalAmount = 0;
     const bookedSeats = [];
@@ -171,6 +177,8 @@ if (
       arrivalDate: busTrip.arrivalDate,
       arrivalTime: busTrip.arrivalTime,
       travelDuration: busTrip.travelDuration,
+      pickupPoints: pickupPoint,
+  dropPoints: dropPoint,
 
       passengers: passengers.map((p, index) => ({
         name: p.name,
@@ -198,11 +206,14 @@ if (
       status: "confirmed"
     });
 
-    await newBooking.save({ session });
-    await busTrip.save({ session });
+    // await newBooking.save({ session });
+    // await busTrip.save({ session });
 
-    await session.commitTransaction();
-    session.endSession();
+    await newBooking.save();
+await busTrip.save();
+
+    // await session.commitTransaction();
+    // session.endSession();
 
     return res.status(201).json({
       success: true,
@@ -211,8 +222,8 @@ if (
     });
 
   } catch (error) {
-    await session.abortTransaction();
-    session.endSession();
+    // await session.abortTransaction();
+    // session.endSession();
 
     return res.status(400).json({
       success: false,

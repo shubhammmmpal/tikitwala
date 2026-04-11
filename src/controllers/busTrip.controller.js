@@ -1,5 +1,6 @@
 import BusTrip from "../models/BusTrip.model.js";
 import Bus from "../models/Bus.model.js";
+import Agency from "../models/Agency.model.js";
 
 // export const createBusTrip = async (req, res) => {
 //   try {
@@ -270,12 +271,31 @@ export const getBusTrips = async (req, res) => {
     if (startPoint) query.startPoint = startPoint;
     if (endPoint) query.endPoint = endPoint;
 
-    const trips = await BusTrip.find(query)
-      .populate("bus", "busNo busType registrationNumber")
-      .sort({ departureDateTime: 1 })
-      .skip((page - 1) * limit)
-      .limit(parseInt(limit));
+    // const trips = await BusTrip.find(query)
+    //   .populate("bus", "travelAgency busNo busType registrationNumber")
+    //   .sort({ departureDateTime: 1 })
+    //   .skip((page - 1) * limit)
+    //   .limit(parseInt(limit));
 
+
+    const trips = await BusTrip.find(query)
+    // .populate("bus", "travelAgency busNo busType registrationNumber")
+  .populate({
+    path: "bus",
+    select: "travelAgency busNo busType registrationNumber",
+    populate: {
+      path: "travelAgency",
+      select: "name"
+    }
+  })
+  .sort({ departureDateTime: 1 })
+  .skip((page - 1) * limit)
+  .limit(parseInt(limit));
+
+console.log(trips[0].bus.travelAgency);
+// console.log(trips[0].bus.toObject());
+// const agency = await Agency.findById("67f8b2c9d5e4a12345678901");
+// console.log(agency);
     const total = await BusTrip.countDocuments(query);
 
     res.status(200).json({
