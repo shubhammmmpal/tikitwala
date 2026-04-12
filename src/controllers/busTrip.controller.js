@@ -455,8 +455,15 @@ export const searchBusTrips = async (req, res) => {
       if (maxPrice) query.basePrice.$lte = Number(maxPrice);
     }
 
-    const trips = await BusTrip.find(query)
-      .populate("bus", "busNo busType ratings images manufacturer model")
+  const trips = await BusTrip.find(query)
+  .populate({
+    path: "bus",
+    select: "travelAgency busNo busType registrationNumber ratings images amenities features manufacturer model",
+    populate: {
+      path: "travelAgency",
+      select: "name"
+    }
+  })
       .select("-seats")                    // Don't send full seats array (too heavy)
       .sort({ departureDateTime: 1 });
 
