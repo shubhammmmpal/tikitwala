@@ -314,8 +314,15 @@ console.log(trips[0].bus.travelAgency);
 export const getBusTripById = async (req, res) => {
   try {
     const trip = await BusTrip.findById(req.params.id)
-      .populate("bus", "busNo busType ratings images amenities features");
-
+      // .populate("bus", "busNo busType ratings images amenities features");
+      .populate({
+    path: "bus",
+    select: "travelAgency busNo busType registrationNumber ratings images amenities features",
+    populate: {
+      path: "travelAgency",
+      select: "name"
+    }
+  })
     if (!trip) {
       return res.status(404).json({ success: false, message: "Bus trip not found" });
     }
