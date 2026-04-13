@@ -17,8 +17,8 @@ const getAdjacentSeat = (seatNo) => {
 
 // ================= BOOK BUS TRIP =================
 export const bookBusTrip = async (req, res) => {
-//   const session = await mongoose.startSession();
-//   session.startTransaction();
+  //   const session = await mongoose.startSession();
+  //   session.startTransaction();
 
   try {
     const {
@@ -27,8 +27,8 @@ export const bookBusTrip = async (req, res) => {
       contactEmail,
       contactPhone,
       selectedSeats,
-      pickupPoint,   
-  dropPoint  
+      pickupPoint,
+      dropPoint,
     } = req.body;
 
     const userId = req.user?.id || null;
@@ -54,8 +54,8 @@ export const bookBusTrip = async (req, res) => {
     }
 
     if (!pickupPoint || !dropPoint) {
-        throw new Error("Pickup and Drop point are required");
-        }
+      throw new Error("Pickup and Drop point are required");
+    }
 
     let totalAmount = 0;
     const bookedSeats = [];
@@ -66,27 +66,28 @@ export const bookBusTrip = async (req, res) => {
       const seatNo = selectedSeats[i];
       const passenger = passengers[i];
 
-      const seat = busTrip.seats.find(s => s.seatNo === seatNo);
+      const seat = busTrip.seats.find((s) => s.seatNo === seatNo);
 
       if (!seat) throw new Error(`Seat ${seatNo} not found`);
 
-    //   if (seat.status !== "available") {
-    //     throw new Error(`Seat ${seatNo} is already booked/blocked`);
-    //   }
-    if (
-  seat.status !== "available" &&
-  !selectedSeatsSet.has(seatNo) // 🔥 allow if it's in same booking
-) {
-  throw new Error(`Seat ${seatNo} is already booked/blocked`);
-}
+      //   if (seat.status !== "available") {
+      //     throw new Error(`Seat ${seatNo} is already booked/blocked`);
+      //   }
+      if (
+        seat.status !== "available" &&
+        !selectedSeatsSet.has(seatNo) // 🔥 allow if it's in same booking
+      ) {
+        throw new Error(`Seat ${seatNo} is already booked/blocked`);
+      }
 
       // ================= GENDER LOGIC =================
       if (seat.seatType === "SLEEPER") {
         const adjacentSeatNo = getAdjacentSeat(seatNo);
-        const adjacentSeat = busTrip.seats.find(s => s.seatNo === adjacentSeatNo);
+        const adjacentSeat = busTrip.seats.find(
+          (s) => s.seatNo === adjacentSeatNo,
+        );
 
         if (adjacentSeat) {
-
           // ❌ BOOKED CASE (different user, opposite gender)
           if (
             adjacentSeat.status === "booked" &&
@@ -95,37 +96,37 @@ export const bookBusTrip = async (req, res) => {
             String(adjacentSeat.bookedBy) !== String(userId)
           ) {
             throw new Error(
-              `Adjacent seat ${adjacentSeatNo} is booked by ${adjacentSeat.genderBooked}`
+              `Adjacent seat ${adjacentSeatNo} is booked by ${adjacentSeat.genderBooked}`,
             );
           }
 
           // ❌ BLOCKED CASE (different user, opposite gender)
           if (
-  adjacentSeat.status === "blocked" &&
-  adjacentSeat.seatFor &&
-  adjacentSeat.seatFor !== "None" &&
-  adjacentSeat.seatFor !== passenger.gender &&
-  String(adjacentSeat.bookedBy) !== String(userId)
-) {
-  throw new Error(
-    `Adjacent seat ${adjacentSeatNo} is reserved for ${adjacentSeat.seatFor}`
-  );
-}
+            adjacentSeat.status === "blocked" &&
+            adjacentSeat.seatFor &&
+            adjacentSeat.seatFor !== "None" &&
+            adjacentSeat.seatFor !== passenger.gender &&
+            String(adjacentSeat.bookedBy) !== String(userId)
+          ) {
+            throw new Error(
+              `Adjacent seat ${adjacentSeatNo} is reserved for ${adjacentSeat.seatFor}`,
+            );
+          }
         }
       }
 
       // ❌ STRICT RULE
-if (seat.status === "booked") {
-  throw new Error(`Seat ${seatNo} is already booked`);
-}
+      if (seat.status === "booked") {
+        throw new Error(`Seat ${seatNo} is already booked`);
+      }
 
-// ❌ BLOCKED (only other user ke liye block)
-if (
-  seat.status === "blocked" &&
-  String(seat.bookedBy) !== String(userId)
-) {
-  throw new Error(`Seat ${seatNo} is reserved`);
-}
+      // ❌ BLOCKED (only other user ke liye block)
+      if (
+        seat.status === "blocked" &&
+        String(seat.bookedBy) !== String(userId)
+      ) {
+        throw new Error(`Seat ${seatNo} is reserved`);
+      }
 
       // ================= BOOK CURRENT SEAT =================
       seat.status = "booked";
@@ -138,17 +139,19 @@ if (
       // ================= AUTO BLOCK ADJACENT =================
       if (seat.seatType === "SLEEPER") {
         const adjacentSeatNo = getAdjacentSeat(seatNo);
-        const adjacentSeat = busTrip.seats.find(s => s.seatNo === adjacentSeatNo);
+        const adjacentSeat = busTrip.seats.find(
+          (s) => s.seatNo === adjacentSeatNo,
+        );
 
-if (
-  adjacentSeat &&
-  adjacentSeat.status === "available" &&
-  !selectedSeatsSet.has(adjacentSeatNo) // 🔥 don't block if user already selected it
-) {
-  adjacentSeat.status = "blocked";
-  adjacentSeat.seatFor = passenger.gender;
-  adjacentSeat.bookedBy = userId;
-}
+        if (
+          adjacentSeat &&
+          adjacentSeat.status === "available" &&
+          !selectedSeatsSet.has(adjacentSeatNo) // 🔥 don't block if user already selected it
+        ) {
+          adjacentSeat.status = "blocked";
+          adjacentSeat.seatFor = passenger.gender;
+          adjacentSeat.bookedBy = userId;
+        }
       }
     }
 
@@ -178,7 +181,7 @@ if (
       arrivalTime: busTrip.arrivalTime,
       travelDuration: busTrip.travelDuration,
       pickupPoints: pickupPoint,
-  dropPoints: dropPoint,
+      dropPoints: dropPoint,
 
       passengers: passengers.map((p, index) => ({
         name: p.name,
@@ -199,18 +202,18 @@ if (
         gst,
         platformFee,
         otherCharges: 0,
-        totalAmount: finalAmount
+        totalAmount: finalAmount,
       },
 
       paymentStatus: "pending",
-      status: "confirmed"
+      status: "confirmed",
     });
 
     // await newBooking.save({ session });
     // await busTrip.save({ session });
 
     await newBooking.save();
-await busTrip.save();
+    await busTrip.save();
 
     // await session.commitTransaction();
     // session.endSession();
@@ -218,20 +221,18 @@ await busTrip.save();
     return res.status(201).json({
       success: true,
       message: "Booking successful",
-      data: newBooking
+      data: newBooking,
     });
-
   } catch (error) {
     // await session.abortTransaction();
     // session.endSession();
 
     return res.status(400).json({
       success: false,
-      message: error.message || "Booking failed"
+      message: error.message || "Booking failed",
     });
   }
 };
-
 
 export const getAllBusBookingsList = async (req, res) => {
   try {
@@ -256,17 +257,15 @@ export const getAllBusBookingsList = async (req, res) => {
       total,
       page: parseInt(page),
       pages: Math.ceil(total / limit),
-      data: bookings
+      data: bookings,
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
 };
-
 
 export const getBusBookingById = async (req, res) => {
   try {
@@ -279,19 +278,18 @@ export const getBusBookingById = async (req, res) => {
     if (!booking) {
       return res.status(404).json({
         success: false,
-        message: "Booking not found"
+        message: "Booking not found",
       });
     }
 
     res.status(200).json({
       success: true,
-      data: booking
+      data: booking,
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
 };
@@ -302,23 +300,39 @@ export const getBusBookingByUserId = async (req, res) => {
 
     const bookings = await Booking.find({ user: userId })
     //   .populate("busTrip")
+      .populate({
+        path: "busTrip",
+        populate: {
+            path: "bus",
+            select: "travelAgency busNo busType registrationNumber",
+            populate: {
+                path: "travelAgency",
+                select: "name"
+            }
+        }
+      })
+//         .populate({
+//     path: "bus",
+//     select: "travelAgency busNo busType registrationNumber",
+//     populate: {
+//       path: "travelAgency",
+//       select: "name"
+//     }
+//   })
     //   .sort({ createdAt: -1 });
 
     res.status(200).json({
       success: true,
       total: bookings.length,
-      data: bookings
+      data: bookings,
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
 };
-
-
 
 export const changeBookingStatus = async (req, res) => {
   try {
@@ -330,7 +344,7 @@ export const changeBookingStatus = async (req, res) => {
     if (!booking) {
       return res.status(404).json({
         success: false,
-        message: "Booking not found"
+        message: "Booking not found",
       });
     }
 
@@ -339,10 +353,8 @@ export const changeBookingStatus = async (req, res) => {
       const busTrip = await BusTrip.findById(booking.busTrip);
 
       if (busTrip) {
-        booking.passengers.forEach(passenger => {
-          const seat = busTrip.seats.find(
-            s => s.seatNo === passenger.seatNo
-          );
+        booking.passengers.forEach((passenger) => {
+          const seat = busTrip.seats.find((s) => s.seatNo === passenger.seatNo);
 
           if (seat) {
             seat.status = "available";
@@ -364,13 +376,12 @@ export const changeBookingStatus = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Booking status updated",
-      data: booking
+      data: booking,
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
 };
@@ -384,7 +395,7 @@ export const deleteBooking = async (req, res) => {
     if (!booking) {
       return res.status(404).json({
         success: false,
-        message: "Booking not found"
+        message: "Booking not found",
       });
     }
 
@@ -392,13 +403,12 @@ export const deleteBooking = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: "Booking deleted successfully"
+      message: "Booking deleted successfully",
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
 };
