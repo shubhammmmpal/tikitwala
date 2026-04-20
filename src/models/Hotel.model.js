@@ -71,5 +71,8 @@ hotelSchema.index({ geoLocation: '2dsphere' }); // enables $geoNear, $nearSphere
 hotelSchema.index({ status: 1 });
 hotelSchema.index({ averageRating: -1 });
 
-const Hotel = mongoose.model('Hotel', hotelSchema);
-export default Hotel;
+
+
+// 👇 Important line
+export default mongoose.models.Hotel || mongoose.model("Hotel", hotelSchema);
+// export default Hotel;
