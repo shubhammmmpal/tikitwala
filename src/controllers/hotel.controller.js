@@ -1,0 +1,344 @@
+import Hotel from '../models/hotel.model.js';
+import Room from '../models/room.model.js';
+import RoomAvailability from '../models/RoomAvailability.model.js';
+
+// ====================== PUBLIC APIS ======================
+
+export const searchHotels = async (req, res) => {
+  try {
+    const { city, checkIn, checkOut, guests = 2, page = 1, limit = 10 } = req.query;
+
+    const query = { status: 'ACTIVE' };
+
+    if (city) {
+      query['address.city'] = { $regex: city, $options: 'i' };
+    }
+
+    const hotels = await Hotel.find(query)
+      .select('name address geoLocation images averageRating reviewCount amenities')
+      .sort({ averageRating: -1 })
+      .skip((page - 1) * limit)
+      .limit(Number(limit));
+
+    const total = await Hotel.countDocuments(query);
+
+    res.status(200).json({
+      success: true,
+      count: hotels.length,
+      total,
+      totalPages: Math.ceil(total / limit),
+      hotels
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const nearbyHotels = async (req, res) => {
+  try {
+    const { lat, lng, radius = 10 } = req.query; // radius in kilometers
+
+    if (!lat || !lng) {
+      return res.status(400).json({ success: false, message: 'lat and lng are required' });
+    }
+
+    const hotels = await Hotel.find({
+      status: 'ACTIVE',
+      geoLocation: {
+        $near: {
+          $geometry: {
+            type: "Point",
+            coordinates: [parseFloat(lng), parseFloat(lat)]
+          },
+          $maxDistance: radius * 1000 // convert km to meters
+        }
+      }
+    }).select('name address geoLocation images averageRating reviewCount');
+
+    res.status(200).json({ success: true, count: hotels.length, hotels });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const getHotelById = async (req, res) => {
+  try {
+    const hotel = await Hotel.findById(req.params.id)
+      // .populate({
+      //   path: 'rooms',           // We'll add virtual or separate route for rooms
+      //   select: 'roomType name basePricePerNight capacity maxOccupancy status'
+      // });
+
+    if (!hotel) {
+      return res.status(404).json({ success: false, message: 'Hotel not found' });
+    }
+
+    res.status(200).json({ success: true, hotel });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const getHotelRooms = async (req, res) => {
+  try {
+    const rooms = await Room.find({ 
+      hotel: req.params.id,
+      status: 'ACTIVE'
+    }).select('-__v');
+
+    res.status(200).json({ success: true, count: rooms.length, rooms });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// ====================== ADMIN ONLY APIS ======================
+
+export const createHotel = async (req, res) => {
+  try {
+    const hotel = await Hotel.create(req.body);
+    
+    res.status(201).json({
+      success: true,
+      message: 'Hotel created successfully',
+      hotel
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const updateHotel = async (req, res) => {
+  try {
+    const hotel = await Hotel.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
+
+    if (!hotel) {
+      return res.status(404).json({ success: false, message: 'Hotel not found' });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Hotel updated successfully',
+      hotel
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+
+export const deleteHotel = async (req, res) => {
+   
+  try {
+    const hotel = await Hotel.findById(req.params.id);
+   
+    if (!hotel) {
+      return res.status(404).json({ success: false, message: 'Hotel not found' });
+    }
+
+    hotel.status = 'INACTIVE'; // Soft delete
+    await hotel.save();
+
+    res.status(200).json({ success: true, message: 'Hotel deactivated successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const updateHotelStatus = async (req, res) => {
+  try {
+    const { status } = req.body;
+
+    const hotel = await Hotel.findByIdAndUpdate(
+      req.params.id,
+      { status },
+      { new: true }
+    );
+
+    if (!hotel) {
+      return res.status(404).json({ success: false, message: 'Hotel not found' });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: `Hotel status updated to ${status}`,
+      hotel
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Advanced Search - Add this function
+export const advancedHotelSearch = async (req, res) => {
+  try {
+    const {
+      city,
+      checkInDate,
+      checkOutDate,
+      rooms = 1,
+      adults = 2,
+      children = 0,
+      page = 1,
+      limit = 10,
+      minPrice,
+      maxPrice,
+      rating
+    } = req.body || req.query;
+
+    if (!city || !checkInDate || !checkOutDate) {
+      return res.status(400).json({
+        success: false,
+        message: "city, checkInDate, and checkOutDate are required"
+      });
+    }
+
+    const checkIn = new Date(checkInDate);
+    const checkOut = new Date(checkOutDate);
+    const nights = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
+
+    if (nights <= 0) {
+      return res.status(400).json({ success: false, message: "Check-out date must be after check-in date" });
+    }
+
+    // Step 1: Find Active Hotels in the city
+    const hotelQuery = {
+      'address.city': { $regex: city, $options: 'i' },
+      status: 'ACTIVE'
+    };
+
+    if (rating) hotelQuery.averageRating = { $gte: Number(rating) };
+
+    let hotels = await Hotel.find(hotelQuery)
+      .select('name address geoLocation images averageRating reviewCount amenities cancellationPolicy couponCodes')
+      .sort({ averageRating: -1 });
+
+    const result = [];
+
+    console.log(hotels.length)
+    // console.log(hotels)
+    // Step 2: For each hotel, check room availability
+    for (const hotel of hotels) {
+      const availableRooms = await Room.find({
+        hotel: hotel._id,
+        status: 'ACTIVE',
+        'capacity.adults': { $gte: Math.ceil(adults / rooms) },   // rough distribution
+        maxOccupancy: { $gte: Math.ceil((adults + children) / rooms) }
+      });
+    console.log(availableRooms)
+
+      if (availableRooms.length === 0) continue;
+
+      let hotelTotalAvailable = 0;
+      let cheapestRoom = null;
+      let totalPriceForStay = Infinity;
+
+      for (const room of availableRooms) {
+        // Check availability for all dates
+        const dates = [];
+        let current = new Date(checkIn);
+        while (current < checkOut) {
+          dates.push(new Date(current));
+          current.setDate(current.getDate() + 1);
+        }
+
+        const availabilities = await RoomAvailability.find({
+          room: room._id,
+          date: { $in: dates }
+        });
+
+    let isFullyAvailable = false;
+
+if (availabilities.length === 0) {
+  // ✅ No availability data → assume full inventory available
+  isFullyAvailable = room.totalInventory >= rooms;
+} else {
+  // ✅ Check all dates
+  isFullyAvailable = dates.every(date => {
+    const record = availabilities.find(a => 
+      a.date.toISOString().split('T')[0] === date.toISOString().split('T')[0]
+    );
+
+    if (!record) {
+      // No record for this date → assume full availability
+      return room.totalInventory >= rooms;
+    }
+
+    return (record.availableCount - record.heldCount) >= rooms;
+  });
+}
+
+        if (isFullyAvailable) {
+          const pricePerNight = room.basePricePerNight;
+          const totalForThisRoom = pricePerNight * nights * rooms;
+
+if (availabilities.length === 0) {
+  hotelTotalAvailable += room.totalInventory;
+} else {
+  hotelTotalAvailable += (availabilities[0]?.availableCount || 0);
+}
+          if (totalForThisRoom < totalPriceForStay) {
+            totalPriceForStay = totalForThisRoom;
+            cheapestRoom = {
+              roomId: room._id,
+              roomName: room.name,
+              roomType: room.roomType,
+              pricePerNight,
+              totalPrice: totalForThisRoom
+            };
+          }
+        }
+      }
+
+      if (cheapestRoom) {
+        result.push({
+          hotel: {
+            id: hotel._id,
+            name: hotel.name,
+            address: hotel.address,
+            images: hotel.images,
+            averageRating: hotel.averageRating,
+            reviewCount: hotel.reviewCount,
+            amenities: hotel.amenities
+          },
+          availableRoomsCount: hotelTotalAvailable,
+          cheapestRoom,
+          totalPriceForStay: cheapestRoom.totalPrice,
+          nights
+        });
+      }
+    }
+
+    // Apply price filter if provided
+    let filteredResult = result;
+    if (minPrice || maxPrice) {
+      filteredResult = result.filter(item => {
+        const price = item.totalPriceForStay;
+        return (!minPrice || price >= minPrice) && (!maxPrice || price <= maxPrice);
+      });
+    }
+
+    // Pagination
+    const startIndex = (page - 1) * limit;
+    const paginatedResult = filteredResult.slice(startIndex, startIndex + Number(limit));
+
+    res.status(200).json({
+      success: true,
+      totalHotels: filteredResult.length,
+      totalPages: Math.ceil(filteredResult.length / limit),
+      currentPage: Number(page),
+      checkIn: checkInDate,
+      checkOut: checkOutDate,
+      nights,
+      searchParams: { rooms, adults, children },
+      hotels: paginatedResult
+    });
+
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};

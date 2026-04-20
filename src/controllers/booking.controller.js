@@ -302,6 +302,7 @@ export const getBusBookingByUserId = async (req, res) => {
     //   .populate("busTrip")
       .populate({
         path: "busTrip",
+        select:"platformType",
         populate: {
             path: "bus",
             select: "travelAgency busNo busType registrationNumber",
@@ -311,6 +312,7 @@ export const getBusBookingByUserId = async (req, res) => {
             }
         }
       })
+
 //         .populate({
 //     path: "bus",
 //     select: "travelAgency busNo busType registrationNumber",

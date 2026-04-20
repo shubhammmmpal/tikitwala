@@ -292,7 +292,7 @@ export const getBusTrips = async (req, res) => {
   .skip((page - 1) * limit)
   .limit(parseInt(limit));
 
-console.log(trips[0].bus.travelAgency);
+
 // console.log(trips[0].bus.toObject());
 // const agency = await Agency.findById("67f8b2c9d5e4a12345678901");
 // console.log(agency);
