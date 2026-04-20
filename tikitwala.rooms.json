@@ -1,0 +1,360 @@
+[{
+  "_id": {
+    "$oid": "69dcf39089c1a761e45a6bba"
+  },
+  "hotel": {
+    "$oid": "69dce2bc26c6c7dbeaf5d8c4"
+  },
+  "roomType": "DELUXE",
+  "name": "Deluxe King Room with City View",
+  "description": "Spacious room with modern amenities",
+  "basePricePerNight": 4500,
+  "capacity": {
+    "adults": 2,
+    "children": 1
+  },
+  "maxOccupancy": 3,
+  "amenities": [
+    "WiFi",
+    "AC",
+    "TV",
+    "Mini Bar",
+    "Room Service"
+  ],
+  "totalInventory": 15,
+  "status": "ACTIVE",
+  "images": [],
+  "createdAt": {
+    "$date": "2026-04-13T13:45:52.766Z"
+  },
+  "updatedAt": {
+    "$date": "2026-04-13T13:45:52.766Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69dcf7b6ea535be67227ceca"
+  },
+  "hotel": "69dce2bc26c6c7dbeaf5d8c4",
+  "roomType": "SUITE",
+  "name": "Imperial Luxury Suite",
+  "description": "Premium suite with king bed, city view and luxury amenities.",
+  "basePricePerNight": 8500,
+  "capacity": {
+    "adults": 2,
+    "children": 2
+  },
+  "maxOccupancy": 4,
+  "amenities": [
+    "WiFi",
+    "TV",
+    "Mini Bar",
+    "Air Conditioning",
+    "Room Service"
+  ],
+  "images": [
+    {
+      "url": "https://example.com/room1.jpg",
+      "caption": "Suite Room"
+    }
+  ],
+  "totalInventory": 10,
+  "status": "ACTIVE"
+},
+{
+  "_id": {
+    "$oid": "69dcf7b6ea535be67227cecb"
+  },
+  "hotel": "69dce2bc26c6c7dbeaf5d8c4",
+  "roomType": "DELUXE",
+  "name": "Deluxe King Room",
+  "description": "Spacious deluxe room with modern interiors.",
+  "basePricePerNight": 5000,
+  "capacity": {
+    "adults": 2,
+    "children": 1
+  },
+  "maxOccupancy": 3,
+  "amenities": [
+    "WiFi",
+    "TV",
+    "AC"
+  ],
+  "images": [
+    {
+      "url": "https://example.com/room2.jpg",
+      "caption": "Deluxe Room"
+    }
+  ],
+  "totalInventory": 20,
+  "status": "ACTIVE"
+},
+{
+  "_id": {
+    "$oid": "69dcf7b6ea535be67227cecc"
+  },
+  "hotel": "69dceb83ea535be67227cebc",
+  "roomType": "SUITE",
+  "name": "Royal Suite",
+  "description": "Luxury suite with premium services.",
+  "basePricePerNight": 9000,
+  "capacity": {
+    "adults": 2,
+    "children": 2
+  },
+  "maxOccupancy": 4,
+  "amenities": [
+    "WiFi",
+    "Spa Access",
+    "Mini Bar"
+  ],
+  "images": [
+    {
+      "url": "https://example.com/room3.jpg"
+    }
+  ],
+  "totalInventory": 8,
+  "status": "ACTIVE"
+},
+{
+  "_id": {
+    "$oid": "69dcf7b6ea535be67227cecd"
+  },
+  "hotel": "69dceb83ea535be67227cebd",
+  "roomType": "DELUXE",
+  "name": "Lake View Deluxe Room",
+  "description": "Room with scenic lake view.",
+  "basePricePerNight": 4500,
+  "capacity": {
+    "adults": 2,
+    "children": 1
+  },
+  "maxOccupancy": 3,
+  "amenities": [
+    "WiFi",
+    "Balcony",
+    "TV"
+  ],
+  "images": [
+    {
+      "url": "https://example.com/room4.jpg"
+    }
+  ],
+  "totalInventory": 15,
+  "status": "ACTIVE"
+},
+{
+  "_id": {
+    "$oid": "69dcf7b6ea535be67227cece"
+  },
+  "hotel": "69dceb83ea535be67227cebe",
+  "roomType": "STANDARD",
+  "name": "Budget Standard Room",
+  "description": "Affordable basic room.",
+  "basePricePerNight": 1800,
+  "capacity": {
+    "adults": 2,
+    "children": 0
+  },
+  "maxOccupancy": 2,
+  "amenities": [
+    "WiFi",
+    "Fan"
+  ],
+  "images": [
+    {
+      "url": "https://example.com/room5.jpg"
+    }
+  ],
+  "totalInventory": 25,
+  "status": "ACTIVE"
+},
+{
+  "_id": {
+    "$oid": "69dcf7b6ea535be67227cecf"
+  },
+  "hotel": "69dceb83ea535be67227cebf",
+  "roomType": "EXECUTIVE",
+  "name": "Executive Business Room",
+  "description": "Perfect for business travelers.",
+  "basePricePerNight": 6000,
+  "capacity": {
+    "adults": 2,
+    "children": 1
+  },
+  "maxOccupancy": 3,
+  "amenities": [
+    "WiFi",
+    "Work Desk",
+    "Coffee Maker"
+  ],
+  "images": [
+    {
+      "url": "https://example.com/room6.jpg"
+    }
+  ],
+  "totalInventory": 18,
+  "status": "ACTIVE"
+},
+{
+  "_id": {
+    "$oid": "69dcf7b6ea535be67227ced0"
+  },
+  "hotel": "69dceb83ea535be67227cec0",
+  "roomType": "VILLA",
+  "name": "Beachside Villa",
+  "description": "Private villa with beach access.",
+  "basePricePerNight": 12000,
+  "capacity": {
+    "adults": 4,
+    "children": 2
+  },
+  "maxOccupancy": 6,
+  "amenities": [
+    "WiFi",
+    "Private Pool",
+    "Sea View"
+  ],
+  "images": [
+    {
+      "url": "https://example.com/room7.jpg"
+    }
+  ],
+  "totalInventory": 5,
+  "status": "ACTIVE"
+},
+{
+  "_id": {
+    "$oid": "69dcf7b6ea535be67227ced1"
+  },
+  "hotel": "69dceb83ea535be67227cec1",
+  "roomType": "DELUXE",
+  "name": "Mountain View Room",
+  "description": "Room with stunning mountain views.",
+  "basePricePerNight": 5500,
+  "capacity": {
+    "adults": 2,
+    "children": 1
+  },
+  "maxOccupancy": 3,
+  "amenities": [
+    "WiFi",
+    "Heater",
+    "Balcony"
+  ],
+  "images": [
+    {
+      "url": "https://example.com/room8.jpg"
+    }
+  ],
+  "totalInventory": 12,
+  "status": "ACTIVE"
+},
+{
+  "_id": {
+    "$oid": "69dcf7b6ea535be67227ced2"
+  },
+  "hotel": "69dceb83ea535be67227cec2",
+  "roomType": "STANDARD",
+  "name": "Airport Standard Room",
+  "description": "Quick stay room near airport.",
+  "basePricePerNight": 3500,
+  "capacity": {
+    "adults": 2,
+    "children": 0
+  },
+  "maxOccupancy": 2,
+  "amenities": [
+    "WiFi",
+    "Shuttle Service"
+  ],
+  "images": [
+    {
+      "url": "https://example.com/room9.jpg"
+    }
+  ],
+  "totalInventory": 30,
+  "status": "ACTIVE"
+},
+{
+  "_id": {
+    "$oid": "69dcf7b6ea535be67227ced3"
+  },
+  "hotel": "69dceb83ea535be67227cec3",
+  "roomType": "SUITE",
+  "name": "Heritage Royal Suite",
+  "description": "Traditional Rajasthani themed suite.",
+  "basePricePerNight": 7000,
+  "capacity": {
+    "adults": 2,
+    "children": 2
+  },
+  "maxOccupancy": 4,
+  "amenities": [
+    "WiFi",
+    "Cultural Decor",
+    "Room Service"
+  ],
+  "images": [
+    {
+      "url": "https://example.com/room10.jpg"
+    }
+  ],
+  "totalInventory": 7,
+  "status": "ACTIVE"
+},
+{
+  "_id": {
+    "$oid": "69dcf7b6ea535be67227ced4"
+  },
+  "hotel": "69dceb83ea535be67227cec4",
+  "roomType": "EXECUTIVE",
+  "name": "Tech Executive Room",
+  "description": "Modern room for IT professionals.",
+  "basePricePerNight": 4800,
+  "capacity": {
+    "adults": 2,
+    "children": 1
+  },
+  "maxOccupancy": 3,
+  "amenities": [
+    "WiFi",
+    "Work Desk",
+    "Smart TV"
+  ],
+  "images": [
+    {
+      "url": "https://example.com/room11.jpg"
+    }
+  ],
+  "totalInventory": 20,
+  "status": "INACTIVE"
+},
+{
+  "_id": {
+    "$oid": "69dcf7b6ea535be67227ced5"
+  },
+  "hotel": "69dceb83ea535be67227cec5",
+  "roomType": "PREMIUM",
+  "name": "Luxury Desert Tent",
+  "description": "Premium tent experience in desert.",
+  "basePricePerNight": 6500,
+  "capacity": {
+    "adults": 2,
+    "children": 1
+  },
+  "maxOccupancy": 3,
+  "amenities": [
+    "Bonfire",
+    "Dinner",
+    "Cultural Show"
+  ],
+  "images": [
+    {
+      "url": "https://example.com/room12.jpg"
+    }
+  ],
+  "totalInventory": 15,
+  "status": "ACTIVE"
+}]

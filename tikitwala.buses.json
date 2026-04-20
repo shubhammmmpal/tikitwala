@@ -1,325 +1,4730 @@
 [{
   "_id": {
-    "$oid": "69d08edbea535be67227cde9"
+    "$oid": "69da51d9ea535be67227cea6"
   },
-  "busNo": "MP-09-VK-4928",
-  "travelAgency": "67f8b2c3d4e5f6a7b8c9d0e1",
-  "busType": "Sleeper",
+  "busNo": "MP09ST1001",
+  "registrationNumber": "MP09AB1001",
+  "travelAgency": "69da4e78ea535be67227cea0",
+  "busType": "AC Sleeper",
+  "deckType": "Double",
   "totalSeats": 36,
-  "deckType": "Double",
-  "images": [
-    "https://busimages.com/mp09vk4928-1.jpg",
-    "https://busimages.com/mp09vk4928-2.jpg"
-  ],
-  "amenities": [
-    "WiFi",
-    "Charging Point",
-    "Blanket",
-    "Water Bottle",
-    "CCTV",
-    "Reading Light"
-  ],
-  "features": [
-    "AC",
-    "Reclining Seats",
-    "Emergency Exit"
-  ]
-},
-{
-  "_id": {
-    "$oid": "69d08edbea535be67227cdea"
+  "seatStructure": {
+    "seats": [
+      {
+        "seatNumber": "LL11",
+        "row": 1,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR11",
+        "row": 1,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR12",
+        "row": 1,
+        "column": 2,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LL21",
+        "row": 2,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR21",
+        "row": 2,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR22",
+        "row": 2,
+        "column": 2,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LL31",
+        "row": 3,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR31",
+        "row": 3,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR32",
+        "row": 3,
+        "column": 2,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LL41",
+        "row": 4,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR41",
+        "row": 4,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR42",
+        "row": 4,
+        "column": 2,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LL51",
+        "row": 5,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR51",
+        "row": 5,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR52",
+        "row": 5,
+        "column": 2,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LL61",
+        "row": 6,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR61",
+        "row": 6,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR62",
+        "row": 6,
+        "column": 2,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UL11",
+        "row": 1,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR11",
+        "row": 1,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR12",
+        "row": 1,
+        "column": 2,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UL21",
+        "row": 2,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR21",
+        "row": 2,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR22",
+        "row": 2,
+        "column": 2,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UL31",
+        "row": 3,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR31",
+        "row": 3,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR32",
+        "row": 3,
+        "column": 2,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UL41",
+        "row": 4,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR41",
+        "row": 4,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR42",
+        "row": 4,
+        "column": 2,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UL51",
+        "row": 5,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR51",
+        "row": 5,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR52",
+        "row": 5,
+        "column": 2,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UL61",
+        "row": 6,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR61",
+        "row": 6,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR62",
+        "row": 6,
+        "column": 2,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      }
+    ]
   },
-  "busNo": "MP-04-AB-7854",
-  "travelAgency": "67f8b2c3d4e5f6a7b8c9d0e1",
-  "busType": "Seater",
-  "totalSeats": 45,
-  "deckType": "Single",
-  "images": [
-    "https://busimages.com/mp04ab7854.jpg"
-  ],
-  "amenities": [
-    "WiFi",
-    "Charging Point",
-    "Snack Box",
-    "GPS"
-  ],
-  "features": [
-    "AC",
-    "Pushback Seats"
-  ]
-},
-{
-  "_id": {
-    "$oid": "69d08edbea535be67227cdeb"
-  },
-  "busNo": "MH-12-XY-3344",
-  "travelAgency": "67f8b2c3d4e5f6a7b8c9d0e2",
-  "busType": "Sleeper",
-  "totalSeats": 32,
-  "deckType": "Double",
-  "images": [
-    "https://busimages.com/mh12xy3344.jpg"
-  ],
-  "amenities": [
-    "WiFi",
-    "Blanket",
-    "CCTV",
-    "Mobile Charging"
-  ],
-  "features": [
-    "AC",
-    "Luxury Interior"
-  ]
-},
-{
-  "_id": {
-    "$oid": "69d08edbea535be67227cdec"
-  },
-  "busNo": "RJ-14-PQ-6677",
-  "travelAgency": "67f8b2c3d4e5f6a7b8c9d0e1",
-  "busType": "Semi-Sleeper",
-  "totalSeats": 40,
-  "deckType": "Single",
-  "images": [
-    "https://busimages.com/rj14pq6677.jpg"
-  ],
-  "amenities": [
-    "WiFi",
-    "Water Bottle",
-    "Reading Light"
-  ],
-  "features": [
-    "AC",
-    "Reclining"
-  ]
-},
-{
-  "_id": {
-    "$oid": "69d08edbea535be67227cded"
-  },
-  "busNo": "MP-07-CD-1122",
-  "travelAgency": "67f8b2c3d4e5f6a7b8c9d0e1",
-  "busType": "Seater",
-  "totalSeats": 48,
-  "deckType": "Single",
-  "images": [
-    "https://busimages.com/mp07cd1122.jpg"
-  ],
-  "amenities": [
-    "Charging Point",
-    "Snack Box",
-    "GPS Tracking"
-  ],
-  "features": [
-    "Non-AC",
-    "Pushback"
-  ]
-},
-{
-  "_id": {
-    "$oid": "69d08edbea535be67227cdee"
-  },
-  "busNo": "MP-09-EF-9988",
-  "travelAgency": "67f8b2c3d4e5f6a7b8c9d0e1",
-  "busType": "Sleeper",
-  "totalSeats": 36,
-  "deckType": "Double",
-  "images": [
-    "https://busimages.com/mp09ef9988.jpg"
-  ],
-  "amenities": [
-    "WiFi",
-    "Blanket",
-    "CCTV",
-    "Water Bottle"
-  ],
-  "features": [
-    "AC",
-    "Luxury"
-  ]
-},
-{
-  "_id": {
-    "$oid": "69d08edbea535be67227cdef"
-  },
-  "busNo": "CG-05-GH-4455",
-  "travelAgency": "67f8b2c3d4e5f6a7b8c9d0e3",
-  "busType": "Seater",
-  "totalSeats": 42,
-  "deckType": "Single",
-  "images": [
-    "https://busimages.com/cg05gh4455.jpg"
-  ],
-  "amenities": [
-    "WiFi",
-    "Charging"
-  ],
-  "features": [
-    "AC"
-  ]
-},
-{
-  "_id": {
-    "$oid": "69d08edbea535be67227cdf0"
-  },
-  "busNo": "MP-03-IJ-7766",
-  "travelAgency": "67f8b2c3d4e5f6a7b8c9d0e1",
-  "busType": "Sleeper",
-  "totalSeats": 34,
-  "deckType": "Double",
-  "images": [
-    "https://busimages.com/mp03ij7766.jpg"
-  ],
-  "amenities": [
-    "Blanket",
-    "CCTV",
-    "Reading Light"
-  ],
-  "features": [
-    "AC"
-  ]
-},
-{
-  "_id": {
-    "$oid": "69d08edbea535be67227cdf1"
-  },
-  "busNo": "MP-08-KL-2233",
-  "travelAgency": "67f8b2c3d4e5f6a7b8c9d0e1",
-  "busType": "Semi-Sleeper",
-  "totalSeats": 38,
-  "deckType": "Single",
-  "images": [
-    "https://busimages.com/mp08kl2233.jpg"
-  ],
-  "amenities": [
-    "WiFi",
-    "Water Bottle"
-  ],
-  "features": [
-    "AC",
-    "Reclining"
-  ]
-},
-{
-  "_id": {
-    "$oid": "69d08edbea535be67227cdf2"
-  },
-  "busNo": "MP-10-MN-8899",
-  "travelAgency": "67f8b2c3d4e5f6a7b8c9d0e1",
-  "busType": "Sleeper",
-  "totalSeats": 36,
-  "deckType": "Double",
-  "images": [
-    "https://busimages.com/mp10mn8899.jpg"
-  ],
-  "amenities": [
-    "WiFi",
-    "Charging Point",
-    "Blanket",
-    "CCTV"
-  ],
-  "features": [
-    "AC",
-    "Luxury Interior"
-  ]
-},
-{
-  "_id": {
-    "$oid": "69d08edbea535be67227cdf3"
-  },
-  "busNo": "MP09AB1234",
-  "travelAgency": "661234abcd1234abcd123401",
-  "busType": "AC",
-  "totalSeats": 40,
-  "deckType": "Single",
-  "images": [
-    "https://example.com/bus1-img1.jpg",
-    "https://example.com/bus1-img2.jpg"
-  ],
-  "amenities": [
-    "WiFi",
-    "Charging Point",
-    "Water Bottle"
-  ],
-  "features": [
-    "GPS Tracking",
-    "CCTV"
-  ]
-},
-{
-  "_id": {
-    "$oid": "69d08edbea535be67227cdf4"
-  },
-  "busNo": "MP09CD5678",
-  "travelAgency": "661234abcd1234abcd123402",
-  "busType": "Sleeper",
-  "totalSeats": 30,
-  "deckType": "Double",
-  "images": [
-    "https://example.com/bus2-img1.jpg"
-  ],
-  "amenities": [
-    "Blanket",
-    "Pillow"
-  ],
-  "features": [
-    "Emergency Exit"
-  ]
-},
-{
-  "_id": {
-    "$oid": "69d08edbea535be67227cdf5"
-  },
-  "busNo": "MP09EF9012",
-  "travelAgency": "661234abcd1234abcd123403",
-  "busType": "Volvo",
-  "totalSeats": 45,
-  "deckType": "Single",
-  "images": [
-    "https://example.com/bus3-img1.jpg"
-  ],
-  "amenities": [
-    "AC",
-    "TV"
-  ],
-  "features": [
-    "Fire Extinguisher",
-    "GPS Tracking"
-  ]
-},
-{
-  "_id": {
-    "$oid": "69d08edbea535be67227cdf6"
-  },
-  "busNo": "MP09GH3456",
-  "travelAgency": "661234abcd1234abcd123404",
-  "busType": "Non-AC",
-  "totalSeats": 50,
-  "deckType": "Single",
+  "baseFare": 1200,
+  "__v": 1,
+  "amenities": [],
+  "features": [],
   "images": [],
-  "amenities": [
-    "Fan"
-  ],
-  "features": []
+  "priceTiers": {
+    "premium": 1.3,
+    "regular": 1,
+    "window": 1.1
+  },
+  "ratings": {
+    "average": 0,
+    "distribution": {
+      "1": {
+        "count": 0,
+        "percentage": 0
+      },
+      "2": {
+        "count": 0,
+        "percentage": 0
+      },
+      "3": {
+        "count": 0,
+        "percentage": 0
+      },
+      "4": {
+        "count": 0,
+        "percentage": 0
+      },
+      "5": {
+        "count": 0,
+        "percentage": 0
+      }
+    },
+    "totalReviews": 0
+  },
+  "status": "ACTIVE",
+  "updatedAt": {
+    "$date": "2026-04-11T13:59:39.336Z"
+  }
 },
 {
   "_id": {
-    "$oid": "69d08edbea535be67227cdf7"
+    "$oid": "69da51d9ea535be67227cea7"
   },
-  "busNo": "MP09IJ7890",
-  "travelAgency": "661234abcd1234abcd123405",
-  "busType": "Luxury",
-  "totalSeats": 35,
+  "busNo": "MP09ST1002",
+  "registrationNumber": "MP09AB1002",
+  "travelAgency": "69da4e78ea535be67227cea0",
+  "busType": "Seater",
+  "deckType": "Single",
+  "totalSeats": 40,
+  "seatStructure": {
+    "seats": [
+      {
+        "seatNumber": "L11",
+        "row": 1,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L12",
+        "row": 1,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R11",
+        "row": 1,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R12",
+        "row": 1,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L21",
+        "row": 2,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L22",
+        "row": 2,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R21",
+        "row": 2,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R22",
+        "row": 2,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L31",
+        "row": 3,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L32",
+        "row": 3,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R31",
+        "row": 3,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R32",
+        "row": 3,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L41",
+        "row": 4,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L42",
+        "row": 4,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R41",
+        "row": 4,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R42",
+        "row": 4,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L51",
+        "row": 5,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L52",
+        "row": 5,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R51",
+        "row": 5,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R52",
+        "row": 5,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L61",
+        "row": 6,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L62",
+        "row": 6,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R61",
+        "row": 6,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R62",
+        "row": 6,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L71",
+        "row": 7,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L72",
+        "row": 7,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R71",
+        "row": 7,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R72",
+        "row": 7,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L81",
+        "row": 8,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L82",
+        "row": 8,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R81",
+        "row": 8,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R82",
+        "row": 8,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L91",
+        "row": 9,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L92",
+        "row": 9,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R91",
+        "row": 9,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R92",
+        "row": 9,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L101",
+        "row": 10,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L102",
+        "row": 10,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R101",
+        "row": 10,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R102",
+        "row": 10,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      }
+    ]
+  },
+  "baseFare": 500,
+  "__v": 1,
+  "amenities": [],
+  "features": [],
+  "images": [],
+  "priceTiers": {
+    "premium": 1.3,
+    "regular": 1,
+    "window": 1.1
+  },
+  "ratings": {
+    "average": 0,
+    "distribution": {
+      "1": {
+        "count": 0,
+        "percentage": 0
+      },
+      "2": {
+        "count": 0,
+        "percentage": 0
+      },
+      "3": {
+        "count": 0,
+        "percentage": 0
+      },
+      "4": {
+        "count": 0,
+        "percentage": 0
+      },
+      "5": {
+        "count": 0,
+        "percentage": 0
+      }
+    },
+    "totalReviews": 0
+  },
+  "status": "ACTIVE",
+  "updatedAt": {
+    "$date": "2026-04-11T14:00:16.942Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69da51d9ea535be67227cea8"
+  },
+  "busNo": "MP09ST1003",
+  "registrationNumber": "MP09AB1003",
+  "travelAgency": "69da4e78ea535be67227cea0",
+  "busType": "Seater",
+  "deckType": "Single",
+  "totalSeats": 40,
+  "seatStructure": {
+    "seats": [
+      {
+        "seatNumber": "L11",
+        "row": 1,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L12",
+        "row": 1,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R11",
+        "row": 1,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R12",
+        "row": 1,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L21",
+        "row": 2,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L22",
+        "row": 2,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R21",
+        "row": 2,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R22",
+        "row": 2,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L31",
+        "row": 3,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L32",
+        "row": 3,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R31",
+        "row": 3,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R32",
+        "row": 3,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L41",
+        "row": 4,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L42",
+        "row": 4,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R41",
+        "row": 4,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R42",
+        "row": 4,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L51",
+        "row": 5,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L52",
+        "row": 5,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R51",
+        "row": 5,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R52",
+        "row": 5,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L61",
+        "row": 6,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L62",
+        "row": 6,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R61",
+        "row": 6,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R62",
+        "row": 6,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L71",
+        "row": 7,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L72",
+        "row": 7,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R71",
+        "row": 7,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R72",
+        "row": 7,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L81",
+        "row": 8,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L82",
+        "row": 8,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R81",
+        "row": 8,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R82",
+        "row": 8,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L91",
+        "row": 9,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L92",
+        "row": 9,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R91",
+        "row": 9,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R92",
+        "row": 9,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L101",
+        "row": 10,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L102",
+        "row": 10,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R101",
+        "row": 10,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R102",
+        "row": 10,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      }
+    ]
+  },
+  "baseFare": 700,
+  "__v": 1,
+  "amenities": [],
+  "features": [],
+  "images": [],
+  "priceTiers": {
+    "premium": 1.3,
+    "regular": 1,
+    "window": 1.1
+  },
+  "ratings": {
+    "average": 0,
+    "distribution": {
+      "1": {
+        "count": 0,
+        "percentage": 0
+      },
+      "2": {
+        "count": 0,
+        "percentage": 0
+      },
+      "3": {
+        "count": 0,
+        "percentage": 0
+      },
+      "4": {
+        "count": 0,
+        "percentage": 0
+      },
+      "5": {
+        "count": 0,
+        "percentage": 0
+      }
+    },
+    "totalReviews": 0
+  },
+  "status": "ACTIVE",
+  "updatedAt": {
+    "$date": "2026-04-11T14:05:24.969Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69da51d9ea535be67227cea9"
+  },
+  "busNo": "MP10RE2001",
+  "registrationNumber": "MP10CD2001",
+  "travelAgency": "69da4e78ea535be67227cea1",
+  "busType": "Volvo",
   "deckType": "Double",
-  "images": [
-    "https://example.com/bus5-img1.jpg"
-  ],
-  "amenities": [
-    "Recliner Seats",
-    "Snacks"
-  ],
-  "features": [
-    "USB Charging",
-    "Reading Light"
-  ]
+  "totalSeats": 42,
+  "seatStructure": {
+    "seats": [
+      {
+        "seatNumber": "LL11",
+        "row": 1,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR11",
+        "row": 1,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR12",
+        "row": 1,
+        "column": 2,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LL21",
+        "row": 2,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR21",
+        "row": 2,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR22",
+        "row": 2,
+        "column": 2,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LL31",
+        "row": 3,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR31",
+        "row": 3,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR32",
+        "row": 3,
+        "column": 2,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LL41",
+        "row": 4,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR41",
+        "row": 4,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR42",
+        "row": 4,
+        "column": 2,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LL51",
+        "row": 5,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR51",
+        "row": 5,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR52",
+        "row": 5,
+        "column": 2,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LL61",
+        "row": 6,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR61",
+        "row": 6,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR62",
+        "row": 6,
+        "column": 2,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LL71",
+        "row": 7,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR71",
+        "row": 7,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR72",
+        "row": 7,
+        "column": 2,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UL11",
+        "row": 1,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR11",
+        "row": 1,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR12",
+        "row": 1,
+        "column": 2,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UL21",
+        "row": 2,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR21",
+        "row": 2,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR22",
+        "row": 2,
+        "column": 2,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UL31",
+        "row": 3,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR31",
+        "row": 3,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR32",
+        "row": 3,
+        "column": 2,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UL41",
+        "row": 4,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR41",
+        "row": 4,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR42",
+        "row": 4,
+        "column": 2,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UL51",
+        "row": 5,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR51",
+        "row": 5,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR52",
+        "row": 5,
+        "column": 2,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UL61",
+        "row": 6,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR61",
+        "row": 6,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR62",
+        "row": 6,
+        "column": 2,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UL71",
+        "row": 7,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR71",
+        "row": 7,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR72",
+        "row": 7,
+        "column": 2,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      }
+    ]
+  },
+  "baseFare": 1500,
+  "__v": 1,
+  "amenities": [],
+  "features": [],
+  "images": [],
+  "priceTiers": {
+    "premium": 1.3,
+    "regular": 1,
+    "window": 1.1
+  },
+  "ratings": {
+    "average": 0,
+    "distribution": {
+      "1": {
+        "count": 0,
+        "percentage": 0
+      },
+      "2": {
+        "count": 0,
+        "percentage": 0
+      },
+      "3": {
+        "count": 0,
+        "percentage": 0
+      },
+      "4": {
+        "count": 0,
+        "percentage": 0
+      },
+      "5": {
+        "count": 0,
+        "percentage": 0
+      }
+    },
+    "totalReviews": 0
+  },
+  "status": "ACTIVE",
+  "updatedAt": {
+    "$date": "2026-04-11T14:05:52.925Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69da51d9ea535be67227ceaa"
+  },
+  "busNo": "MP10RE2002",
+  "registrationNumber": "MP10CD2002",
+  "travelAgency": "69da4e78ea535be67227cea1",
+  "busType": "Luxury",
+  "deckType": "Double",
+  "totalSeats": 36,
+  "seatStructure": {
+    "seats": [
+      {
+        "seatNumber": "LL11",
+        "row": 1,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR11",
+        "row": 1,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR12",
+        "row": 1,
+        "column": 2,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LL21",
+        "row": 2,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR21",
+        "row": 2,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR22",
+        "row": 2,
+        "column": 2,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LL31",
+        "row": 3,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR31",
+        "row": 3,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR32",
+        "row": 3,
+        "column": 2,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LL41",
+        "row": 4,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR41",
+        "row": 4,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR42",
+        "row": 4,
+        "column": 2,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LL51",
+        "row": 5,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR51",
+        "row": 5,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR52",
+        "row": 5,
+        "column": 2,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LL61",
+        "row": 6,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR61",
+        "row": 6,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR62",
+        "row": 6,
+        "column": 2,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UL11",
+        "row": 1,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR11",
+        "row": 1,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR12",
+        "row": 1,
+        "column": 2,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UL21",
+        "row": 2,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR21",
+        "row": 2,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR22",
+        "row": 2,
+        "column": 2,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UL31",
+        "row": 3,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR31",
+        "row": 3,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR32",
+        "row": 3,
+        "column": 2,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UL41",
+        "row": 4,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR41",
+        "row": 4,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR42",
+        "row": 4,
+        "column": 2,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UL51",
+        "row": 5,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR51",
+        "row": 5,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR52",
+        "row": 5,
+        "column": 2,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UL61",
+        "row": 6,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR61",
+        "row": 6,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR62",
+        "row": 6,
+        "column": 2,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      }
+    ]
+  },
+  "baseFare": 1800,
+  "__v": 1,
+  "amenities": [],
+  "features": [],
+  "images": [],
+  "priceTiers": {
+    "premium": 1.3,
+    "regular": 1,
+    "window": 1.1
+  },
+  "ratings": {
+    "average": 0,
+    "distribution": {
+      "1": {
+        "count": 0,
+        "percentage": 0
+      },
+      "2": {
+        "count": 0,
+        "percentage": 0
+      },
+      "3": {
+        "count": 0,
+        "percentage": 0
+      },
+      "4": {
+        "count": 0,
+        "percentage": 0
+      },
+      "5": {
+        "count": 0,
+        "percentage": 0
+      }
+    },
+    "totalReviews": 0
+  },
+  "status": "ACTIVE",
+  "updatedAt": {
+    "$date": "2026-04-11T14:07:36.182Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69da51d9ea535be67227ceab"
+  },
+  "busNo": "MP10RE2003",
+  "registrationNumber": "MP10CD2003",
+  "travelAgency": "69da4e78ea535be67227cea1",
+  "busType": "AC Seater",
+  "deckType": "Single",
+  "totalSeats": 44,
+  "seatStructure": {
+    "seats": [
+      {
+        "seatNumber": "L11",
+        "row": 1,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L12",
+        "row": 1,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R11",
+        "row": 1,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R12",
+        "row": 1,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L21",
+        "row": 2,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L22",
+        "row": 2,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R21",
+        "row": 2,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R22",
+        "row": 2,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L31",
+        "row": 3,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L32",
+        "row": 3,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R31",
+        "row": 3,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R32",
+        "row": 3,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L41",
+        "row": 4,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L42",
+        "row": 4,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R41",
+        "row": 4,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R42",
+        "row": 4,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L51",
+        "row": 5,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L52",
+        "row": 5,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R51",
+        "row": 5,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R52",
+        "row": 5,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L61",
+        "row": 6,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L62",
+        "row": 6,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R61",
+        "row": 6,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R62",
+        "row": 6,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L71",
+        "row": 7,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L72",
+        "row": 7,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R71",
+        "row": 7,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R72",
+        "row": 7,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L81",
+        "row": 8,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L82",
+        "row": 8,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R81",
+        "row": 8,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R82",
+        "row": 8,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L91",
+        "row": 9,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L92",
+        "row": 9,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R91",
+        "row": 9,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R92",
+        "row": 9,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L101",
+        "row": 10,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L102",
+        "row": 10,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R101",
+        "row": 10,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R102",
+        "row": 10,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L111",
+        "row": 11,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L112",
+        "row": 11,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R111",
+        "row": 11,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R112",
+        "row": 11,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      }
+    ]
+  },
+  "baseFare": 800,
+  "__v": 1,
+  "amenities": [],
+  "features": [],
+  "images": [],
+  "priceTiers": {
+    "premium": 1.3,
+    "regular": 1,
+    "window": 1.1
+  },
+  "ratings": {
+    "average": 0,
+    "distribution": {
+      "1": {
+        "count": 0,
+        "percentage": 0
+      },
+      "2": {
+        "count": 0,
+        "percentage": 0
+      },
+      "3": {
+        "count": 0,
+        "percentage": 0
+      },
+      "4": {
+        "count": 0,
+        "percentage": 0
+      },
+      "5": {
+        "count": 0,
+        "percentage": 0
+      }
+    },
+    "totalReviews": 0
+  },
+  "status": "ACTIVE",
+  "updatedAt": {
+    "$date": "2026-04-11T14:08:34.271Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69da51d9ea535be67227ceac"
+  },
+  "busNo": "MP20NB3001",
+  "registrationNumber": "MP20EF3001",
+  "travelAgency": "69da4e78ea535be67227cea2",
+  "busType": "Non-AC Sleeper",
+  "deckType": "Double",
+  "totalSeats": 30,
+  "seatStructure": {
+    "seats": [
+      {
+        "seatNumber": "LL11",
+        "row": 1,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR11",
+        "row": 1,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR12",
+        "row": 1,
+        "column": 2,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LL21",
+        "row": 2,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR21",
+        "row": 2,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR22",
+        "row": 2,
+        "column": 2,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LL31",
+        "row": 3,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR31",
+        "row": 3,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR32",
+        "row": 3,
+        "column": 2,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LL41",
+        "row": 4,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR41",
+        "row": 4,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR42",
+        "row": 4,
+        "column": 2,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LL51",
+        "row": 5,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR51",
+        "row": 5,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR52",
+        "row": 5,
+        "column": 2,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UL11",
+        "row": 1,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR11",
+        "row": 1,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR12",
+        "row": 1,
+        "column": 2,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UL21",
+        "row": 2,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR21",
+        "row": 2,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR22",
+        "row": 2,
+        "column": 2,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UL31",
+        "row": 3,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR31",
+        "row": 3,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR32",
+        "row": 3,
+        "column": 2,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UL41",
+        "row": 4,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR41",
+        "row": 4,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR42",
+        "row": 4,
+        "column": 2,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UL51",
+        "row": 5,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR51",
+        "row": 5,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR52",
+        "row": 5,
+        "column": 2,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      }
+    ]
+  },
+  "baseFare": 900,
+  "__v": 1,
+  "amenities": [],
+  "features": [],
+  "images": [],
+  "priceTiers": {
+    "premium": 1.3,
+    "regular": 1,
+    "window": 1.1
+  },
+  "ratings": {
+    "average": 0,
+    "distribution": {
+      "1": {
+        "count": 0,
+        "percentage": 0
+      },
+      "2": {
+        "count": 0,
+        "percentage": 0
+      },
+      "3": {
+        "count": 0,
+        "percentage": 0
+      },
+      "4": {
+        "count": 0,
+        "percentage": 0
+      },
+      "5": {
+        "count": 0,
+        "percentage": 0
+      }
+    },
+    "totalReviews": 0
+  },
+  "status": "ACTIVE",
+  "updatedAt": {
+    "$date": "2026-04-11T14:09:32.578Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69da51d9ea535be67227cead"
+  },
+  "busNo": "MP20NB3002",
+  "registrationNumber": "MP20EF3002",
+  "travelAgency": "69da4e78ea535be67227cea2",
+  "busType": "Non-AC Seater",
+  "deckType": "Single",
+  "totalSeats": 36,
+  "seatStructure": {
+    "seats": [
+      {
+        "seatNumber": "L11",
+        "row": 1,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L12",
+        "row": 1,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R11",
+        "row": 1,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R12",
+        "row": 1,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L21",
+        "row": 2,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L22",
+        "row": 2,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R21",
+        "row": 2,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R22",
+        "row": 2,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L31",
+        "row": 3,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L32",
+        "row": 3,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R31",
+        "row": 3,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R32",
+        "row": 3,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L41",
+        "row": 4,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L42",
+        "row": 4,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R41",
+        "row": 4,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R42",
+        "row": 4,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L51",
+        "row": 5,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L52",
+        "row": 5,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R51",
+        "row": 5,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R52",
+        "row": 5,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L61",
+        "row": 6,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L62",
+        "row": 6,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R61",
+        "row": 6,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R62",
+        "row": 6,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L71",
+        "row": 7,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L72",
+        "row": 7,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R71",
+        "row": 7,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R72",
+        "row": 7,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L81",
+        "row": 8,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L82",
+        "row": 8,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R81",
+        "row": 8,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R82",
+        "row": 8,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L91",
+        "row": 9,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L92",
+        "row": 9,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R91",
+        "row": 9,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R92",
+        "row": 9,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      }
+    ]
+  },
+  "baseFare": 400,
+  "__v": 1,
+  "amenities": [],
+  "features": [],
+  "images": [],
+  "priceTiers": {
+    "premium": 1.3,
+    "regular": 1,
+    "window": 1.1
+  },
+  "ratings": {
+    "average": 0,
+    "distribution": {
+      "1": {
+        "count": 0,
+        "percentage": 0
+      },
+      "2": {
+        "count": 0,
+        "percentage": 0
+      },
+      "3": {
+        "count": 0,
+        "percentage": 0
+      },
+      "4": {
+        "count": 0,
+        "percentage": 0
+      },
+      "5": {
+        "count": 0,
+        "percentage": 0
+      }
+    },
+    "totalReviews": 0
+  },
+  "status": "ACTIVE",
+  "updatedAt": {
+    "$date": "2026-04-11T14:10:16.394Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69da51d9ea535be67227ceae"
+  },
+  "busNo": "MP20NB3003",
+  "registrationNumber": "MP20EF3003",
+  "travelAgency": "69da4e78ea535be67227cea2",
+  "busType": "Seater",
+  "deckType": "Single",
+  "totalSeats": 40,
+  "seatStructure": {
+    "seats": [
+      {
+        "seatNumber": "L11",
+        "row": 1,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L12",
+        "row": 1,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R11",
+        "row": 1,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R12",
+        "row": 1,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L21",
+        "row": 2,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L22",
+        "row": 2,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R21",
+        "row": 2,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R22",
+        "row": 2,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L31",
+        "row": 3,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L32",
+        "row": 3,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R31",
+        "row": 3,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R32",
+        "row": 3,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L41",
+        "row": 4,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L42",
+        "row": 4,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R41",
+        "row": 4,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R42",
+        "row": 4,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L51",
+        "row": 5,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L52",
+        "row": 5,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R51",
+        "row": 5,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R52",
+        "row": 5,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L61",
+        "row": 6,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L62",
+        "row": 6,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R61",
+        "row": 6,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R62",
+        "row": 6,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L71",
+        "row": 7,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L72",
+        "row": 7,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R71",
+        "row": 7,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R72",
+        "row": 7,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L81",
+        "row": 8,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L82",
+        "row": 8,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R81",
+        "row": 8,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R82",
+        "row": 8,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L91",
+        "row": 9,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L92",
+        "row": 9,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R91",
+        "row": 9,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R92",
+        "row": 9,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L101",
+        "row": 10,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "L102",
+        "row": 10,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "LEFT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R101",
+        "row": 10,
+        "column": 1,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": false,
+        "isAisle": true,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "R102",
+        "row": 10,
+        "column": 2,
+        "deck": "SINGLE",
+        "section": "RIGHT",
+        "type": "SEATER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      }
+    ]
+  },
+  "baseFare": 600,
+  "__v": 1,
+  "amenities": [],
+  "features": [],
+  "images": [],
+  "priceTiers": {
+    "premium": 1.3,
+    "regular": 1,
+    "window": 1.1
+  },
+  "ratings": {
+    "average": 0,
+    "distribution": {
+      "1": {
+        "count": 0,
+        "percentage": 0
+      },
+      "2": {
+        "count": 0,
+        "percentage": 0
+      },
+      "3": {
+        "count": 0,
+        "percentage": 0
+      },
+      "4": {
+        "count": 0,
+        "percentage": 0
+      },
+      "5": {
+        "count": 0,
+        "percentage": 0
+      }
+    },
+    "totalReviews": 0
+  },
+  "status": "ACTIVE",
+  "updatedAt": {
+    "$date": "2026-04-11T14:12:13.502Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69da51d9ea535be67227ceaf"
+  },
+  "busNo": "MP20NB3004",
+  "registrationNumber": "MP20EF3004",
+  "travelAgency": "69da4e78ea535be67227cea2",
+  "busType": "Sleeper",
+  "deckType": "Double",
+  "totalSeats": 36,
+  "seatStructure": {
+    "seats": [
+      {
+        "seatNumber": "LL11",
+        "row": 1,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR11",
+        "row": 1,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR12",
+        "row": 1,
+        "column": 2,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LL21",
+        "row": 2,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR21",
+        "row": 2,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR22",
+        "row": 2,
+        "column": 2,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LL31",
+        "row": 3,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR31",
+        "row": 3,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR32",
+        "row": 3,
+        "column": 2,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LL41",
+        "row": 4,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR41",
+        "row": 4,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR42",
+        "row": 4,
+        "column": 2,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LL51",
+        "row": 5,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR51",
+        "row": 5,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR52",
+        "row": 5,
+        "column": 2,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LL61",
+        "row": 6,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR61",
+        "row": 6,
+        "column": 1,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "LR62",
+        "row": 6,
+        "column": 2,
+        "deck": "LOWER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UL11",
+        "row": 1,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR11",
+        "row": 1,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR12",
+        "row": 1,
+        "column": 2,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UL21",
+        "row": 2,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR21",
+        "row": 2,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR22",
+        "row": 2,
+        "column": 2,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UL31",
+        "row": 3,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR31",
+        "row": 3,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR32",
+        "row": 3,
+        "column": 2,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UL41",
+        "row": 4,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR41",
+        "row": 4,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR42",
+        "row": 4,
+        "column": 2,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UL51",
+        "row": 5,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR51",
+        "row": 5,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR52",
+        "row": 5,
+        "column": 2,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UL61",
+        "row": 6,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "LEFT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR61",
+        "row": 6,
+        "column": 1,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": false,
+        "isAisle": false,
+        "category": "REGULAR"
+      },
+      {
+        "seatNumber": "UR62",
+        "row": 6,
+        "column": 2,
+        "deck": "UPPER",
+        "section": "RIGHT",
+        "type": "SLEEPER",
+        "isWindow": true,
+        "isAisle": false,
+        "category": "REGULAR"
+      }
+    ]
+  },
+  "baseFare": 1000,
+  "__v": 1,
+  "amenities": [],
+  "features": [],
+  "images": [],
+  "priceTiers": {
+    "premium": 1.3,
+    "regular": 1,
+    "window": 1.1
+  },
+  "ratings": {
+    "average": 0,
+    "distribution": {
+      "1": {
+        "count": 0,
+        "percentage": 0
+      },
+      "2": {
+        "count": 0,
+        "percentage": 0
+      },
+      "3": {
+        "count": 0,
+        "percentage": 0
+      },
+      "4": {
+        "count": 0,
+        "percentage": 0
+      },
+      "5": {
+        "count": 0,
+        "percentage": 0
+      }
+    },
+    "totalReviews": 0
+  },
+  "status": "ACTIVE",
+  "updatedAt": {
+    "$date": "2026-04-11T14:12:49.457Z"
+  }
 }]

@@ -1,0 +1,476 @@
+[{
+  "_id": {
+    "$oid": "69dce2bc26c6c7dbeaf5d8c4"
+  },
+  "name": "The Grand Imperial - Updated",
+  "description": "Luxury 5-star hotel in Indore",
+  "address": {
+    "street": "MG Road",
+    "city": "Indore",
+    "state": "Madhya Pradesh",
+    "country": "India",
+    "pincode": "452001"
+  },
+  "geoLocation": {
+    "coordinates": [
+      75.8577,
+      22.7196
+    ],
+    "type": "Point"
+  },
+  "amenities": [
+    "WiFi",
+    "Swimming Pool",
+    "Restaurant",
+    "Spa",
+    "Gym",
+    "Parking"
+  ],
+  "images": [
+    {
+      "url": "https://example.com/hotel1.jpg",
+      "isCover": true,
+      "_id": {
+        "$oid": "69dce2bc26c6c7dbeaf5d8c5"
+      }
+    }
+  ],
+  "averageRating": 4.5,
+  "reviewCount": 0,
+  "status": "ACTIVE",
+  "cancellationPolicy": "MODERATE",
+  "dynamicPricingFactor": 1,
+  "createdAt": {
+    "$date": "2026-04-13T12:34:04.165Z"
+  },
+  "updatedAt": {
+    "$date": "2026-04-13T12:38:47.190Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69dceb83ea535be67227cebc"
+  },
+  "name": "Royal Palace Hotel",
+  "description": "Luxury hotel with premium amenities and city view rooms.",
+  "address": {
+    "street": "MG Road",
+    "city": "Bhopal",
+    "state": "Madhya Pradesh",
+    "country": "India",
+    "pincode": "462001"
+  },
+  "geoLocation": {
+    "type": "Point",
+    "coordinates": [
+      77.4126,
+      23.2599
+    ]
+  },
+  "amenities": [
+    "WiFi",
+    "Swimming Pool",
+    "Spa",
+    "Parking",
+    "Gym"
+  ],
+  "images": [
+    {
+      "url": "https://example.com/hotel1.jpg",
+      "caption": "Front View",
+      "isCover": true
+    }
+  ],
+  "averageRating": 4.5,
+  "reviewCount": 120,
+  "status": "ACTIVE",
+  "cancellationPolicy": "FLEXIBLE",
+  "contact": {
+    "email": "info@royalpalace.com",
+    "phone": "9876543210"
+  },
+  "dynamicPricingFactor": 1.2
+},
+{
+  "_id": {
+    "$oid": "69dceb83ea535be67227cebd"
+  },
+  "name": "Lake View Resort",
+  "description": "Beautiful lakeside resort with peaceful environment.",
+  "address": {
+    "street": "Upper Lake Road",
+    "city": "Bhopal",
+    "state": "Madhya Pradesh",
+    "country": "India",
+    "pincode": "462002"
+  },
+  "geoLocation": {
+    "type": "Point",
+    "coordinates": [
+      77.361,
+      23.238
+    ]
+  },
+  "amenities": [
+    "WiFi",
+    "Restaurant",
+    "Parking"
+  ],
+  "images": [
+    {
+      "url": "https://example.com/hotel2.jpg",
+      "caption": "Lake View",
+      "isCover": true
+    }
+  ],
+  "averageRating": 4.2,
+  "reviewCount": 80,
+  "status": "ACTIVE",
+  "cancellationPolicy": "MODERATE",
+  "contact": {
+    "email": "contact@lakeview.com",
+    "phone": "9123456780"
+  },
+  "dynamicPricingFactor": 1.1
+},
+{
+  "_id": {
+    "$oid": "69dceb83ea535be67227cebe"
+  },
+  "name": "Budget Inn",
+  "description": "Affordable stay for budget travelers.",
+  "address": {
+    "street": "Station Road",
+    "city": "Indore",
+    "state": "Madhya Pradesh",
+    "country": "India",
+    "pincode": "452001"
+  },
+  "geoLocation": {
+    "type": "Point",
+    "coordinates": [
+      75.8577,
+      22.7196
+    ]
+  },
+  "amenities": [
+    "WiFi",
+    "Parking"
+  ],
+  "images": [
+    {
+      "url": "https://example.com/hotel3.jpg",
+      "caption": "Rooms",
+      "isCover": true
+    }
+  ],
+  "averageRating": 3.8,
+  "reviewCount": 45,
+  "status": "ACTIVE",
+  "cancellationPolicy": "STRICT",
+  "contact": {
+    "email": "budgetinn@gmail.com",
+    "phone": "9988776655"
+  },
+  "dynamicPricingFactor": 0.9
+},
+{
+  "_id": {
+    "$oid": "69dceb83ea535be67227cebf"
+  },
+  "name": "City Center Hotel",
+  "description": "Located in the heart of the city with modern facilities.",
+  "address": {
+    "street": "Connaught Place",
+    "city": "Delhi",
+    "state": "Delhi",
+    "country": "India",
+    "pincode": "110001"
+  },
+  "geoLocation": {
+    "type": "Point",
+    "coordinates": [
+      77.209,
+      28.6139
+    ]
+  },
+  "amenities": [
+    "WiFi",
+    "Gym",
+    "Restaurant",
+    "Parking"
+  ],
+  "images": [
+    {
+      "url": "https://example.com/hotel4.jpg",
+      "caption": "Lobby",
+      "isCover": true
+    }
+  ],
+  "averageRating": 4.3,
+  "reviewCount": 150,
+  "status": "ACTIVE",
+  "cancellationPolicy": "MODERATE",
+  "contact": {
+    "email": "info@citycenter.com",
+    "phone": "9812345678"
+  },
+  "dynamicPricingFactor": 1.3
+},
+{
+  "_id": {
+    "$oid": "69dceb83ea535be67227cec0"
+  },
+  "name": "Beachside Resort",
+  "description": "Relaxing resort near the beach with sea-facing rooms.",
+  "address": {
+    "street": "Calangute Beach",
+    "city": "Goa",
+    "state": "Goa",
+    "country": "India",
+    "pincode": "403516"
+  },
+  "geoLocation": {
+    "type": "Point",
+    "coordinates": [
+      73.755,
+      15.5439
+    ]
+  },
+  "amenities": [
+    "WiFi",
+    "Swimming Pool",
+    "Bar",
+    "Spa"
+  ],
+  "images": [
+    {
+      "url": "https://example.com/hotel5.jpg",
+      "caption": "Beach View",
+      "isCover": true
+    }
+  ],
+  "averageRating": 4.7,
+  "reviewCount": 200,
+  "status": "ACTIVE",
+  "cancellationPolicy": "FLEXIBLE",
+  "contact": {
+    "email": "goa@beachside.com",
+    "phone": "9090909090"
+  },
+  "dynamicPricingFactor": 1.5
+},
+{
+  "_id": {
+    "$oid": "69dceb83ea535be67227cec1"
+  },
+  "name": "Hilltop Retreat",
+  "description": "Peaceful stay in the hills with scenic views.",
+  "address": {
+    "street": "Mall Road",
+    "city": "Manali",
+    "state": "Himachal Pradesh",
+    "country": "India",
+    "pincode": "175131"
+  },
+  "geoLocation": {
+    "type": "Point",
+    "coordinates": [
+      77.1892,
+      32.2432
+    ]
+  },
+  "amenities": [
+    "WiFi",
+    "Fireplace",
+    "Parking"
+  ],
+  "images": [
+    {
+      "url": "https://example.com/hotel6.jpg",
+      "caption": "Mountain View",
+      "isCover": true
+    }
+  ],
+  "averageRating": 4.6,
+  "reviewCount": 95,
+  "status": "ACTIVE",
+  "cancellationPolicy": "STRICT",
+  "contact": {
+    "email": "hilltop@gmail.com",
+    "phone": "9871234560"
+  },
+  "dynamicPricingFactor": 1.4
+},
+{
+  "_id": {
+    "$oid": "69dceb83ea535be67227cec2"
+  },
+  "name": "Airport Residency",
+  "description": "Convenient hotel near airport for travelers.",
+  "address": {
+    "street": "Airport Road",
+    "city": "Mumbai",
+    "state": "Maharashtra",
+    "country": "India",
+    "pincode": "400099"
+  },
+  "geoLocation": {
+    "type": "Point",
+    "coordinates": [
+      72.8777,
+      19.076
+    ]
+  },
+  "amenities": [
+    "WiFi",
+    "Shuttle Service",
+    "Restaurant"
+  ],
+  "images": [
+    {
+      "url": "https://example.com/hotel7.jpg",
+      "caption": "Reception",
+      "isCover": true
+    }
+  ],
+  "averageRating": 4.1,
+  "reviewCount": 110,
+  "status": "ACTIVE",
+  "cancellationPolicy": "NON_REFUNDABLE",
+  "contact": {
+    "email": "airport@stay.com",
+    "phone": "9000011111"
+  },
+  "dynamicPricingFactor": 1.2
+},
+{
+  "_id": {
+    "$oid": "69dceb83ea535be67227cec3"
+  },
+  "name": "Heritage Haveli",
+  "description": "Traditional Rajasthani heritage stay.",
+  "address": {
+    "street": "Old City",
+    "city": "Jaipur",
+    "state": "Rajasthan",
+    "country": "India",
+    "pincode": "302001"
+  },
+  "geoLocation": {
+    "type": "Point",
+    "coordinates": [
+      75.7873,
+      26.9124
+    ]
+  },
+  "amenities": [
+    "WiFi",
+    "Cultural Shows",
+    "Restaurant"
+  ],
+  "images": [
+    {
+      "url": "https://example.com/hotel8.jpg",
+      "caption": "Courtyard",
+      "isCover": true
+    }
+  ],
+  "averageRating": 4.4,
+  "reviewCount": 75,
+  "status": "ACTIVE",
+  "cancellationPolicy": "MODERATE",
+  "contact": {
+    "email": "heritage@haveli.com",
+    "phone": "9111222333"
+  },
+  "dynamicPricingFactor": 1.3
+},
+{
+  "_id": {
+    "$oid": "69dceb83ea535be67227cec4"
+  },
+  "name": "Tech Park Hotel",
+  "description": "Business hotel near IT hub.",
+  "address": {
+    "street": "Whitefield",
+    "city": "Bangalore",
+    "state": "Karnataka",
+    "country": "India",
+    "pincode": "560066"
+  },
+  "geoLocation": {
+    "type": "Point",
+    "coordinates": [
+      77.7499,
+      12.9698
+    ]
+  },
+  "amenities": [
+    "WiFi",
+    "Conference Room",
+    "Gym"
+  ],
+  "images": [
+    {
+      "url": "https://example.com/hotel9.jpg",
+      "caption": "Conference Hall",
+      "isCover": true
+    }
+  ],
+  "averageRating": 4,
+  "reviewCount": 60,
+  "status": "INACTIVE",
+  "cancellationPolicy": "MODERATE",
+  "contact": {
+    "email": "techpark@hotel.com",
+    "phone": "9887766554"
+  },
+  "dynamicPricingFactor": 1.25,
+  "updatedAt": {
+    "$date": "2026-04-13T13:23:38.141Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "69dceb83ea535be67227cec5"
+  },
+  "name": "Desert Camp Stay",
+  "description": "Experience desert life with luxury tents.",
+  "address": {
+    "street": "Sam Sand Dunes",
+    "city": "Jaisalmer",
+    "state": "Rajasthan",
+    "country": "India",
+    "pincode": "345001"
+  },
+  "geoLocation": {
+    "type": "Point",
+    "coordinates": [
+      70.9083,
+      26.9157
+    ]
+  },
+  "amenities": [
+    "Cultural Shows",
+    "Bonfire",
+    "Dinner"
+  ],
+  "images": [
+    {
+      "url": "https://example.com/hotel10.jpg",
+      "caption": "Desert Camp",
+      "isCover": true
+    }
+  ],
+  "averageRating": 4.8,
+  "reviewCount": 130,
+  "status": "ACTIVE",
+  "cancellationPolicy": "FLEXIBLE",
+  "contact": {
+    "email": "desert@camp.com",
+    "phone": "9776655443"
+  },
+  "dynamicPricingFactor": 1.6
+}]
