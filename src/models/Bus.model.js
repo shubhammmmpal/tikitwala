@@ -49,30 +49,39 @@ const busSchema = new mongoose.Schema({
     trim: true
   },
 
+  busName: {
+    type: String,
+    trim: true,
+    // required : true,
+  },
+
   registrationNumber: {     // 🔥 Added - Very important
     type: String,
     required: true,
     unique: true
   },
 
+  
+
   travelAgency: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Agency",
-    required: true
+    // required: true
   },
 
   busType: {
     type: String,
     enum: [
-      "Seater",
-      "AC Seater",
-      "Non-AC Seater",
-      "Sleeper",
-      "AC Sleeper",
-      "Non-AC Sleeper",
-      "Semi-Sleeper",
-      "Volvo",
-      "Luxury"
+        "Seater",
+        "AC Seater",
+        "Non-AC Seater",
+        "Sleeper",
+        "AC Sleeper",
+        "Non-AC Sleeper",
+        "Semi-Sleeper",
+        "AC Semi-Sleeper",
+        "Volvo",
+        "Luxury"
     ],
     required: true
   },
@@ -157,6 +166,8 @@ const busSchema = new mongoose.Schema({
       5: { count: { type: Number, default: 0 }, percentage: { type: Number, default: 0 } }
     }
   },
+
+  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 
   // Timestamps
 }, { 

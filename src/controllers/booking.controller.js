@@ -218,11 +218,37 @@ export const bookBusTrip = async (req, res) => {
     // await session.commitTransaction();
     // session.endSession();
 
-    return res.status(201).json({
-      success: true,
-      message: "Booking successful",
-      data: newBooking,
-    });
+    const bookingDetails = await Booking.findById(newBooking._id)
+
+  .populate({
+    path: "busTrip",
+    select: "startPoint endPoint departureDateTime arrivalDateTime departureDate departureTime arrivalDate arrivalTime travelDuration",
+    populate: [
+
+      // ======================
+      // BUS
+      // ======================
+
+      {
+        path: "bus",
+        select:
+          "busNo busName busType registrationNumber travelAgency",
+      }
+
+      
+    ],
+  });
+
+return res.status(201).json({
+  success: true,
+  message: "Booking successful",
+
+  data: {
+    booking: bookingDetails,
+
+    tripInfo: bookingDetails.busTrip,
+  },
+});
   } catch (error) {
     // await session.abortTransaction();
     // session.endSession();
@@ -271,9 +297,37 @@ export const getBusBookingById = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const booking = await Booking.findById(id)
-      .populate("user", "name email")
-      .populate("busTrip");
+const booking = await Booking.findById(id)
+
+  // ======================
+  // USER
+  // ======================
+
+  .populate("user", "name email")
+
+  // ======================
+  // BUS TRIP
+  // ======================
+
+  .populate({
+    path: "busTrip",
+    select: "startPoint endPoint departureDateTime arrivalDateTime departureDate departureTime arrivalDate arrivalTime travelDuration",
+
+    populate: [
+
+      // ======================
+      // BUS INFO
+      // ======================
+
+      {
+        path: "bus",
+        select:
+          "busNo busName busType registrationNumber travelAgency",
+      }
+
+      
+    ],
+  });
 
     if (!booking) {
       return res.status(404).json({
@@ -300,18 +354,31 @@ export const getBusBookingByUserId = async (req, res) => {
 
     const bookings = await Booking.find({ user: userId })
     //   .populate("busTrip")
-      .populate({
-        path: "busTrip",
-        select:"platformType",
-        populate: {
-            path: "bus",
-            select: "travelAgency busNo busType registrationNumber",
-            populate: {
-                path: "travelAgency",
-                select: "name"
-            }
-        }
-      })
+      .populate("user", "name email")
+
+  // ======================
+  // BUS TRIP
+  // ======================
+
+  .populate({
+    path: "busTrip",
+    select: "startPoint endPoint departureDateTime arrivalDateTime departureDate departureTime arrivalDate arrivalTime travelDuration",
+
+    populate: [
+
+      // ======================
+      // BUS INFO
+      // ======================
+
+      {
+        path: "bus",
+        select:
+          "busNo busName busType registrationNumber travelAgency",
+      }
+
+      
+    ],
+  });
 
 //         .populate({
 //     path: "bus",

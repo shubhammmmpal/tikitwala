@@ -9,7 +9,10 @@ import { createBusTrip,
   updateBusTrip,
   deleteBusTrip,
   changeBusTripStatus,
-  searchBusTrips } from '../controllers/busTrip.controller.js';
+  searchBusTrips,
+  updateSeatPrice,
+  updateSeatType
+   } from '../controllers/busTrip.controller.js';
 
 router.post("/create", createBusTrip);
 router.get("/search", searchBusTrips);
@@ -18,7 +21,8 @@ router.get("/:id", getBusTripById);
 router.put("/:id", updateBusTrip);
 router.patch("/:id/status", changeBusTripStatus);
 router.delete("/:id", deleteBusTrip);
-
+router.patch("/update-seat-price", updateSeatPrice);
+router.patch("/update-seat-type", updateSeatType);
 
 
 

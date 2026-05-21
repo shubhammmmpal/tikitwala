@@ -12,11 +12,15 @@ import { createBus,
     generateBusSeats,searchBuses
 } from '../controllers/bus.controller.js';
 
-// router.get('/buses', getBusList);
+import { protect } from '../middleware/authMiddleware.js';   // Your auth middleware
+
+import upload from '../middleware/uploadMiddleware.js';
+
+router.get('/buses', protect, getBusList);
 router.get('/search-buses', searchBuses);
 // router.get('/debug-buses', debugBuses);
-router.post("/create", createBus);
-router.get("/", getBusList);
+router.post("/create", protect, upload.array("images", 10), createBus);
+
 router.get("/:id", getBusById);
 router.put("/:id", updateBus);
 router.delete("/:id", deleteBus);

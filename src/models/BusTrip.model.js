@@ -1,128 +1,357 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
+
+
+// ======================
+// Pickup Point Schema
+// ======================
+
+const pickupPointSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true
+  },
+
+  datetime: {
+    type: Date,
+    required: true
+  },
+
+  address: {
+    type: String
+  }
+}, { _id: false });
+
+
+// ======================
+// Drop Point Schema
+// ======================
+
+const dropPointSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true
+  },
+
+  datetime: {
+    type: Date,
+    required: true
+  },
+
+  address: {
+    type: String
+  }
+}, { _id: false });
+
+
+// ======================
+// City Wise Pickup Schema
+// ======================
+
+const cityPickupSchema = new mongoose.Schema({
+  city: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "City",
+    required: true
+  },
+
+  points: [pickupPointSchema]
+
+}, { _id: false });
+
+
+// ======================
+// City Wise Drop Schema
+// ======================
+
+const cityDropSchema = new mongoose.Schema({
+  city: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "City",
+    required: true
+  },
+
+  points: [dropPointSchema]
+
+}, { _id: false });
+
+
+// ======================
+// Stop Point Schema
+// ======================
+
+const stopPointSchema = new mongoose.Schema({
+  city: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "City",
+    required: true
+  },
+
+  arrivalTime: {
+    type: Date
+  },
+
+  departureTime: {
+    type: Date
+  },
+
+  order: {
+    type: Number,
+    required: true
+  }
+
+}, { _id: false });
+
+
+// ======================
+// Seat Schema
+// ======================
+
+const seatSchema = new mongoose.Schema({
+
+  seatNo: {
+    type: String,
+    required: true
+  },
+
+  deck: {
+    type: String,
+    enum: ['LOWER', 'UPPER', 'SINGLE'],
+    required: true
+  },
+
+  seatPrice: {
+    type: Number,
+    required: true
+  },
+
+  seatType: {
+    type: String,
+    enum: ['SEATER', 'SLEEPER', 'SEMI_SLEEPER'],
+    required: true
+  },
+
+  seatFor: {
+    type: String,
+    enum: ['Male', 'Female', 'None'],
+    default: 'None'
+  },
+
+  status: {
+    type: String,
+    enum: ['available', 'booked', 'blocked'],
+    default: 'available'
+  },
+
+  bookedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    default: null
+  },
+
+  genderBooked: {
+    type: String,
+    default: null
+  }
+
+}, { _id: false });
+
+
+// ======================
+// Main Bus Trip Schema
+// ======================
+
 const busTripSchema = new mongoose.Schema({
+
   bus: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Bus',
     required: true
   },
+
   platformType: {
     type: String,
     default: 'BUS'
   },
+
+  // ======================
+  // ROUTE
+  // ======================
+
   startPoint: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'City',
     required: true
   },
+
   endPoint: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'City',
     required: true
   },
+
+  stopPoints: [stopPointSchema],
+
+
+  // ======================
+  // DATE & TIME
+  // ======================
+
   departureDateTime: {
     type: Date,
     required: true
   },
+
   arrivalDateTime: {
     type: Date,
     required: true
   },
+
   departureDate: {
     type: String,
     required: true
   },
+
   arrivalDate: {
     type: String,
     required: true
   },
+
   departureTime: {
-    type: String,
-    // required: true
+    type: String
   },
+
   arrivalTime: {
-    type: String,
-    // required: true
+    type: String
   },
+
   travelDuration: {
-    type: String, // e.g., "8h 30m"
+    type: String,
     required: true
   },
 
-  // Pickup Points (multiple stops)
-  pickupPoints: [{
-    name: { type: String, required: true },
-    datetime: { type: Date, required: true },
-    order: { type: Number } // sequence of stop
+  creationType:{
+    type: String,
+    enum: ['random', 'daily'],
+    
+  },
+  
+  dates: [Date], // For random generation of trips on specific dates
+
+
+
+  // ======================
+  // PICKUP & DROP POINTS
+  // ======================
+
+  pickupPoints: [cityPickupSchema],
+
+  dropPoints: [cityDropSchema],
+
+
+  // ======================
+  // SEATS
+  // ======================
+
+  seats: [seatSchema],
+
+
+  // ======================
+  // PRICING
+  // ======================
+
+  basePrice: {
+    type: Number,
+    required: true
+  },
+
+  pricePerSeat: {
+    type: Map,
+    of: Number
+  },
+
+
+  // ======================
+  // EXTRA
+  // ======================
+
+  amenities: [{
+    type: String
   }],
 
-  // Drop Points
-  dropPoints: [{
-    name: { type: String, required: true },
-    datetime: { type: Date, required: true },
-    order: { type: Number }
+  features: [{
+    type: String
   }],
 
-  // Seat Configuration
-seats: [{
-    seatNo: { type: String, required: true },
-    
-    deck: {
-      type: String,
-      enum: ['LOWER', 'UPPER', 'SINGLE'],   // ← Changed
-      required: true
-    },
-    
-    seatPrice: { type: Number, required: true },
-    
-    seatType: {
-      type: String,
-      enum: ['SEATER', 'SLEEPER', 'SEMI_SLEEPER'],   // ← Changed
-      required: true
-    },
-    
-    seatFor: {
-      type: String,
-      enum: ['Male', 'Female', 'None'],
-      default: 'None'
-    },
-    
-    status: {
-      type: String,
-      enum: ['available', 'booked', 'blocked'],
-      default: 'available'
-    },
-    
-    bookedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },
-    genderBooked: { type: String, default: null }
+  busImages: [{
+    type: String
   }],
 
-  // Pricing (you can extend this)
-  basePrice: { type: Number, required: true },
-  pricePerSeat: { type: Map, of: Number }, // e.g., { "Upper": 1200, "Lower": 1500 }
 
-  amenities: [{ type: String }],
-  features: [{ type: String }],
-  busImages: [{ type: String }],
+  // ======================
+  // RATINGS
+  // ======================
 
-  // Ratings (for this trip or overall bus)
   ratings: {
-    average: { type: Number, default: 0 },
-    totalReviews: { type: Number, default: 0 },
+
+    average: {
+      type: Number,
+      default: 0
+    },
+
+    totalReviews: {
+      type: Number,
+      default: 0
+    },
+
     distribution: {
-      1: { count: Number, percentage: Number },
-      2: { count: Number, percentage: Number },
-      3: { count: Number, percentage: Number },
-      4: { count: Number, percentage: Number },
-      5: { count: Number, percentage: Number }
+
+      1: {
+        count: Number,
+        percentage: Number
+      },
+
+      2: {
+        count: Number,
+        percentage: Number
+      },
+
+      3: {
+        count: Number,
+        percentage: Number
+      },
+
+      4: {
+        count: Number,
+        percentage: Number
+      },
+
+      5: {
+        count: Number,
+        percentage: Number
+      }
     }
   },
+
+
+  // ======================
+  // STATUS
+  // ======================
 
   status: {
     type: String,
     enum: ['active', 'cancelled', 'completed', 'delayed'],
     default: 'active'
   }
+
 }, {
-  timestamps: true // auto adds createdAt & updatedAt
+  timestamps: true
 });
 
+
+// ======================
+// MODEL
+// ======================
+
 const BusTrip = mongoose.model('BusTrip', busTripSchema);
+
 export default BusTrip;

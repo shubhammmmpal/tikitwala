@@ -2,337 +2,685 @@ import BusTrip from "../models/BusTrip.model.js";
 import Bus from "../models/Bus.model.js";
 import Agency from "../models/Agency.model.js";
 
-// export const createBusTrip = async (req, res) => {
-//   try {
-//     const {
-//       busId,
-//       startPoint,
-//       endPoint,
-//       departureDateTime,     // Optional base
-//       arrivalDateTime,       // Optional base
-//       departureTime,         // "22:30"
-//       arrivalTime,           // "07:00"
-//       travelDuration,
-//       basePrice,
-//       pricePerSeat,
-//       pickupPoints,
-//       dropPoints,
-
-//       creationType,          // "single" | "daily" | "custom" | "random"
-//       endDate,
-//       dates                  // for random
-//     } = req.body;
-
-//     const bus = await Bus.findById(busId);
-//     if (!bus) return res.status(404).json({ success: false, message: "Bus not found" });
-
-//     let tripDates = [];
-
-//     if (creationType === "single") {
-//       tripDates.push(new Date(departureDateTime));
-//     } 
-//     else if (creationType === "daily" || creationType === "custom") {
-//       const start = new Date(departureDateTime);
-//       const end = new Date(endDate);
-
-//       let current = new Date(start);
-//       while (current <= end) {
-//         tripDates.push(new Date(current));
-//         current.setDate(current.getDate() + 1);
-//       }
-//     } 
-//     else if (creationType === "random") {
-//       if (!dates || !Array.isArray(dates) || dates.length === 0) {
-//         return res.status(400).json({ success: false, message: "dates array is required for random type" });
-//       }
-//       tripDates = dates.map(d => new Date(d));
-//     } 
-//     else {
-//       return res.status(400).json({ success: false, message: "Invalid creationType" });
-//     }
-
-//     // Remove duplicate dates
-//     const uniqueDates = [...new Set(tripDates.map(d => d.toISOString().split('T')[0]))];
-
-//     const createdTrips = [];
-
-//     for (let dateStr of uniqueDates) {
-//       const depDate = new Date(dateStr);
-
-//       // Create Departure DateTime
-//       const [depHour, depMin] = departureTime.split(":").map(Number);
-//       const finalDeparture = new Date(depDate);
-//       finalDeparture.setHours(depHour, depMin, 0, 0);
-
-//       // Create Arrival DateTime
-//       const [arrHour, arrMin] = arrivalTime.split(":").map(Number);
-//       let finalArrival = new Date(depDate);
-
-//       // If arrival time is next day (e.g., 22:30 → 07:00)
-//       if (arrHour < depHour || (arrHour === depHour && arrMin < depMin)) {
-//         finalArrival.setDate(finalArrival.getDate() + 1);
-//       }
-//       finalArrival.setHours(arrHour, arrMin, 0, 0);
-
-//       const newTrip = new BusTrip({
-//         bus: busId,
-//         tripCode: `${bus.busNo}-${dateStr.replace(/-/g, '')}`,
-//         startPoint,
-//         endPoint,
-//         departureDateTime: finalDeparture,
-//         arrivalDateTime: finalArrival,
-//         departureDate: dateStr,
-//         departureTime,
-//         arrivalDate: finalArrival.toISOString().split('T')[0],
-//         arrivalTime,
-//         travelDuration,
-//         basePrice,
-//         pricePerSeat: pricePerSeat || new Map(),
-//         pickupPoints: pickupPoints || [],
-//         dropPoints: dropPoints || [],
-//         totalSeats: bus.totalSeats,
-//         availableSeats: bus.totalSeats,
-//       });
-
-//       await newTrip.save();
-//       createdTrips.push(newTrip);
-//     }
-
-//     res.status(201).json({
-//       success: true,
-//       message: `${createdTrips.length} trip(s) created successfully`,
-//       totalCreated: createdTrips.length,
-//       data: createdTrips
-//     });
-
-//   } catch (error) {
-//     console.error(error); // Helpful for debugging
-//     res.status(500).json({
-//       success: false,
-//       message: error.message
-//     });
-//   }
-// };
-
 
 export const createBusTrip = async (req, res) => {
   try {
+
     const {
       busId,
       startPoint,
       endPoint,
+      stopPoints = [],
+
       departureTime,
       arrivalTime,
+
       travelDuration,
+
       basePrice,
       pricePerSeat,
-      pickupPoints,
-      dropPoints,
+
+      pickupPoints = [],
+      dropPoints = [],
 
       creationType,
       endDate,
       dates
+
     } = req.body;
 
-    const bus = await Bus.findById(busId);
-    if (!bus) return res.status(404).json({ success: false, message: "Bus not found" });
 
-    if (!bus.seatStructure?.seats?.length) {
-      return res.status(400).json({ 
-        success: false, 
-        message: "Seat structure not generated for this bus yet." 
+    // =========================
+    // CHECK BUS
+    // =========================
+
+    const bus = await Bus.findById(busId);
+
+    if (!bus) {
+      return res.status(404).json({
+        success: false,
+        message: "Bus not found"
       });
     }
 
-    // ==================== Prepare Trip Dates ====================
+    if (!bus.seatStructure?.seats?.length) {
+      return res.status(400).json({
+        success: false,
+        message: "Seat structure not generated for this bus yet."
+      });
+    }
+
+
+    // =========================
+    // PREPARE DATES
+    // =========================
+
     let tripDates = [];
 
     if (creationType === "single") {
-      tripDates.push(new Date(req.body.departureDateTime));
-    } else if (creationType === "daily" || creationType === "custom") {
-      const start = new Date(req.body.departureDateTime);
-      const end = new Date(endDate);
-      let current = new Date(start);
-      while (current <= end) {
-        tripDates.push(new Date(current));
-        current.setDate(current.getDate() + 1);
-      }
-    } else if (creationType === "random") {
-      tripDates = dates.map(d => new Date(d));
+
+      tripDates.push(
+        new Date(req.body.departureDateTime)
+      );
+
     }
 
-    const uniqueDates = [...new Set(tripDates.map(d => d.toISOString().split('T')[0]))];
+    else if (
+      creationType === "daily" ||
+      creationType === "custom"
+    ) {
+
+      const start = new Date(req.body.departureDateTime);
+
+      const end = new Date(endDate);
+
+      let current = new Date(start);
+
+      while (current <= end) {
+
+        tripDates.push(
+          new Date(current)
+        );
+
+        current.setDate(
+          current.getDate() + 1
+        );
+      }
+
+    }
+
+    else if (creationType === "random") {
+
+      tripDates = dates.map(
+        d => new Date(d)
+      );
+
+    }
+
+
+    // =========================
+    // REMOVE DUPLICATES
+    // =========================
+
+    const uniqueDates = [
+      ...new Set(
+        tripDates.map(
+          d => d.toISOString().split('T')[0]
+        )
+      )
+    ];
+
+
     const createdTrips = [];
     const skippedTrips = [];
 
-    // ==================== Check & Create Trips ====================
+
+    // =========================
+    // LOOP DATES
+    // =========================
+
     for (let dateStr of uniqueDates) {
 
-      // 🔥 Duplicate Check
+
+      // =========================
+      // CHECK DUPLICATE TRIP
+      // =========================
+
       const existingTrip = await BusTrip.findOne({
         bus: busId,
         departureDate: dateStr
       });
 
       if (existingTrip) {
-        skippedTrips.push({ date: dateStr, reason: "Trip already exists for this bus on this date" });
-        continue; // Skip this date
+
+        skippedTrips.push({
+          date: dateStr,
+          reason: "Trip already exists for this bus on this date"
+        });
+
+        continue;
       }
 
-      // Create Departure & Arrival Time
+
+      // =========================
+      // CREATE DEPARTURE DATETIME
+      // =========================
+
       const depDate = new Date(dateStr);
-      const [depHour, depMin] = departureTime.split(":").map(Number);
+
+      const [depHour, depMin] = departureTime
+        .split(":")
+        .map(Number);
+
       const finalDeparture = new Date(depDate);
-      finalDeparture.setHours(depHour, depMin, 0, 0);
 
-      const [arrHour, arrMin] = arrivalTime.split(":").map(Number);
+      finalDeparture.setHours(
+        depHour,
+        depMin,
+        0,
+        0
+      );
+
+
+      // =========================
+      // CREATE ARRIVAL DATETIME
+      // =========================
+
+      const [arrHour, arrMin] = arrivalTime
+        .split(":")
+        .map(Number);
+
       let finalArrival = new Date(depDate);
-      if (arrHour < depHour || (arrHour === depHour && arrMin < depMin)) {
-        finalArrival.setDate(finalArrival.getDate() + 1);
-      }
-      finalArrival.setHours(arrHour, arrMin, 0, 0);
 
-      // Generate Seats
+      // NEXT DAY ARRIVAL
+
+      if (
+        arrHour < depHour ||
+        (
+          arrHour === depHour &&
+          arrMin < depMin
+        )
+      ) {
+
+        finalArrival.setDate(
+          finalArrival.getDate() + 1
+        );
+      }
+
+      finalArrival.setHours(
+        arrHour,
+        arrMin,
+        0,
+        0
+      );
+
+
+      // =========================
+      // GENERATE SEATS
+      // =========================
+
       const tripSeats = bus.seatStructure.seats.map(seat => ({
+
         seatNo: seat.seatNumber,
+
         deck: seat.deck,
-        seatPrice: pricePerSeat?.[seat.deck] || basePrice,
+
+        seatPrice:
+          pricePerSeat?.[seat.deck] ||
+          basePrice,
+
         seatType: seat.type,
+
         seatFor: "None",
+
         status: "available",
+
         bookedBy: null,
+
         genderBooked: null
+
       }));
 
+
+      // =========================
+      // FORMAT STOP POINTS
+      // =========================
+
+      const formattedStopPoints = stopPoints.map((stop, index) => ({
+
+        city: stop.city,
+
+        arrivalTime: stop.arrivalTime
+          ? new Date(stop.arrivalTime)
+          : null,
+
+        departureTime: stop.departureTime
+          ? new Date(stop.departureTime)
+          : null,
+
+        order: stop.order || index + 1
+
+      }));
+
+
+      // =========================
+      // FORMAT PICKUP POINTS
+      // =========================
+
+      const formattedPickupPoints = pickupPoints.map(item => ({
+
+        city: item.city,
+
+        points: item.points.map(point => ({
+
+          name: point.name,
+
+          datetime: new Date(point.datetime),
+
+          address: point.address || ""
+
+        }))
+
+      }));
+
+
+      // =========================
+      // FORMAT DROP POINTS
+      // =========================
+
+      const formattedDropPoints = dropPoints.map(item => ({
+
+        city: item.city,
+
+        points: item.points.map(point => ({
+
+          name: point.name,
+
+          datetime: new Date(point.datetime),
+
+          address: point.address || ""
+
+        }))
+
+      }));
+
+
+      // =========================
+      // CREATE TRIP
+      // =========================
+
       const newTrip = new BusTrip({
+
         bus: busId,
-        tripCode: `${bus.busNo}-${dateStr.replace(/-/g, '')}`,
+
+        tripCode:
+          `${bus.busNo}-${dateStr.replace(/-/g, '')}`,
+
+        platformType: "BUS",
+
+
+        // =========================
+        // ROUTE
+        // =========================
+
         startPoint,
+
         endPoint,
+
+        stopPoints: formattedStopPoints,
+
+
+        // =========================
+        // DATETIME
+        // =========================
+
         departureDateTime: finalDeparture,
+
         arrivalDateTime: finalArrival,
+
         departureDate: dateStr,
+
+        arrivalDate:
+          finalArrival.toISOString().split('T')[0],
+
         departureTime,
-        arrivalDate: finalArrival.toISOString().split('T')[0],
+
         arrivalTime,
+
         travelDuration,
+
+
+        // =========================
+        // PRICE
+        // =========================
+
         basePrice,
-        pricePerSeat: pricePerSeat || {},
-        amenities: bus.amenities || [],
-        features: bus.features || [],
-        busImages: bus.images || [],
-        busRatings: {
-    average: bus.ratings?.average || 0,
-    totalReviews: bus.ratings?.totalReviews || 0,
-    distribution: bus.ratings?.distribution || {
-      1: { count: 0, percentage: 0 },
-      2: { count: 0, percentage: 0 },
-      3: { count: 0, percentage: 0 },
-      4: { count: 0, percentage: 0 },
-      5: { count: 0, percentage: 0 }
-    }
-  },
-        pickupPoints: pickupPoints || [],
-        dropPoints: dropPoints || [],
+
+        pricePerSeat:
+          pricePerSeat || {},
+
+
+        // =========================
+        // BUS DATA
+        // =========================
+
+        amenities:
+          bus.amenities || [],
+
+        features:
+          bus.features || [],
+
+        busImages:
+          bus.images || [],
+
+
+        // =========================
+        // RATINGS
+        // =========================
+
+        ratings: {
+
+          average:
+            bus.ratings?.average || 0,
+
+          totalReviews:
+            bus.ratings?.totalReviews || 0,
+
+          distribution:
+            bus.ratings?.distribution || {
+
+              1: {
+                count: 0,
+                percentage: 0
+              },
+
+              2: {
+                count: 0,
+                percentage: 0
+              },
+
+              3: {
+                count: 0,
+                percentage: 0
+              },
+
+              4: {
+                count: 0,
+                percentage: 0
+              },
+
+              5: {
+                count: 0,
+                percentage: 0
+              }
+
+            }
+
+        },
+
+
+        // =========================
+        // PICKUP & DROP
+        // =========================
+
+        pickupPoints:
+          formattedPickupPoints,
+
+        dropPoints:
+          formattedDropPoints,
+
+
+        // =========================
+        // SEATS
+        // =========================
+
         seats: tripSeats,
-        totalSeats: tripSeats.length,
-        availableSeats: tripSeats.length,
+
+        totalSeats:
+          tripSeats.length,
+
+        availableSeats:
+          tripSeats.length
+
       });
 
+
+      // =========================
+      // SAVE
+      // =========================
+
       await newTrip.save();
+
       createdTrips.push(newTrip);
+
     }
 
-    res.status(201).json({
+
+    // =========================
+    // RESPONSE
+    // =========================
+
+    return res.status(201).json({
+
       success: true,
-      message: `${createdTrips.length} trip(s) created successfully`,
-      totalCreated: createdTrips.length,
-      skipped: skippedTrips.length,
+
+      message:
+        `${createdTrips.length} trip(s) created successfully`,
+
+      totalCreated:
+        createdTrips.length,
+
+      skipped:
+        skippedTrips.length,
+
       createdTrips,
+
       skippedTrips
+
     });
 
-  } catch (error) {
-    console.error("Create Trip Error:", error);
-    res.status(500).json({
+  }
+
+  catch (error) {
+
+    console.error(
+      "Create Trip Error:",
+      error
+    );
+
+    return res.status(500).json({
+
       success: false,
+
       message: error.message
+
     });
+
   }
 };
+
 export const getBusTrips = async (req, res) => {
   try {
-    const { page = 1, limit = 10, busId, departureDate, status, startPoint, endPoint } = req.query;
+
+    const {
+      page = 1,
+      limit = 10,
+      busId,
+      departureDate,
+      status,
+      startPoint,
+      endPoint
+    } = req.query;
 
     const query = {};
+
     if (busId) query.bus = busId;
     if (departureDate) query.departureDate = departureDate;
     if (status) query.status = status;
     if (startPoint) query.startPoint = startPoint;
     if (endPoint) query.endPoint = endPoint;
 
-    // const trips = await BusTrip.find(query)
-    //   .populate("bus", "travelAgency busNo busType registrationNumber")
-    //   .sort({ departureDateTime: 1 })
-    //   .skip((page - 1) * limit)
-    //   .limit(parseInt(limit));
-
-
     const trips = await BusTrip.find(query)
-    // .populate("bus", "travelAgency busNo busType registrationNumber")
-  .populate({
-    path: "bus",
-    select: "travelAgency busNo busType registrationNumber",
-    populate: {
-      path: "travelAgency",
-      select: "name"
-    }
-  })
-  .sort({ departureDateTime: 1 })
-  .skip((page - 1) * limit)
-  .limit(parseInt(limit));
 
+      // ======================
+      // BUS
+      // ======================
 
-// console.log(trips[0].bus.toObject());
-// const agency = await Agency.findById("67f8b2c9d5e4a12345678901");
-// console.log(agency);
+      .populate({
+        path: "bus",
+        select: "travelAgency busNo busName busType registrationNumber",
+        populate: {
+          path: "travelAgency",
+          select: "name"
+        }
+      })
+
+      // ======================
+      // START CITY
+      // ======================
+
+      .populate({
+        path: "startPoint",
+        model: "City",
+        select: "city_name city_id state_id"
+      })
+
+      // ======================
+      // END CITY
+      // ======================
+
+      .populate({
+        path: "endPoint",
+        model: "City",
+        select: "city_name city_id state_id"
+      })
+
+      // ======================
+      // STOP POINTS CITY
+      // ======================
+
+      .populate({
+        path: "stopPoints.city",
+        model: "City",
+        select: "city_name city_id state_id"
+      })
+
+      // ======================
+      // PICKUP POINTS CITY
+      // ======================
+
+      .populate({
+        path: "pickupPoints.city",
+        model: "City",
+        select: "city_name city_id state_id"
+      })
+
+      // ======================
+      // DROP POINTS CITY
+      // ======================
+
+      .populate({
+        path: "dropPoints.city",
+        model: "City",
+        select: "city_name city_id state_id"
+      })
+
+      .sort({ departureDateTime: 1 })
+
+      .skip((page - 1) * limit)
+
+      .limit(Number(limit));
+
     const total = await BusTrip.countDocuments(query);
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       total,
       totalPages: Math.ceil(total / limit),
-      currentPage: parseInt(page),
+      currentPage: Number(page),
       data: trips
     });
+
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+
+    return res.status(500).json({
+      success: false,
+      message: error.message
+    });
+
   }
 };
 
 // ====================== GET BUS TRIP BY ID ======================
 export const getBusTripById = async (req, res) => {
   try {
+
     const trip = await BusTrip.findById(req.params.id)
-      // .populate("bus", "busNo busType ratings images amenities features");
+
+      // ======================
+      // BUS
+      // ======================
+
       .populate({
-    path: "bus",
-    select: "travelAgency busNo busType registrationNumber ratings images amenities features",
-    populate: {
-      path: "travelAgency",
-      select: "name"
-    }
-  })
+        path: "bus",
+        select:
+          "travelAgency busNo busName busType registrationNumber ratings images amenities features",
+        populate: {
+          path: "travelAgency",
+          select: "name"
+        }
+      })
+
+      // ======================
+      // START POINT
+      // ======================
+
+      .populate({
+        path: "startPoint",
+        model: "City",
+        select: "city_name city_id state_id"
+      })
+
+      // ======================
+      // END POINT
+      // ======================
+
+      .populate({
+        path: "endPoint",
+        model: "City",
+        select: "city_name city_id state_id"
+      })
+
+      // ======================
+      // STOP POINTS
+      // ======================
+
+      .populate({
+        path: "stopPoints.city",
+        model: "City",
+        select: "city_name city_id state_id"
+      })
+
+      // ======================
+      // PICKUP POINTS
+      // ======================
+
+      .populate({
+        path: "pickupPoints.city",
+        model: "City",
+        select: "city_name city_id state_id"
+      })
+
+      // ======================
+      // DROP POINTS
+      // ======================
+
+      .populate({
+        path: "dropPoints.city",
+        model: "City",
+        select: "city_name city_id state_id"
+      });
+
+
     if (!trip) {
-      return res.status(404).json({ success: false, message: "Bus trip not found" });
+      return res.status(404).json({
+        success: false,
+        message: "Bus trip not found"
+      });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       data: trip
     });
+
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+
+    return res.status(500).json({
+      success: false,
+      message: error.message
+    });
+
   }
 };
 
@@ -429,7 +777,19 @@ export const deleteBusTrip = async (req, res) => {
 // ====================== SEARCH BUS TRIPS ======================
 export const searchBusTrips = async (req, res) => {
   try {
-    const { startPoint, endPoint, departureDate, busType, minPrice, maxPrice } = req.query;
+
+    const {
+      startPoint,
+      endPoint,
+      departureDate,
+      busType,
+      minPrice,
+      maxPrice
+    } = req.query;
+
+    // =========================
+    // VALIDATION
+    // =========================
 
     if (!startPoint || !endPoint || !departureDate) {
       return res.status(400).json({
@@ -438,36 +798,283 @@ export const searchBusTrips = async (req, res) => {
       });
     }
 
+    // =========================
+    // MAIN QUERY
+    // =========================
+
     const query = {
-      startPoint: { $regex: startPoint, $options: "i" },
-      endPoint: { $regex: endPoint, $options: "i" },
-      departureDate: departureDate,
-      status: "active"                    // Only show active trips
+      departureDate,
+      status: "active",
+
+      $and: [
+
+        // =========================
+        // START POINT CONDITION
+        // =========================
+
+        {
+          $or: [
+
+            // exact start city
+            {
+              startPoint: startPoint
+            },
+
+            // stop point city
+            {
+              "stopPoints.city": startPoint
+            }
+          ]
+        },
+
+        // =========================
+        // END POINT CONDITION
+        // =========================
+
+        {
+          $or: [
+
+            // exact end city
+            {
+              endPoint: endPoint
+            },
+
+            // stop point city
+            {
+              "stopPoints.city": endPoint
+            }
+          ]
+        }
+      ]
     };
 
-    // Optional filters
-    if (busType) {
-      query['bus.busType'] = busType;
-    }
+    // =========================
+    // PRICE FILTER
+    // =========================
+
     if (minPrice || maxPrice) {
+
       query.basePrice = {};
-      if (minPrice) query.basePrice.$gte = Number(minPrice);
-      if (maxPrice) query.basePrice.$lte = Number(maxPrice);
+
+      if (minPrice) {
+        query.basePrice.$gte = Number(minPrice);
+      }
+
+      if (maxPrice) {
+        query.basePrice.$lte = Number(maxPrice);
+      }
     }
 
-  const trips = await BusTrip.find(query)
-  .populate({
-    path: "bus",
-    select: "travelAgency busNo busType registrationNumber ratings images amenities features manufacturer model",
-    populate: {
-      path: "travelAgency",
-      select: "name"
-    }
-  })
-      .select("-seats")                    // Don't send full seats array (too heavy)
+    // =========================
+    // FIND
+    // =========================
+
+    let trips = await BusTrip.find(query)
+
+      .populate({
+        path: "bus",
+        select:
+          "travelAgency busNo busName busType registrationNumber ratings images amenities features manufacturer model",
+        populate: {
+          path: "travelAgency",
+          select: "name"
+        }
+      })
+
+      .populate({
+        path: "startPoint",
+        model: "City",
+        select: "city_name city_id"
+      })
+
+      .populate({
+        path: "endPoint",
+        model: "City",
+        select: "city_name city_id"
+      })
+
+      .populate({
+        path: "stopPoints.city",
+        model: "City",
+        select: "city_name city_id"
+      })
+
+      .populate({
+        path: "pickupPoints.city",
+        model: "City",
+        select: "city_name city_id"
+      })
+
+      .populate({
+        path: "dropPoints.city",
+        model: "City",
+        select: "city_name city_id"
+      })
+
+      .select("-seats")
+
       .sort({ departureDateTime: 1 });
 
-    res.status(200).json({
+    // =========================
+    // BUS TYPE FILTER
+    // =========================
+
+    if (busType) {
+      trips = trips.filter(
+        trip => trip.bus?.busType === busType
+      );
+    }
+
+    // =========================
+    // OPTIONAL:
+    // REMOVE INVALID ROUTES
+    // =========================
+    // Prevent reverse routes
+    // Example:
+    // Hyderabad -> Dewas should NOT work
+
+trips = trips
+  .filter(trip => {
+
+    const route = [
+      trip.startPoint?._id?.toString(),
+
+      ...trip.stopPoints.map(
+        stop => stop.city?._id?.toString()
+      ),
+
+      trip.endPoint?._id?.toString()
+    ];
+
+    const startIndex = route.indexOf(startPoint);
+    const endIndex = route.indexOf(endPoint);
+
+    return (
+      startIndex !== -1 &&
+      endIndex !== -1 &&
+      startIndex < endIndex
+    );
+  })
+
+  .map(trip => {
+
+    // =========================
+    // FULL ROUTE
+    // =========================
+
+    const fullRoute = [
+
+      {
+        type: "start",
+        city: trip.startPoint
+      },
+
+      ...trip.stopPoints.map(stop => ({
+        type: "stop",
+        city: stop.city,
+        arrivalTime: stop.arrivalTime,
+        departureTime: stop.departureTime,
+        order: stop.order
+      })),
+
+      {
+        type: "end",
+        city: trip.endPoint
+      }
+    ];
+
+    // =========================
+    // FIND START INDEX
+    // =========================
+
+    const startIndex = fullRoute.findIndex(
+      item =>
+        item?.city?._id?.toString() === startPoint
+    );
+
+    // =========================
+    // FIND END INDEX
+    // =========================
+
+    const endIndex = fullRoute.findIndex(
+      item =>
+        item?.city?._id?.toString() === endPoint
+    );
+
+    // =========================
+    // ROUTE SLICE
+    // =========================
+
+    const selectedRoute = fullRoute.slice(
+      startIndex,
+      endIndex + 1
+    );
+
+    // =========================
+    // START & END
+    // =========================
+
+    const newStartPoint =
+      selectedRoute[0]?.city || null;
+
+    const newEndPoint =
+      selectedRoute[selectedRoute.length - 1]?.city || null;
+
+    // =========================
+    // STOPS
+    // =========================
+
+    const newStopPoints = selectedRoute
+      .filter(item => item?.type === "stop")
+      .map(item => ({
+        city: item.city,
+        arrivalTime: item.arrivalTime,
+        departureTime: item.departureTime,
+        order: item.order
+      }));
+
+    // =========================
+    // PICKUP POINTS
+    // =========================
+
+    const pickupPoints = trip.pickupPoints.filter(
+      point =>
+        point?.city?._id?.toString() === startPoint
+    );
+
+    // =========================
+    // DROP POINTS
+    // =========================
+
+    const dropPoints = trip.dropPoints.filter(
+      point =>
+        point?.city?._id?.toString() === endPoint
+    );
+
+    // =========================
+    // RETURN
+    // =========================
+
+    return {
+      ...trip.toObject(),
+
+      startPoint: newStartPoint,
+
+      endPoint: newEndPoint,
+
+      stopPoints: newStopPoints,
+
+      pickupPoints,
+
+      dropPoints
+    };
+  });
+
+    // =========================
+    // RESPONSE
+    // =========================
+
+    return res.status(200).json({
       success: true,
       total: trips.length,
       departureDate,
@@ -477,10 +1084,223 @@ export const searchBusTrips = async (req, res) => {
     });
 
   } catch (error) {
+
     console.error(error);
-    res.status(500).json({
+
+    return res.status(500).json({
       success: false,
-      message: "Error searching bus trips"
+      message: "Error searching bus trips",
+      error: error.message
+    });
+
+  }
+};
+
+// ==========================================
+// UPDATE SEAT PRICE
+// ==========================================
+
+export const updateSeatPrice = async (req, res) => {
+  try {
+
+    const { busTripId, seats, seatPrice } = req.body;
+
+    // ==========================================
+    // VALIDATION
+    // ==========================================
+
+    if (!busTripId) {
+      return res.status(400).json({
+        success: false,
+        message: "busTripId is required"
+      });
+    }
+
+    if (!Array.isArray(seats) || seats.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Seats array is required"
+      });
+    }
+
+    if (seatPrice == null) {
+      return res.status(400).json({
+        success: false,
+        message: "seatPrice is required"
+      });
+    }
+
+    // ==========================================
+    // UPDATE SEAT PRICES
+    // ==========================================
+
+    const updatedTrip = await BusTrip.findOneAndUpdate(
+
+      {
+        _id: busTripId
+      },
+
+      {
+        $set: {
+          "seats.$[elem].seatPrice": seatPrice
+        }
+      },
+
+      {
+        arrayFilters: [
+          {
+            "elem.seatNo": { $in: seats }
+          }
+        ],
+
+        new: true
+      }
+    );
+
+    // ==========================================
+    // NOT FOUND
+    // ==========================================
+
+    if (!updatedTrip) {
+      return res.status(404).json({
+        success: false,
+        message: "Bus trip not found"
+      });
+    }
+
+    // ==========================================
+    // RESPONSE
+    // ==========================================
+
+    return res.status(200).json({
+      success: true,
+      message: "Seat prices updated successfully",
+      data: updatedTrip
+    });
+
+  } catch (error) {
+
+    console.error("Update Seat Price Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message
+    });
+  }
+};
+
+// ==========================================
+// UPDATE SEAT TYPE
+// ==========================================
+
+export const updateSeatType = async (req, res) => {
+
+  try {
+
+    const { busTripId, seats, seatType } = req.body;
+
+    // ==========================================
+    // VALIDATION
+    // ==========================================
+
+    if (!busTripId) {
+      return res.status(400).json({
+        success: false,
+        message: "busTripId is required"
+      });
+    }
+
+    if (!Array.isArray(seats) || seats.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Seats array is required"
+      });
+    }
+
+    if (!seatType) {
+      return res.status(400).json({
+        success: false,
+        message: "seatType is required"
+      });
+    }
+
+    // ==========================================
+    // VALID SEAT TYPES
+    // ==========================================
+
+    const validSeatTypes = [
+      "SEATER",
+      "SLEEPER",
+      "SEMI_SLEEPER"
+    ];
+
+    if (!validSeatTypes.includes(seatType)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid seatType",
+        allowed: validSeatTypes
+      });
+    }
+
+    // ==========================================
+    // UPDATE MULTIPLE SEAT TYPES
+    // ==========================================
+
+    const updatedTrip = await BusTrip.findOneAndUpdate(
+
+      {
+        _id: busTripId
+      },
+
+      {
+        $set: {
+          "seats.$[elem].seatType": seatType
+        }
+      },
+
+      {
+        arrayFilters: [
+          {
+            "elem.seatNo": {
+              $in: seats
+            }
+          }
+        ],
+
+        new: true
+      }
+    );
+
+    // ==========================================
+    // NOT FOUND
+    // ==========================================
+
+    if (!updatedTrip) {
+      return res.status(404).json({
+        success: false,
+        message: "Bus trip not found"
+      });
+    }
+
+    // ==========================================
+    // RESPONSE
+    // ==========================================
+
+    return res.status(200).json({
+      success: true,
+      message: "Seat types updated successfully",
+      data: updatedTrip
+    });
+
+  } catch (error) {
+
+    console.error("Update Multiple Seat Types Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message
     });
   }
 };

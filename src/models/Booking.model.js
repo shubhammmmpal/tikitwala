@@ -44,8 +44,10 @@ const bookingSchema = new mongoose.Schema({
   },
 
   // Journey Details
-  startPoint: { type: String, required: true },
-  endPoint: { type: String, required: true },
+  startPoint: { type: mongoose.Schema.Types.ObjectId, ref: "City", required: true },
+  endPoint: { type: mongoose.Schema.Types.ObjectId, ref: "City", required: true },
+  // startPoint: { type: String, required: true },
+  // endPoint: { type: String, required: true },
 
   departureDateTime: { type: Date, required: true },
   arrivalDateTime: { type: Date, required: true },
@@ -94,7 +96,7 @@ const bookingSchema = new mongoose.Schema({
   status: {
     type: String,
     enum: ["confirmed", "cancelled", "completed", "pending"],
-    default: "confirmed"
+    default: "pending"
   },
 
   // Additional Info

@@ -14,13 +14,13 @@ import adminRoomRoutes from './routes/adminRoom.route.js';
 import bookingHotelRoutes from './routes/bookingHotel.route.js';
 import agentRoutes from './routes/agent.route.js';
 // import paymentRoutes from './routes/payment.route.js';
-// import reviewRoutes from './routes/reviewRoutes.js';
-// import couponRoutes from './routes/couponRoutes.js';
+import reviewRoutes from './routes/review.route.js';
+import couponRoutes from './routes/coupon.route.js';
 // import agentRoutes from './routes/agent.route.js';
 // import wishlistRoutes from './routes/wishlistRoutes.js';
 // import notificationRoutes from './routes/notificationRoutes.js';
 // import adminDashboardRoutes from './routes/adminDashboardRoutes.js';
-
+import locationRoutes from './routes/location.route.js';
 // Load environment variables
 dotenv.config();
 
@@ -47,8 +47,9 @@ app.use('/api/admin/rooms', adminRoomRoutes);   // Admin room routes
 app.use('/api/hotel/bookings', bookingHotelRoutes);
 app.use('/api/agent', agentRoutes);
 // app.use('/api/payments', paymentRoutes);
-// app.use('/api/reviews', reviewRoutes);
-// app.use('/api/coupons', couponRoutes);
+app.use('/api/reviews', reviewRoutes);
+app.use('/api/coupons', couponRoutes);
+app.use('/api/locations', locationRoutes);
 // app.use('/api/agent', agentRoutes);
 // app.use('/api/wishlist', wishlistRoutes);
 // app.use('/api/notifications', notificationRoutes);

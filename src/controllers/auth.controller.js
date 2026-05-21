@@ -9,7 +9,8 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 // @access  Public
 export const signup = async (req, res) => {
   try {
-    const { name, email, phone, password, device } = req.body;
+    const { name, email, phone, role , password, device } = req.body;
+
 
     // Check existing user
     const userExists = await User.findOne({
@@ -28,6 +29,7 @@ export const signup = async (req, res) => {
       name,
       email,
       phone,
+      role: role || 'user',
       password,
       devices: device ? [device] : []
     });

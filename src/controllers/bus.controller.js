@@ -8,54 +8,6 @@ import Bus from "../models/Bus.model.js";
 // @route   GET /api/buses/search
 // @access  Public
 
-// export const getBusList = async (req, res) => {
-//   try {
-//     let { page = 1, limit = 10, busType, deckType, search } = req.query;
-
-//     page = parseInt(page);
-//     limit = parseInt(limit);
-
-//     let query = {};
-
-//     // 🔍 Filter by busType
-//     if (busType) {
-//       query.busType = busType;
-//     }
-
-//     // 🔍 Filter by deckType
-//     if (deckType) {
-//       query.deckType = deckType;
-//     }
-
-//     // 🔍 Search by busNo
-//     if (search) {
-//       query.busNo = { $regex: search, $options: 'i' };
-//     }
-
-//     const buses = await Bus.find(query)
-//       .populate('travelAgency', 'name email') // optional fields
-//       .skip((page - 1) * limit)
-//       .limit(limit)
-//       .sort({ createdAt: -1 });
-
-//     const total = await Bus.countDocuments(query);
-
-//     res.status(200).json({
-//       success: true,
-//       count: buses.length,
-//       total,
-//       page,
-//       totalPages: Math.ceil(total / limit),
-//       data: buses
-//     });
-
-//   } catch (error) {
-//     res.status(500).json({
-//       success: false,
-//       message: error.message
-//     });
-//   }
-// };
 
 
 // @desc    Search buses based on startPoint, endPoint and date
@@ -101,6 +53,18 @@ export const createBus = async (req, res) => {
   try {
     const busData = req.body;
 
+    // Assuming auth middleware adds user in req.user
+    busData.createdBy = req.user.id;
+
+     // Store uploaded image paths
+    if (req.files && req.files.length > 0) {
+
+      busData.images = req.files.map(file => {
+        return `/uploads/buses/${file.filename}`;
+      });
+
+    }
+
     const newBus = new Bus(busData);
     await newBus.save();
 
@@ -109,6 +73,7 @@ export const createBus = async (req, res) => {
       message: "Bus created successfully",
       data: newBus
     });
+
   } catch (error) {
     res.status(400).json({
       success: false,
@@ -120,32 +85,66 @@ export const createBus = async (req, res) => {
 // Get All Buses (with pagination and filters)
 export const getBusList = async (req, res) => {
   try {
-    const { page = 1, limit = 10, busType, status, agency } = req.query;
 
+    const userId = req.user.id;
+    const userRole = req.user.role;
+
+    const {
+      page = 1,
+      limit = 10,
+      search = "",
+      status,
+      busType
+    } = req.query;
+
+    // Base query
     const query = {};
-    if (busType) query.busType = busType;
-    if (status) query.status = status;
-    if (agency) query.travelAgency = agency;
+
+    // If not admin, show only own buses
+    if (userRole !== "ADMIN") {
+      query.createdBy = userId;
+    }
+
+    // Search filter
+    if (search) {
+      query.$or = [
+        { busName: { $regex: search, $options: "i" } },
+        { busNo: { $regex: search, $options: "i" } },
+        { registrationNumber: { $regex: search, $options: "i" } }
+      ];
+    }
+
+    // Status filter
+    if (status) {
+      query.status = status;
+    }
+
+    // Bus type filter
+    if (busType) {
+      query.busType = busType;
+    }
 
     const buses = await Bus.find(query)
-      .populate("travelAgency", "name contactNumber")
+      .populate("travelAgency")
+      .populate("createdBy", "name email role")
       .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
-      .limit(parseInt(limit));
+      .limit(Number(limit));
 
     const total = await Bus.countDocuments(query);
 
     res.status(200).json({
       success: true,
       total,
+      currentPage: Number(page),
       totalPages: Math.ceil(total / limit),
-      currentPage: parseInt(page),
       data: buses
     });
+
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Error fetching buses"
+      message: error.message || "Error fetching buses"
     });
   }
 };
@@ -404,60 +403,4 @@ export const generateBusSeats = async (req, res) => {
     });
   }
 };
-// Add this new function in your bus controller
 
-// const getBusList = async (req, res) => {
-//   try {
-//     let { startPoint, endPoint, date } = req.query;
-
-//     // ✅ Validate input
-//     if (!startPoint || !endPoint || !date) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "startPoint, endPoint and date are required",
-//       });
-//     }
-
-//     // ✅ Trim & normalize
-//     startPoint = startPoint.trim();
-//     endPoint = endPoint.trim();
-
-//     // ✅ Convert IST date to UTC range
-//     const startOfDayIST = new Date(`${date}T00:00:00+05:30`);
-//     const endOfDayIST = new Date(`${date}T23:59:59.999+05:30`);
-
-//     // Convert to UTC (MongoDB stores in UTC)
-//     const startOfDayUTC = new Date(startOfDayIST.toISOString());
-//     const endOfDayUTC = new Date(endOfDayIST.toISOString());
-
-//     // ✅ Query
-//     const buses = await BusTrip.find({
-//       startPoint: { $regex: startPoint, $options: "i" }, // flexible match
-//       endPoint: { $regex: endPoint, $options: "i" },
-//       departureDateTime: {
-//         $gte: startOfDayUTC,
-//         $lte: endOfDayUTC,
-//       },
-//       status: "active",
-//     })
-//       .populate("bus", "busNo busType deckType")
-//       .select("-seats") // remove heavy seat data
-//       .sort({ departureDateTime: 1 });
-
-//     // ✅ Response
-//     return res.status(200).json({
-//       success: true,
-//       count: buses.length,
-//       data: buses,
-//     });
-//   } catch (error) {
-//     console.error("Bus List Error:", error);
-//     return res.status(500).json({
-//       success: false,
-//       message: "Server Error",
-//       error: error.message,
-//     });
-//   }
-// };
-
-// export { getBusList };
