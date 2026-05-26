@@ -42,8 +42,8 @@ const bookingHotelSchema = new mongoose.Schema({
   
   guestDetails: [{
     name: { type: String, required: true },
-    age: Number,
-    gender: String,
+    phone: Number,
+    email: String,
     idProofType: String,
     idProofNumber: String
   }],

@@ -6,31 +6,119 @@ import RoomAvailability from '../models/RoomAvailability.model.js';
 
 export const searchHotels = async (req, res) => {
   try {
-    const { city, checkIn, checkOut, guests = 2, page = 1, limit = 10 } = req.query;
+    const {
+      city,
+      roomType,
+      guests = 2,
+      page = 1,
+      limit = 10,
+    } = req.query;
 
-    const query = { status: 'ACTIVE' };
+    // Hotel filters
+    const hotelQuery = {
+      status: "ACTIVE",
+    };
 
+    // City filter
     if (city) {
-      query['address.city'] = { $regex: city, $options: 'i' };
+      hotelQuery["address.city"] = {
+        $regex: city,
+        $options: "i",
+      };
     }
 
-    const hotels = await Hotel.find(query)
-      .select('name address geoLocation images averageRating reviewCount amenities')
-      .sort({ averageRating: -1 })
-      .skip((page - 1) * limit)
-      .limit(Number(limit));
+    // Room filters
+    const roomQuery = {
+      status: "ACTIVE",
+    };
 
-    const total = await Hotel.countDocuments(query);
+    // Room type filter
+    if (roomType) {
+      roomQuery.roomType = roomType.toUpperCase();
+    }
+
+    const hotels = await Hotel.aggregate([
+      {
+        $match: hotelQuery,
+      },
+
+      // Get rooms
+      {
+        $lookup: {
+          from: "rooms",
+          localField: "_id",
+          foreignField: "hotel",
+          as: "rooms",
+          pipeline: [
+            {
+              $match: roomQuery,
+            },
+
+            // Optional guest capacity filter
+            {
+              $match: {
+                maxOccupancy: { $gte: Number(guests) },
+              },
+            },
+
+            {
+              $project: {
+                roomType: 1,
+                name: 1,
+                description: 1,
+                basePricePerNight: 1,
+                discountPricePerNight: 1,
+                withBreakfastPricePerNight: 1,
+                taxesAndFees: 1,
+                capacity: 1,
+                maxOccupancy: 1,
+                amenities: 1,
+                images: 1,
+                totalInventory: 1,
+              },
+            },
+          ],
+        },
+      },
+
+      // Remove hotels with no matching rooms
+      {
+        $match: {
+          rooms: { $ne: [] },
+        },
+      },
+
+      // Sort hotels
+      {
+        $sort: {
+          "ratings.average": -1,
+        },
+      },
+
+      // Pagination
+      {
+        $skip: (Number(page) - 1) * Number(limit),
+      },
+
+      {
+        $limit: Number(limit),
+      },
+    ]);
+
+    const total = await Hotel.countDocuments(hotelQuery);
 
     res.status(200).json({
       success: true,
       count: hotels.length,
       total,
       totalPages: Math.ceil(total / limit),
-      hotels
+      hotels,
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
 };
 
