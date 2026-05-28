@@ -21,6 +21,10 @@ import couponRoutes from './routes/coupon.route.js';
 // import notificationRoutes from './routes/notificationRoutes.js';
 // import adminDashboardRoutes from './routes/adminDashboardRoutes.js';
 import locationRoutes from './routes/location.route.js';
+import travelTripRoutes from "./routes/travelTrip.route.js";
+import inquiryRoutes from "./routes/inquiry.route.js";
+import carRentRoute from "./routes/carRent.route.js";
+import carInquiryRoutes from "./routes/carInquiry.route.js";
 // Load environment variables
 dotenv.config();
 
@@ -50,6 +54,10 @@ app.use('/api/agent', agentRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/coupons', couponRoutes);
 app.use('/api/locations', locationRoutes);
+app.use('/api/travel-trips', travelTripRoutes);
+app.use("/api/inquiry", inquiryRoutes);
+app.use("/api/car-rent", carRentRoute);
+app.use("/api/car-inquiry", carInquiryRoutes);
 // app.use('/api/agent', agentRoutes);
 // app.use('/api/wishlist', wishlistRoutes);
 // app.use('/api/notifications', notificationRoutes);

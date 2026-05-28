@@ -29,6 +29,8 @@ export const bookBusTrip = async (req, res) => {
       selectedSeats,
       pickupPoint,
       dropPoint,
+      startPoint,
+      endPoint,
     } = req.body;
 
     const userId = req.user?.id || null;
@@ -171,8 +173,8 @@ export const bookBusTrip = async (req, res) => {
         busType: busTrip.bus?.busType || "N/A",
       },
 
-      startPoint: busTrip.startPoint,
-      endPoint: busTrip.endPoint,
+      startPoint: startPoint,
+      endPoint: endPoint,
       departureDateTime: busTrip.departureDateTime,
       arrivalDateTime: busTrip.arrivalDateTime,
       departureDate: busTrip.departureDate,
@@ -305,6 +307,9 @@ const booking = await Booking.findById(id)
 
   .populate("user", "name email")
 
+  .populate("startPoint", "city_name state")
+  .populate("endPoint", "city_name state")
+
   // ======================
   // BUS TRIP
   // ======================
@@ -323,7 +328,15 @@ const booking = await Booking.findById(id)
         path: "bus",
         select:
           "busNo busName busType registrationNumber travelAgency",
-      }
+      },
+      {
+            path: "startPoint",
+            select: "city_name state",
+          },
+          {
+            path: "endPoint",
+            select: "city_name state",
+          },
 
       
     ],

@@ -16,10 +16,13 @@ import { protect } from '../middleware/authMiddleware.js';   // Your auth middle
 
 import upload from '../middleware/uploadMiddleware.js';
 
+const busUpload = upload("buses");
+
+
 router.get('/buses', protect, getBusList);
 router.get('/search-buses', searchBuses);
 // router.get('/debug-buses', debugBuses);
-router.post("/create", protect, upload.array("images", 10), createBus);
+router.post("/create", protect, busUpload.array("images", 10), createBus);
 
 router.get("/:id", getBusById);
 router.put("/:id", updateBus);
