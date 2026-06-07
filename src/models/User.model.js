@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 
+
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -36,6 +37,9 @@ const userSchema = new mongoose.Schema({
     select: false,
     sparse: true            // Optional now
   },
+  profileImage:{
+    type:String
+  },
   role: {
     type: String,
     enum: ['user', 'admin', 'client' , 'agent'],
@@ -61,6 +65,12 @@ const userSchema = new mongoose.Schema({
     appVersion: { type: String },
     lastLogin: { type: Date, default: Date.now }
   }],
+
+  activeLocation: {
+    latitude: Number,
+    longitude: Number,
+    updatedAt: Date
+  },
   createdAt: {
     type: Date,
     default: Date.now

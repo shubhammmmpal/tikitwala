@@ -1,6 +1,10 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import http from "http";
+import { Server } from "socket.io";
+import { initializeSocket } from './socket/socket.js';
+
 import connectDB from './config/db.js';
 import authRoutes from './routes/auth.route.js';
 import busRoutes from './routes/bus.route.js';
@@ -25,6 +29,10 @@ import travelTripRoutes from "./routes/travelTrip.route.js";
 import inquiryRoutes from "./routes/inquiry.route.js";
 import carRentRoute from "./routes/carRent.route.js";
 import carInquiryRoutes from "./routes/carInquiry.route.js";
+import campRoutes from "./routes/camp.route.js";
+import sosRoutes from "./routes/sos.route.js";
+import volunteerRoutes from "./routes/volunteer.route.js"
+
 // Load environment variables
 dotenv.config();
 
@@ -37,6 +45,8 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+const server = http.createServer(app);
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -58,6 +68,11 @@ app.use('/api/travel-trips', travelTripRoutes);
 app.use("/api/inquiry", inquiryRoutes);
 app.use("/api/car-rent", carRentRoute);
 app.use("/api/car-inquiry", carInquiryRoutes);
+app.use("/api/camps", campRoutes);
+
+app.use("/api/sos", sosRoutes);
+app.use("/api/volunteer", volunteerRoutes)
+
 // app.use('/api/agent', agentRoutes);
 // app.use('/api/wishlist', wishlistRoutes);
 // app.use('/api/notifications', notificationRoutes);
@@ -74,6 +89,16 @@ app.get('/health', (req, res) => {
 });
 
 // Start server
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`);
+// app.listen(PORT, () => {
+//   console.log(`Server is running on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`);
+// });
+
+
+
+initializeSocket(server);
+
+server.listen(PORT, () => {
+  console.log(
+    `Server running on port ${PORT}`
+  );
 });
