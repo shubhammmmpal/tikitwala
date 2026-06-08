@@ -19,7 +19,7 @@ import upload from '../middleware/uploadMiddleware.js';
 const busUpload = upload("buses");
 
 
-router.get('/buses', protect, getBusList);
+router.get('/buses', getBusList);
 router.get('/search-buses', searchBuses);
 // router.get('/debug-buses', debugBuses);
 router.post("/create", protect, busUpload.array("images", 10), createBus);
