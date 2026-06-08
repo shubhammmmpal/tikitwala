@@ -1,6 +1,7 @@
 import Room from '../models/room.model.js';
 // import RoomAvailability from '../models/roomAvailability.model.js';
 import Hotel from '../models/hotel.model.js';
+import InventoryHotel from '../models/inventoryHotel.model.js';
 
 // ====================== PUBLIC APIS ======================
 
@@ -97,23 +98,91 @@ export const checkRoomAvailability = async (req, res) => {
 
 export const createRoom = async (req, res) => {
   try {
-    const { hotel } = req.body;
+    const images =
+      req.files?.map((file) => ({
+        url: file.path,
+        caption: "",
+      })) || [];
 
-    // Verify hotel exists
-    const hotelExists = await Hotel.findById(hotel);
-    if (!hotelExists) {
-      return res.status(404).json({ success: false, message: 'Hotel not found' });
+    const room = await Room.create({
+      hotel: req.body.hotel,
+      roomType: req.body.roomType,
+      roomSize: req.body.roomSize,
+      bedType: req.body.bedType,
+      name: req.body.name,
+      description: req.body.description,
+
+      basePricePerNight: Number(req.body.basePricePerNight),
+      discountPricePerNight: Number(req.body.discountPricePerNight),
+      taxesAndFees: Number(req.body.taxesAndFees),
+      withBreakfastPricePerNight: Number(
+        req.body.withBreakfastPricePerNight
+      ),
+
+      capacity: {
+        adults: Number(req.body.capacity.adults),
+        children: Number(req.body.capacity.children || 0),
+      },
+
+      maxOccupancy: Number(req.body.maxOccupancy),
+
+      amenities: req.body.amenities || [],
+
+      totalInventory: Number(req.body.totalInventory),
+
+      status: req.body.status,
+
+      images,
+    });
+
+    // ==========================
+    // Update Hotel Inventory
+    // ==========================
+
+    const inventoryHotel = await InventoryHotel.findOne({
+      hotelId: room.hotel,
+    });
+
+    if (inventoryHotel) {
+      const existingRoomType = inventoryHotel.inventory.find(
+        (item) => item.roomType === room.roomType
+      );
+
+      if (existingRoomType) {
+        existingRoomType.basePrice =
+          room.basePricePerNight;
+
+        existingRoomType.dealPrice =
+          room.discountPricePerNight ||
+          room.basePricePerNight;
+
+        existingRoomType.totalCount +=
+          room.totalInventory;
+      } else {
+        inventoryHotel.inventory.push({
+          roomType: room.roomType,
+          basePrice: room.basePricePerNight,
+          dealPrice:
+            room.discountPricePerNight ||
+            room.basePricePerNight,
+          totalCount: room.totalInventory,
+          bookedCount: 0,
+        });
+      }
+
+      await inventoryHotel.save();
     }
 
-    const room = await Room.create(req.body);
-
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
-      message: 'Room created successfully',
-      room
+      message: "Room created successfully",
+      room,
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
 };
 

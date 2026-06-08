@@ -1,6 +1,7 @@
 import Hotel from '../models/hotel.model.js';
 import Room from '../models/room.model.js';
 import RoomAvailability from '../models/RoomAvailability.model.js';
+import InventoryHotel from '../models/inventoryHotel.model.js '
 
 // ====================== PUBLIC APIS ======================
 
@@ -184,37 +185,134 @@ export const getHotelRooms = async (req, res) => {
 
 export const createHotel = async (req, res) => {
   try {
-    const hotel = await Hotel.create(req.body);
+
+    const adminId = req.user.id
+
+    const coverImageIndex = Number(req.body.coverImageIndex || 0);
+
+
+    const imageData = req.files?.map((file, index) => ({
+      url: file.path,
+      caption: req.body?.captions?.[index] || "",
+      isCover: index === 0
+    })) || [];
     
-    res.status(201).json({
-      success: true,
-      message: 'Hotel created successfully',
-      hotel
+
+    const hotel = await Hotel.create({
+      name: req.body.name,
+      description: req.body.description,
+      checkInTime: req.body.checkInTime,
+      checkOutTime: req.body.checkOutTime,
+
+      address: {
+        street: req.body.street,
+        city: req.body.city,
+        state: req.body.state,
+        country: req.body.country,
+        pincode: req.body.pincode,
+      },
+
+      latitude: req.body.latitude,
+      longitude: req.body.longitude,
+
+      amenities: req.body.amenities
+        ? JSON.parse(req.body.amenities)
+        : [],
+
+      important_facts: req.body.important_facts
+        ? JSON.parse(req.body.important_facts)
+        : [],
+
+      property_Rules: req.body.property_Rules
+        ? JSON.parse(req.body.property_Rules)
+        : [],
+
+      policies: req.body.policies
+        ? JSON.parse(req.body.policies)
+        : [],
+
+      images: imageData,
+
+      status: req.body.status,
+      cancellationPolicy: req.body.cancellationPolicy,
+
+      contact: {
+        email: req.body.email,
+        phone: req.body.phone,
+      },
+
+      dynamicPricingFactor:
+        req.body.dynamicPricingFactor || 1,
+      
+      createdby:adminId,
     });
+
+    // Create Inventory for this hotel
+    await InventoryHotel.create({
+      createdBy: adminId,
+      hotelId: hotel._id,
+      inventory: [],
+    });
+
+    return res.status(201).json({
+      success: true,
+      data: hotel,
+    });
+
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+
   }
 };
 
 export const updateHotel = async (req, res) => {
   try {
+
+    const updateData = {
+      ...req.body
+    };
+
+    if (req.files && req.files.length > 0) {
+      updateData.images = req.files.map((file, index) => ({
+        url: file.path,
+        caption: "",
+        isCover: index === Number(req.body.coverImageIndex || 0)
+      }));
+    }
+
     const hotel = await Hotel.findByIdAndUpdate(
       req.params.id,
-      req.body,
-      { new: true, runValidators: true }
+      updateData,
+      {
+        new: true,
+        runValidators: true
+      }
     );
 
     if (!hotel) {
-      return res.status(404).json({ success: false, message: 'Hotel not found' });
+      return res.status(404).json({
+        success: false,
+        message: "Hotel not found"
+      });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
-      message: 'Hotel updated successfully',
+      message: "Hotel updated successfully",
       hotel
     });
+
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+
+    return res.status(500).json({
+      success: false,
+      message: error.message
+    });
+
   }
 };
 
@@ -430,3 +528,33 @@ if (availabilities.length === 0) {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+
+export const getMyHotelInventories = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const inventories = await InventoryHotel.find({
+      createdBy: userId,
+    })
+      .populate({
+        path: "hotelId",
+        select:
+          "name address.city address.state address.country status images",
+      })
+      .sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      success: true,
+      count: inventories.length,
+      data: inventories,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+

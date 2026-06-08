@@ -16,4 +16,5 @@ router.get('/nearby', nearbyHotels);
 router.get('/:id', getHotelById);
 router.get('/:id/rooms', getHotelRooms);
 
+
 export default router;

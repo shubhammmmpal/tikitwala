@@ -4,28 +4,36 @@ import mongoose from "mongoose";
 const hotelSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, trim: true },
-    description: { type: String, required: true },
+    description: { type: String },
 
     address: {
       street: { type: String, required: true },
-      city: { type: String, required: true, index: true },
-      state: String,
-      country: { type: String, required: true, default: "India" },
+      city: { type: mongoose.Schema.Types.ObjectId, ref: "City", required: true},
+      state: { type: mongoose.Schema.Types.ObjectId, ref: "State", required: true},
+      country: { type: String, default: "India" },
       pincode: String,
     },
-
-    // GeoJSON for location-based search & radius queries
-    geoLocation: {
-      type: {
-        type: String,
-        enum: ["Point"],
-        default: "Point",
-      },
-      coordinates: {
-        type: [Number], // [longitude, latitude]
-        required: true,
-      },
+    important_facts: [String],
+    property_Rules: [String],
+    policies: [String],
+    
+    latitude:{
+      type:String
     },
+    longitude :{
+      type:String
+    },
+    // geoLocation: {
+    //   type: {
+    //     type: String,
+    //     enum: ["Point"],
+    //     default: "Point",
+    //   },
+    //   coordinates: {
+    //     type: [Number], // [longitude, latitude]
+    //     required: true,
+    //   },
+    // },
 
     amenities: [String], // e.g. ["WiFi", "Swimming Pool", "Restaurant", "Spa", "Parking", "Gym"]
 
@@ -125,11 +133,15 @@ const hotelSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Coupon",
     }, // e.g. ["SUMMER20", "WINTER15"]
-    checkInTime: { type: String, default: "14:00" },
+    checkInTime: { type: String, default: "14:00" },                                                                                                                                                                
     checkOutTime: { type: String, default: "12:00" },
     contact: {
       email: String,
       phone: String,
+    },
+    createdby:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref : "User",
     },
 
     // For dynamic pricing at hotel level (multiplier)

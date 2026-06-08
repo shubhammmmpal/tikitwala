@@ -14,6 +14,12 @@ const roomSchema = new mongoose.Schema({
     required: true,
     enum: ['STANDARD', 'DELUXE', 'EXECUTIVE', 'SUITE', 'VILLA', 'PREMIUM', 'OTHER']
   },
+  roomSize:{
+    type:String
+  },
+  bedType:{
+    type:String
+  },
   
   name: { type: String, required: true }, // e.g. "Deluxe King Room"
   description: String,
