@@ -86,8 +86,8 @@ export const createBus = async (req, res) => {
 export const getBusList = async (req, res) => {
   try {
 
-    const userId = req.user.id;
-    const userRole = req.user.role;
+    // const userId = req.user.id;
+    // const userRole = req.user.role;
 
     const {
       page = 1,
@@ -101,9 +101,9 @@ export const getBusList = async (req, res) => {
     const query = {};
 
     // If not admin, show only own buses
-    if (userRole !== "ADMIN") {
-      query.createdBy = userId;
-    }
+    // if (userRole !== "ADMIN") {
+    //   query.createdBy = userId;
+    // }
 
     // Search filter
     if (search) {
@@ -126,7 +126,7 @@ export const getBusList = async (req, res) => {
 
     const buses = await Bus.find(query)
       .populate("travelAgency")
-      .populate("createdBy", "name email role")
+      .populate("createdBy", "name email")
       .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(Number(limit));
