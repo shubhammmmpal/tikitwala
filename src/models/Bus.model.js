@@ -80,8 +80,6 @@ const busSchema = new mongoose.Schema({
         "Non-AC Sleeper",
         "Semi-Sleeper",
         "AC Semi-Sleeper",
-        "Volvo",
-        "Luxury"
     ],
     required: true
   },

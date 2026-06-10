@@ -267,129 +267,200 @@ export const changeBusStatus = async (req, res) => {
 };
 
 // ==================== GENERATE SEAT STRUCTURE ====================
+// export const generateBusSeats = async (req, res) => {
+//   try {
+//     const { busId } = req.params;
+//     const { seatType, totalRows, lastRowSeats, lowerDeckRows, upperDeckRows } = req.body;
+
+//     const bus = await Bus.findById(busId);
+//     if (!bus) {
+//       return res.status(404).json({ success: false, message: "Bus not found" });
+//     }
+
+//     let seats = [];
+
+//     if (["Seater", "AC Seater", "Non-AC Seater"].includes(bus.busType)) {
+//       // ==================== SEATER BUS ====================
+//       if (!seatType || !totalRows) {
+//         return res.status(400).json({ success: false, message: "seatType and totalRows are required for Seater buses" });
+//       }
+
+//       const [rightSeats,leftSeats] = seatType.split("+").map(Number); // e.g., "2+2" → [2,2]
+
+//       for (let row = 1; row <= totalRows; row++) {
+//         const currentLeft = leftSeats;
+//         const currentRight = (row === totalRows && lastRowSeats) ? lastRowSeats : rightSeats;
+
+//         // Left Side
+//         for (let col = 1; col <= currentLeft; col++) {
+//           seats.push({
+//             seatNumber: `L${row}${col}`,
+//             row,
+//             column: col,
+//             deck: "SINGLE",
+//             section: "LEFT",
+//             type: "SEATER",
+//             isWindow: col === 1,
+//             isAisle: col === currentLeft
+//           });
+//         }
+
+//         // Right Side
+//         for (let col = 1; col <= currentRight; col++) {
+//           seats.push({
+//             seatNumber: `R${row}${col}`,
+//             row,
+//             column: col,
+//             deck: "SINGLE",
+//             section: "RIGHT",
+//             type: "SEATER",
+//             isWindow: col === currentRight,
+//             isAisle: col === 1
+//           });
+//         }
+//       }
+//     } 
+//     else {
+//       // ==================== SLEEPER BUS ====================
+//       if (!seatType || !lowerDeckRows || !upperDeckRows) {
+//         return res.status(400).json({ success: false, message: "seatType, lowerDeckRows and upperDeckRows are required for Sleeper buses" });
+//       }
+
+//       const [rightSeats,leftSeats ] = seatType.split("+").map(Number);
+
+//       // Lower Deck
+//       for (let row = 1; row <= lowerDeckRows; row++) {
+//         for (let col = 1; col <= leftSeats; col++) {
+//           seats.push({
+//             seatNumber: `LL${row}${col}`,   // Lower Left
+//             row,
+//             column: col,
+//             deck: "LOWER",
+//             section: "LEFT",
+//             type: "SLEEPER",
+//             isWindow: col === 1
+//           });
+//         }
+//         for (let col = 1; col <= rightSeats; col++) {
+//           seats.push({
+//             seatNumber: `LR${row}${col}`,   // Lower Right
+//             row,
+//             column: col,
+//             deck: "LOWER",
+//             section: "RIGHT",
+//             type: "SLEEPER",
+//             isWindow: col === rightSeats
+//           });
+//         }
+//       }
+
+//       // Upper Deck
+//       for (let row = 1; row <= upperDeckRows; row++) {
+//         for (let col = 1; col <= leftSeats; col++) {
+//           seats.push({
+//             seatNumber: `UL${row}${col}`,   // Upper Left
+//             row,
+//             column: col,
+//             deck: "UPPER",
+//             section: "LEFT",
+//             type: "SLEEPER",
+//             isWindow: col === 1
+//           });
+//         }
+//         for (let col = 1; col <= rightSeats; col++) {
+//           seats.push({
+//             seatNumber: `UR${row}${col}`,   // Upper Right
+//             row,
+//             column: col,
+//             deck: "UPPER",
+//             section: "RIGHT",
+//             type: "SLEEPER",
+//             isWindow: col === rightSeats
+//           });
+//         }
+//       }
+//     }
+
+//     // Update Bus with generated seats
+//     bus.seatStructure = {
+//       seats: seats
+//     };
+//     bus.totalSeats = seats.length;
+
+//     await bus.save();
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Seat structure generated successfully",
+//       totalSeats: seats.length,
+//       data: bus
+//     });
+
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message
+//     });
+//   }
+// };
+
+
 export const generateBusSeats = async (req, res) => {
   try {
     const { busId } = req.params;
-    const { seatType, totalRows, lastRowSeats, lowerDeckRows, upperDeckRows } = req.body;
+    const { seat_layout } = req.body;
 
     const bus = await Bus.findById(busId);
+
     if (!bus) {
-      return res.status(404).json({ success: false, message: "Bus not found" });
+      return res.status(404).json({
+        success: false,
+        message: "Bus not found"
+      });
     }
 
-    let seats = [];
-
-    if (["Seater", "AC Seater", "Non-AC Seater"].includes(bus.busType)) {
-      // ==================== SEATER BUS ====================
-      if (!seatType || !totalRows) {
-        return res.status(400).json({ success: false, message: "seatType and totalRows are required for Seater buses" });
-      }
-
-      const [rightSeats,leftSeats] = seatType.split("+").map(Number); // e.g., "2+2" → [2,2]
-
-      for (let row = 1; row <= totalRows; row++) {
-        const currentLeft = leftSeats;
-        const currentRight = (row === totalRows && lastRowSeats) ? lastRowSeats : rightSeats;
-
-        // Left Side
-        for (let col = 1; col <= currentLeft; col++) {
-          seats.push({
-            seatNumber: `L${row}${col}`,
-            row,
-            column: col,
-            deck: "SINGLE",
-            section: "LEFT",
-            type: "SEATER",
-            isWindow: col === 1,
-            isAisle: col === currentLeft
-          });
-        }
-
-        // Right Side
-        for (let col = 1; col <= currentRight; col++) {
-          seats.push({
-            seatNumber: `R${row}${col}`,
-            row,
-            column: col,
-            deck: "SINGLE",
-            section: "RIGHT",
-            type: "SEATER",
-            isWindow: col === currentRight,
-            isAisle: col === 1
-          });
-        }
-      }
-    } 
-    else {
-      // ==================== SLEEPER BUS ====================
-      if (!seatType || !lowerDeckRows || !upperDeckRows) {
-        return res.status(400).json({ success: false, message: "seatType, lowerDeckRows and upperDeckRows are required for Sleeper buses" });
-      }
-
-      const [rightSeats,leftSeats ] = seatType.split("+").map(Number);
-
-      // Lower Deck
-      for (let row = 1; row <= lowerDeckRows; row++) {
-        for (let col = 1; col <= leftSeats; col++) {
-          seats.push({
-            seatNumber: `LL${row}${col}`,   // Lower Left
-            row,
-            column: col,
-            deck: "LOWER",
-            section: "LEFT",
-            type: "SLEEPER",
-            isWindow: col === 1
-          });
-        }
-        for (let col = 1; col <= rightSeats; col++) {
-          seats.push({
-            seatNumber: `LR${row}${col}`,   // Lower Right
-            row,
-            column: col,
-            deck: "LOWER",
-            section: "RIGHT",
-            type: "SLEEPER",
-            isWindow: col === rightSeats
-          });
-        }
-      }
-
-      // Upper Deck
-      for (let row = 1; row <= upperDeckRows; row++) {
-        for (let col = 1; col <= leftSeats; col++) {
-          seats.push({
-            seatNumber: `UL${row}${col}`,   // Upper Left
-            row,
-            column: col,
-            deck: "UPPER",
-            section: "LEFT",
-            type: "SLEEPER",
-            isWindow: col === 1
-          });
-        }
-        for (let col = 1; col <= rightSeats; col++) {
-          seats.push({
-            seatNumber: `UR${row}${col}`,   // Upper Right
-            row,
-            column: col,
-            deck: "UPPER",
-            section: "RIGHT",
-            type: "SLEEPER",
-            isWindow: col === rightSeats
-          });
-        }
-      }
+    if (!seat_layout || !Array.isArray(seat_layout) || seat_layout.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "seat_layout is required"
+      });
     }
 
-    // Update Bus with generated seats
+    const seats = seat_layout.map((seat) => ({
+      seatNumber: seat.seatName,
+      row: seat.row,
+      column: seat.column || 1,
+
+      deck:
+        seat.type?.toUpperCase() === "UPPER"
+          ? "UPPER"
+          : seat.type?.toUpperCase() === "LOWER"
+          ? "LOWER"
+          : "SINGLE",
+
+      section: seat.section?.toUpperCase() || "LEFT",
+
+      type: bus.busType.includes("Sleeper")
+        ? "SLEEPER"
+        : "SEATER",
+
+      isWindow: seat.isWindow || false,
+      isAisle: seat.isAisle || false,
+
+      category: seat.category || "REGULAR",
+
+      basePrice: seat.price || bus.baseFare
+    }));
+
     bus.seatStructure = {
-      seats: seats
+      seats
     };
+
     bus.totalSeats = seats.length;
 
     await bus.save();
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "Seat structure generated successfully",
       totalSeats: seats.length,
@@ -397,7 +468,7 @@ export const generateBusSeats = async (req, res) => {
     });
 
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: error.message
     });
