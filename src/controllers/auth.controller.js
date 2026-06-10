@@ -167,7 +167,9 @@ export const signup = async (req, res) => {
 
 export const signin = async (req, res) => {
   try {
-    const { email, password, device } = req.body;
+    const { agent_id, password, device } = req.body;
+
+    const email = agent_id
 
     // =========================
     // Try User Login
