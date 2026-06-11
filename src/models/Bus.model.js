@@ -1,6 +1,10 @@
 import mongoose from "mongoose";
 
 const seatSchema = new mongoose.Schema({
+  seatName: {
+    type: String,
+    required: true
+  },
   seatNumber: { 
     type: String, 
     required: true 

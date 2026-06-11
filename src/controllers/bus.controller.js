@@ -427,7 +427,8 @@ export const generateBusSeats = async (req, res) => {
     }
 
     const seats = seat_layout.map((seat) => ({
-      seatNumber: seat.seatName,
+      seatName : seat.seatName,
+      seatNumber: seat.seatId,
       row: seat.row,
       column: seat.column || 1,
 
