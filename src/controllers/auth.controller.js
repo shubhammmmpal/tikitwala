@@ -167,14 +167,15 @@ export const signup = async (req, res) => {
 
 export const signin = async (req, res) => {
   try {
-    const { agent_id, password, device } = req.body;
+    const { agent_id, password, device, email  } = req.body;
 
-    const email = agent_id
+    const  phone = agent_id
 
     // =========================
     // Try User Login
     // =========================
-    const user = await User.findOne({ email }).select("+password");
+    const user = await User.findOne({ phone }).select("+password");
+    console.log(user)
 
     if (user) {
       const isMatch = await user.matchPassword(password);

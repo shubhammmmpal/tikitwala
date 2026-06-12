@@ -19,13 +19,18 @@ import upload from '../middleware/uploadMiddleware.js';
 const busUpload = upload("buses");
 
 
-router.get('/buses', getBusList);
+router.get('/buses',protect, getBusList);
 router.get('/search-buses', searchBuses);
 // router.get('/debug-buses', debugBuses);
 router.post("/create", protect, busUpload.array("images", 10), createBus);
 
 router.get("/:id", getBusById);
-router.put("/:id", updateBus);
+router.put(
+  "/:id",
+  protect,
+  busUpload.array("images", 10),
+  updateBus
+);
 router.delete("/:id", deleteBus);
 router.patch("/:id/status", changeBusStatus);
 router.post("/:busId/generate-seats", generateBusSeats);

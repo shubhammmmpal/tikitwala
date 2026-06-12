@@ -173,6 +173,10 @@ const busTripSchema = new mongoose.Schema({
     default: 'BUS'
   },
 
+  tripCode :{
+    type: String,
+  },
+
   // ======================
   // ROUTE
   // ======================
@@ -198,7 +202,7 @@ const busTripSchema = new mongoose.Schema({
 
   departureDateTime: {
     type: Date,
-    required: true
+    // required: true
   },
 
   arrivalDateTime: {
@@ -330,6 +334,11 @@ const busTripSchema = new mongoose.Schema({
         percentage: Number
       }
     }
+  },
+
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
   },
 
 

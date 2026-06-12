@@ -6,6 +6,8 @@ import Agency from "../models/Agency.model.js";
 export const createBusTrip = async (req, res) => {
   try {
 
+    const userId  = req.user.id;
+
     const {
       busId,
       startPoint,
@@ -408,7 +410,8 @@ export const createBusTrip = async (req, res) => {
 
         dropPoints:
           formattedDropPoints,
-
+          
+        createdBy : userId,  
 
         // =========================
         // SEATS
@@ -1301,6 +1304,38 @@ export const updateSeatType = async (req, res) => {
       success: false,
       message: "Internal server error",
       error: error.message
+    });
+  }
+};
+
+export const getUpcomingTrips = async (req, res) => {
+  try {
+    const userId = req.user.id; // from auth middleware
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const trips = await BusTrip.find({
+      createdBy: userId,
+      departureDateTime: { $gte: today },
+      status: "active"
+    })
+      .populate("startPoint", "name")
+      .populate("endPoint", "name")
+      .select(
+        "startPoint endPoint departureDate departureDateTime arrivalDate"
+      )
+      .sort({ departureDateTime: 1 });
+
+    return res.status(200).json({
+      success: true,
+      count: trips.length,
+      data: trips
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message
     });
   }
 };

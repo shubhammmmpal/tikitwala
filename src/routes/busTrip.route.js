@@ -11,10 +11,13 @@ import { createBusTrip,
   changeBusTripStatus,
   searchBusTrips,
   updateSeatPrice,
-  updateSeatType
+  updateSeatType,
+  getUpcomingTrips
    } from '../controllers/busTrip.controller.js';
+import { protect } from '../middleware/authMiddleware.js';
 
-router.post("/create", createBusTrip);
+router.post("/create",protect, createBusTrip);
+router.get("/upcoming",protect, getUpcomingTrips);
 router.get("/search", searchBusTrips);
 router.get("/", getBusTrips);
 router.get("/:id", getBusTripById);

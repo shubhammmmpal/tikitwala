@@ -1,5 +1,7 @@
 import BusTrip from "../models/BusTrip.model.js";
 import Bus from "../models/Bus.model.js";
+import fs from "fs";
+import path from "path";
 // @desc    Get bus list based on startPoint, endPoint and date
 // @route   GET /api/buses
 // @access  Public
@@ -85,9 +87,9 @@ export const createBus = async (req, res) => {
 // Get All Buses (with pagination and filters)
 export const getBusList = async (req, res) => {
   try {
-
-    // const userId = req.user.id;
-    // const userRole = req.user.role;
+    console.log(req.user)
+    const userId = req.user.id;
+    
 
     const {
       page = 1,
@@ -97,20 +99,25 @@ export const getBusList = async (req, res) => {
       busType
     } = req.query;
 
-    // Base query
-    const query = {};
+    const query = {
+      createdBy: userId
+    };
 
-    // If not admin, show only own buses
-    // if (userRole !== "ADMIN") {
-    //   query.createdBy = userId;
-    // }
-
-    // Search filter
-    if (search) {
+    // Search by Bus Name or Bus Number
+    if (search?.trim()) {
       query.$or = [
-        { busName: { $regex: search, $options: "i" } },
-        { busNo: { $regex: search, $options: "i" } },
-        { registrationNumber: { $regex: search, $options: "i" } }
+        {
+          busName: {
+            $regex: search.trim(),
+            $options: "i"
+          }
+        },
+        {
+          busNo: {
+            $regex: search.trim(),
+            $options: "i"
+          }
+        }
       ];
     }
 
@@ -119,7 +126,7 @@ export const getBusList = async (req, res) => {
       query.status = status;
     }
 
-    // Bus type filter
+    // Bus Type filter
     if (busType) {
       query.busType = busType;
     }
@@ -128,21 +135,20 @@ export const getBusList = async (req, res) => {
       .populate("travelAgency")
       .populate("createdBy", "name email")
       .sort({ createdAt: -1 })
-      .skip((page - 1) * limit)
+      .skip((Number(page) - 1) * Number(limit))
       .limit(Number(limit));
 
     const total = await Bus.countDocuments(query);
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       total,
       currentPage: Number(page),
-      totalPages: Math.ceil(total / limit),
+      totalPages: Math.ceil(total / Number(limit)),
       data: buses
     });
-
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: error.message || "Error fetching buses"
     });
@@ -178,36 +184,8 @@ export const getBusById = async (req, res) => {
 export const updateBus = async (req, res) => {
   try {
     const { id } = req.params;
-    const updatedBus = await Bus.findByIdAndUpdate(
-      id,
-      req.body,
-      { new: true, runValidators: true }
-    ).populate("travelAgency");
 
-    if (!updatedBus) {
-      return res.status(404).json({
-        success: false,
-        message: "Bus not found"
-      });
-    }
-
-    res.status(200).json({
-      success: true,
-      message: "Bus updated successfully",
-      data: updatedBus
-    });
-  } catch (error) {
-    res.status(400).json({
-      success: false,
-      message: error.message || "Error updating bus"
-    });
-  }
-};
-
-// Delete Bus
-export const deleteBus = async (req, res) => {
-  try {
-    const bus = await Bus.findByIdAndDelete(req.params.id);
+    const bus = await Bus.findById(id);
 
     if (!bus) {
       return res.status(404).json({
@@ -216,14 +194,69 @@ export const deleteBus = async (req, res) => {
       });
     }
 
-    res.status(200).json({
-      success: true,
-      message: "Bus deleted successfully"
+    // Update fields from form-data
+    Object.keys(req.body).forEach((key) => {
+      bus[key] = req.body[key];
     });
+
+    // Update uploaded images
+    if (req.files && req.files.length > 0) {
+      bus.images = req.files.map(
+        file => `/uploads/buses/${file.filename}`
+      );
+    }
+
+    await bus.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Bus updated successfully",
+      data: bus
+    });
+
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      message: "Error deleting bus"
+      message: error.message
+    });
+  }
+};
+
+// Delete Bus
+export const deleteBus = async (req, res) => {
+  try {
+    const bus = await Bus.findById(req.params.id);
+
+    if (!bus) {
+      return res.status(404).json({
+        success: false,
+        message: "Bus not found"
+      });
+    }
+
+    // Delete images from uploads folder
+    if (bus.images && bus.images.length > 0) {
+      bus.images.forEach((imagePath) => {
+        const fullPath = path.join(process.cwd(), imagePath);
+
+        if (fs.existsSync(fullPath)) {
+          fs.unlinkSync(fullPath);
+        }
+      });
+    }
+
+    // Delete bus record
+    await Bus.findByIdAndDelete(req.params.id);
+
+    return res.status(200).json({
+      success: true,
+      message: "Bus and associated images deleted successfully"
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message || "Error deleting bus"
     });
   }
 };
