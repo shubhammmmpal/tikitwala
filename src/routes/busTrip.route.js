@@ -12,20 +12,26 @@ import { createBusTrip,
   searchBusTrips,
   updateSeatPrice,
   updateSeatType,
-  getUpcomingTrips
+  getUpcomingTrips,
+  changeBusInTrip
    } from '../controllers/busTrip.controller.js';
 import { protect } from '../middleware/authMiddleware.js';
 
 router.post("/create",protect, createBusTrip);
 router.get("/upcoming",protect, getUpcomingTrips);
 router.get("/search", searchBusTrips);
-router.get("/", getBusTrips);
+router.get("/",protect, getBusTrips);
 router.get("/:id", getBusTripById);
 router.put("/:id", updateBusTrip);
 router.patch("/:id/status", changeBusTripStatus);
 router.delete("/:id", deleteBusTrip);
 router.patch("/update-seat-price", updateSeatPrice);
 router.patch("/update-seat-type", updateSeatType);
+router.put(
+  "/change-bus/:tripId",
+  protect,
+  changeBusInTrip
+);
 
 
 
