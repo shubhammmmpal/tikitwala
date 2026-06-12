@@ -465,12 +465,8 @@ export const generateBusSeats = async (req, res) => {
       row: seat.row,
       column: seat.column || 1,
 
-      deck:
-        seat.type?.toUpperCase() === "UPPER"
-          ? "UPPER"
-          : seat.type?.toUpperCase() === "LOWER"
-          ? "LOWER"
-          : "SINGLE",
+      deck: seat.deck?.toUpperCase() ,
+       
 
       section: seat.section?.toUpperCase() || "LEFT",
 

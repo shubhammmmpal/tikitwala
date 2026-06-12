@@ -113,6 +113,10 @@ const seatSchema = new mongoose.Schema({
     required: true
   },
 
+  seatName:{
+    type: String,
+    required: true
+  },
   deck: {
     type: String,
     enum: ['LOWER', 'UPPER', 'SINGLE'],

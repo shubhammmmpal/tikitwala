@@ -205,6 +205,7 @@ export const createBusTrip = async (req, res) => {
 
         seatNo: seat.seatNumber,
 
+        seatName: seat.seatName,
         deck: seat.deck,
 
         seatPrice:
@@ -484,7 +485,6 @@ export const createBusTrip = async (req, res) => {
 
 export const getBusTrips = async (req, res) => {
   try {
-
     const {
       page = 1,
       limit = 10,
@@ -495,8 +495,18 @@ export const getBusTrips = async (req, res) => {
       endPoint
     } = req.query;
 
+    // return
+    const pageNumber = Number(page) || 1;
+    const limitNumber = Number(limit) || 10;
+
     const query = {};
 
+    // Role-based filtering
+    if (req.user.role !== "Admin") {
+      query.createdBy = req.user.id;
+    }
+
+    // Other filters
     if (busId) query.bus = busId;
     if (departureDate) query.departureDate = departureDate;
     if (status) query.status = status;
@@ -504,11 +514,6 @@ export const getBusTrips = async (req, res) => {
     if (endPoint) query.endPoint = endPoint;
 
     const trips = await BusTrip.find(query)
-
-      // ======================
-      // BUS
-      // ======================
-
       .populate({
         path: "bus",
         select: "travelAgency busNo busName busType registrationNumber",
@@ -517,80 +522,50 @@ export const getBusTrips = async (req, res) => {
           select: "name"
         }
       })
-
-      // ======================
-      // START CITY
-      // ======================
-
       .populate({
         path: "startPoint",
         model: "City",
         select: "city_name city_id state_id"
       })
-
-      // ======================
-      // END CITY
-      // ======================
-
       .populate({
         path: "endPoint",
         model: "City",
         select: "city_name city_id state_id"
       })
-
-      // ======================
-      // STOP POINTS CITY
-      // ======================
-
       .populate({
         path: "stopPoints.city",
         model: "City",
         select: "city_name city_id state_id"
       })
-
-      // ======================
-      // PICKUP POINTS CITY
-      // ======================
-
       .populate({
         path: "pickupPoints.city",
         model: "City",
         select: "city_name city_id state_id"
       })
-
-      // ======================
-      // DROP POINTS CITY
-      // ======================
-
       .populate({
         path: "dropPoints.city",
         model: "City",
         select: "city_name city_id state_id"
       })
-
       .sort({ departureDateTime: 1 })
-
-      .skip((page - 1) * limit)
-
-      .limit(Number(limit));
+      .skip((pageNumber - 1) * limitNumber)
+      .limit(limitNumber);
 
     const total = await BusTrip.countDocuments(query);
 
     return res.status(200).json({
       success: true,
       total,
-      totalPages: Math.ceil(total / limit),
-      currentPage: Number(page),
+      totalPages: Math.ceil(total / limitNumber),
+      currentPage: pageNumber,
       data: trips
     });
 
   } catch (error) {
-
     return res.status(500).json({
       success: false,
       message: error.message
     });
-
   }
 };
 
@@ -1331,6 +1306,57 @@ export const getUpcomingTrips = async (req, res) => {
       success: true,
       count: trips.length,
       data: trips
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+export const changeBusInTrip = async (req, res) => {
+  try {
+    const { tripId } = req.params;
+    const { busId } = req.body;
+    const userId = req.user?.id || req.headers["user-id"];
+
+    if (!busId) {
+      return res.status(400).json({
+        success: false,
+        message: "Bus ID is required"
+      });
+    }
+
+    const trip = await BusTrip.findOne({
+      _id: tripId,
+      createdBy: userId
+    });
+
+    if (!trip) {
+      return res.status(404).json({
+        success: false,
+        message: "Bus trip not found"
+      });
+    }
+
+    const bus = await Bus.findById(busId);
+
+    if (!bus) {
+      return res.status(404).json({
+        success: false,
+        message: "Bus not found"
+      });
+    }
+
+    trip.bus = busId;
+
+    await trip.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Bus changed successfully",
+      data: trip
     });
   } catch (error) {
     return res.status(500).json({
