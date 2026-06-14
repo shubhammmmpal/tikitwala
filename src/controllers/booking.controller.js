@@ -1,6 +1,9 @@
 import Booking from "../models/Booking.model.js";
 import BusTrip from "../models/BusTrip.model.js";
+
 import mongoose from "mongoose";
+import Payment from "../models/payment.model.js";
+import BusAgentDashboard from "../models/busAgentDashboard.model.js";
 
 // ====================== BOOK BUS TRIP ======================
 // ================= HELPER =================
@@ -20,18 +23,25 @@ export const bookBusTrip = async (req, res) => {
   //   const session = await mongoose.startSession();
   //   session.startTransaction();
 
+
   try {
     const {
-      busTripId,
-      passengers,
-      contactEmail,
-      contactPhone,
-      selectedSeats,
-      pickupPoint,
-      dropPoint,
-      startPoint,
-      endPoint,
-    } = req.body;
+  busTripId,
+  passengers,
+  contactEmail,
+  contactPhone,
+  selectedSeats,
+  pickupPoint,
+  dropPoint,
+  startPoint,
+  endPoint,
+   totalSeatAmount,
+        convenienceFee,
+        gstAmount,
+        totalAmount,
+ 
+  paymentMethod
+} = req.body;
 
     const userId = req.user?.id || null;
 
@@ -42,9 +52,9 @@ export const bookBusTrip = async (req, res) => {
       throw new Error("Please select at least one seat");
     }
 
-    if (!passengers || passengers.length !== selectedSeats.length) {
-      throw new Error("Passengers and seats count mismatch");
-    }
+    // if (!passengers || passengers.length !== selectedSeats.length) {
+    //   throw new Error("Passengers and seats count mismatch");
+    // }
 
     // ================= FETCH TRIP =================
     const busTrip = await BusTrip.findById(busTripId);
@@ -59,9 +69,11 @@ export const bookBusTrip = async (req, res) => {
       throw new Error("Pickup and Drop point are required");
     }
 
-    let totalAmount = 0;
+    // let totalAmount = 0;
     const bookedSeats = [];
     const selectedSeatsSet = new Set(selectedSeats);
+
+    const agentId = busTrip.createdBy;
 
     // ================= PROCESS SEATS =================
     for (let i = 0; i < selectedSeats.length; i++) {
@@ -135,7 +147,7 @@ export const bookBusTrip = async (req, res) => {
       seat.bookedBy = userId;
       seat.genderBooked = passenger.gender;
       seat.seatFor = "None";
-      totalAmount += seat.seatPrice;
+      // totalAmount += seat.seatPrice;
       bookedSeats.push(seat);
 
       // ================= AUTO BLOCK ADJACENT =================
@@ -158,15 +170,16 @@ export const bookBusTrip = async (req, res) => {
     }
 
     // ================= PRICE CALC =================
-    const gst = Math.round(totalAmount * 0.05);
-    const platformFee = 100;
-    const finalAmount = totalAmount + gst + platformFee;
+    // const gst = Math.round(totalAmount * 0.05);
+    // const platformFee = 100;
+    // const finalAmount = totalAmount + gst + platformFee;
 
     // ================= CREATE BOOKING =================
     const newBooking = new Booking({
       bookingId: "", // auto generate in schema
       user: userId,
       busTrip: busTripId,
+      bookedBy: userId, // <-- add this
 
       bus: {
         busNo: busTrip.bus?.busNo || "N/A",
@@ -200,11 +213,11 @@ export const bookBusTrip = async (req, res) => {
       contactPhone,
 
       fareBreakup: {
-        baseFare: totalAmount,
-        gst,
-        platformFee,
+        baseFare: totalSeatAmount,
+        gst: gstAmount,
+        platformFee: convenienceFee,
         otherCharges: 0,
-        totalAmount: finalAmount,
+        totalAmount,
       },
 
       paymentStatus: "pending",
@@ -216,6 +229,86 @@ export const bookBusTrip = async (req, res) => {
 
     await newBooking.save();
     await busTrip.save();
+
+    const payment = await Payment.create({
+      booking: newBooking._id,
+
+      amount: totalAmount,
+      currency: "INR",
+
+      paymentMethod,
+
+      status: "SUCCESS",
+
+      gatewayResponse: {
+        totalSeatAmount,
+        convenienceFee,
+        gstAmount,
+        totalAmount
+      }
+    });
+
+    const today = new Date();
+
+const currentMonth = today.getMonth();
+const currentYear = today.getFullYear();
+
+let dashboard = await BusAgentDashboard.findOne({
+  agentId
+});
+
+if (!dashboard) {
+  dashboard = await BusAgentDashboard.create({
+    agentId
+  });
+}
+
+// Total Stats
+dashboard.totalTrips += 1;
+dashboard.totalPassengers += passengers.length;
+dashboard.totalRevenue += totalAmount;
+
+// Monthly Stats
+const dashboardMonth = dashboard.updatedAt
+  ? dashboard.updatedAt.getMonth()
+  : currentMonth;
+
+const dashboardYear = dashboard.updatedAt
+  ? dashboard.updatedAt.getFullYear()
+  : currentYear;
+
+if (
+  dashboardMonth === currentMonth &&
+  dashboardYear === currentYear
+) {
+  dashboard.currentMonthTrips += 1;
+  dashboard.currentMonthPessanger += passengers.length;
+  dashboard.currentMonthRevenue += totalAmount;
+} else {
+  dashboard.currentMonthTrips = 1;
+  dashboard.currentMonthPessanger = passengers.length;
+  dashboard.currentMonthRevenue = totalAmount;
+}
+
+// Daily Stats
+const lastUpdated = dashboard.updatedAt || today;
+
+const isSameDay =
+  lastUpdated.getDate() === today.getDate() &&
+  lastUpdated.getMonth() === today.getMonth() &&
+  lastUpdated.getFullYear() === today.getFullYear();
+
+if (isSameDay) {
+  dashboard.todayTrips += 1;
+  dashboard.todayPessanger += passengers.length;
+  dashboard.todayRevenue += totalAmount;
+} else {
+  dashboard.todayTrips = 1;
+  dashboard.todayPessanger = passengers.length;
+  dashboard.todayRevenue = totalAmount;
+}
+
+await dashboard.save();
 
     // await session.commitTransaction();
     // session.endSession();

@@ -1,6 +1,7 @@
 import BusTrip from "../models/BusTrip.model.js";
 import Bus from "../models/Bus.model.js";
 import Agency from "../models/Agency.model.js";
+import City from "../models/city.model.js"
 
 
 export const createBusTrip = async (req, res) => {
@@ -1172,6 +1173,85 @@ export const updateSeatPrice = async (req, res) => {
 // UPDATE SEAT TYPE
 // ==========================================
 
+
+
+export const getFareSummary = async (req, res) => {
+  try {
+    const { tripId, selectedSeats } = req.body;
+
+    if (!tripId || !selectedSeats?.length) {
+      return res.status(400).json({
+        success: false,
+        message: "Trip ID and seats are required"
+      });
+    }
+
+    const trip = await BusTrip.findById(tripId);
+
+    if (!trip) {
+      return res.status(404).json({
+        success: false,
+        message: "Trip not found"
+      });
+    }
+
+    // Get selected seat details
+    const seats = trip.seats.filter((seat) =>
+      selectedSeats.includes(seat.seatNo)
+    );
+
+    if (!seats.length) {
+      return res.status(400).json({
+        success: false,
+        message: "No valid seats found"
+      });
+    }
+
+    // Total seat amount
+    const totalSeatAmount = seats.reduce(
+      (sum, seat) => sum + seat.seatPrice,
+      0
+    );
+
+    // Charges
+    const convenienceFee = 50 * seats.length; // 2%
+    // const platformFee = 50 * seats.length; // ₹20 per seat
+
+    // const taxableAmount =
+    //   totalSeatAmount +
+    //   convenienceFee 
+    //   // platformFee;
+
+    const gstAmount = totalSeatAmount * 0.18;
+
+    const totalAmount = totalSeatAmount + 
+      convenienceFee +
+      gstAmount;
+
+    return res.status(200).json({
+      success: true,
+      data: {
+        totalSeatAmount: Number(totalSeatAmount.toFixed(2)),
+        convenienceFee: Number(convenienceFee.toFixed(2)),
+        // platformFee: Number(platformFee.toFixed(2)),
+        gstAmount: Number(gstAmount.toFixed(2)),
+        totalAmount: Number(totalAmount.toFixed(2)),
+        selectedSeats: seats.map((seat) => ({
+          seatNo: seat.seatNo,
+          seatName: seat.seatName,
+          price: seat.seatPrice
+        }))
+      }
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
 export const updateSeatType = async (req, res) => {
 
   try {
@@ -1285,20 +1365,64 @@ export const updateSeatType = async (req, res) => {
 
 export const getUpcomingTrips = async (req, res) => {
   try {
-    const userId = req.user.id; // from auth middleware
+    const userId = req.user.id;
+    const { search, busName } = req.query;
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    const trips = await BusTrip.find({
+    let cityIds = [];
+    let busIds = [];
+
+    // Search Cities
+    if (search) {
+      const cities = await City.find({
+        city_name: { $regex: search, $options: "i" }
+      }).select("_id");
+
+      cityIds = cities.map(city => city._id);
+    }
+
+    // Search Bus Names
+    if (busName) {
+      const buses = await Bus.find({
+        busName: { $regex: busName, $options: "i" }
+      }).select("_id");
+
+      busIds = buses.map(bus => bus._id);
+    }
+
+    const query = {
       createdBy: userId,
       departureDateTime: { $gte: today },
       status: "active"
-    })
-      .populate("startPoint", "name")
-      .populate("endPoint", "name")
+    };
+
+    const filters = [];
+
+    if (search) {
+      filters.push(
+        { startPoint: { $in: cityIds } },
+        { endPoint: { $in: cityIds } }
+      );
+    }
+
+    if (busName) {
+      filters.push(
+        { bus: { $in: busIds } }
+      );
+    }
+
+    if (filters.length > 0) {
+      query.$or = filters;
+    }
+
+    const trips = await BusTrip.find(query)
+      .populate("bus", "busName")
+      .populate("startPoint", "city_name")
+      .populate("endPoint", "city_name")
       .select(
-        "startPoint endPoint departureDate departureDateTime arrivalDate"
+        "bus startPoint endPoint departureDate departureDateTime arrivalDate"
       )
       .sort({ departureDateTime: 1 });
 
@@ -1307,6 +1431,7 @@ export const getUpcomingTrips = async (req, res) => {
       count: trips.length,
       data: trips
     });
+
   } catch (error) {
     return res.status(500).json({
       success: false,

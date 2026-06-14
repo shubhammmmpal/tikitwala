@@ -98,6 +98,18 @@ const bookingSchema = new mongoose.Schema({
     enum: ["confirmed", "cancelled", "completed", "pending"],
     default: "pending"
   },
+  bookedBy:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true
+  },
+  cancelledBy:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
+  },
+  cancellationReason: String,
+  cancellationDate: Date,
+  
 
   // Additional Info
   seatType: String,              // e.g., "A/C Sleeper (2+1)"

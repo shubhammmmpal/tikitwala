@@ -26,6 +26,11 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Please add a phone number'],
     unique: true
   },
+  agent_id:{
+    type: String,
+    unique: true,
+    sparse: true
+  },
   // password: {
   //   type: String,
   //   required: [true, 'Please add a password'],
@@ -74,6 +79,11 @@ const userSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  status: {
+    type: String,
+    enum: ['active', 'inactive', 'banned'],
+    default: 'inactive'
   }
 }, {
   timestamps: true

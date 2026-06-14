@@ -13,7 +13,8 @@ import { createBusTrip,
   updateSeatPrice,
   updateSeatType,
   getUpcomingTrips,
-  changeBusInTrip
+  changeBusInTrip,
+  getFareSummary
    } from '../controllers/busTrip.controller.js';
 import { protect } from '../middleware/authMiddleware.js';
 
@@ -27,6 +28,7 @@ router.patch("/:id/status", changeBusTripStatus);
 router.delete("/:id", deleteBusTrip);
 router.patch("/update-seat-price", updateSeatPrice);
 router.patch("/update-seat-type", updateSeatType);
+router.post("/fare-summary", getFareSummary);
 router.put(
   "/change-bus/:tripId",
   protect,

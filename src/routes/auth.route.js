@@ -10,6 +10,7 @@ import {
   updateActiveLocation,
   updateUser,
   getProfile,
+  checkUserExists
 } from "../controllers/auth.controller.js   ";
 import { protect } from "../middleware/authMiddleware.js";
 import upload from "../middleware/uploadMiddleware.js";
@@ -23,6 +24,7 @@ router.post("/signin", signin);
 router.post("/send-otp", sendOTP);
 router.post("/verify-otp", verifyOTP);
 router.put("/active-location", protect, updateActiveLocation);
+router.post('/check-user-exists', checkUserExists);
 router.put(
   "/update/:id",
   protect,
