@@ -179,12 +179,12 @@ export const signin = async (req, res) => {
   try {
     const { agent_id, password, device, email } = req.body;
 
-    const phone = agent_id;
+    // const agent_id = agent_id;
 
     // =========================
     // Try User Login
     // =========================
-    const user = await User.findOne({ phone }).select("+password");
+    const user = await User.findOne({ agent_id }).select("+password");
     console.log(user);
 
     if (user) {
