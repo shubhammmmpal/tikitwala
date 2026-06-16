@@ -96,7 +96,10 @@ const stopPointSchema = new mongoose.Schema({
 
   order: {
     type: Number,
-    required: true
+    // required: true
+  },
+  address:{
+    type: String
   }
 
 }, { _id: false });

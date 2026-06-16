@@ -242,7 +242,8 @@ export const createBusTrip = async (req, res) => {
           ? new Date(stop.departureTime)
           : null,
 
-        order: stop.order || index + 1
+        order: stop.order || index + 1,
+        address: stop.address || ""
 
       }));
 
