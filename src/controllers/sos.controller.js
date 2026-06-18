@@ -143,7 +143,7 @@ export const getAgentSOS = async (req, res) => {
     // =========================
     // AGENT
     // =========================
-    if (role === "agent") {
+    if (role === "CAMP_AGENT") {
       const campFilter = {
         createdBy: userId,
       };
@@ -309,7 +309,7 @@ export const approveSOS = async (req, res) => {
     // =====================
     // AGENT APPROVAL
     // =====================
-    if (role.toLowerCase() === "agent") {
+    if (role.toLowerCase() === "CAMP_AGENT") {
       const camp = await Camp.findOne({
         createdBy: userId,
       });
@@ -424,7 +424,7 @@ export const rejectSOS = async (req, res) => {
         // =========================
         // AGENT
         // =========================
-        if (role === "agent") {
+        if (role === "CAMP_AGENT") {
 
             const camp = await Camp.findOne({
                 createdBy: userId
@@ -545,7 +545,7 @@ export const transferSOS = async (req, res) => {
         let campId;
 
         // Agent
-        if (role === "agent") {
+        if (role === "CAMP_AGENT") {
 
             const camp = await Camp.findOne({
                 createdBy: userId

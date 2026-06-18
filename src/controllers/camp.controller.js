@@ -297,7 +297,7 @@ export const campDashboard = async (req, res) => {
   try {
     let camps = [];
 
-    if (req.user.role === "agent") {
+    if (req.user.role === "CAMP_AGENT") {
       camps = await Camp.find({
         createdBy: req.user.id,
       });
