@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const campSchema = new mongoose.Schema({
     campName: { type: String, required: true },
-    campType: { type: String, enum: ["medical", "police","rest_room","water_and_food","other"]},
+    campType: { type: String, enum: ["medical", "police","rest_room","water_and_food","washroom","other"]},
     phone: { type: Number, required: true },
     stallno: { type: String, required: true },
     image: [String],
