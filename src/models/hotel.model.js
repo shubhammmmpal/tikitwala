@@ -9,7 +9,7 @@ const hotelSchema = new mongoose.Schema(
     address: {
       street: { type: String, required: true },
       city: { type: mongoose.Schema.Types.ObjectId, ref: "City", required: true},
-      state: { type: mongoose.Schema.Types.ObjectId, ref: "State", required: true},
+      state: { type: mongoose.Schema.Types.ObjectId, ref: "State"},
       country: { type: String, default: "India" },
       pincode: String,
     },

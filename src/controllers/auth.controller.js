@@ -169,12 +169,6 @@ export const signup = async (req, res) => {
   }
 };
 
-// @desc    Auth user & get token
-// @route   POST /api/auth/login
-// @access  Public
-// import User from '../models/User.js';
-// import generateToken from '../utils/generateToken.js';
-
 export const signin = async (req, res) => {
   try {
     const { agent_id, password, device, email } = req.body;
@@ -324,7 +318,6 @@ export const sendOTP = async (req, res) => {
   }
 };
 
-// Verify OTP
 export const verifyOTP = async (req, res) => {
   try {
     const { phone, otp, device } = req.body;
@@ -537,6 +530,186 @@ export const checkUserExists = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const getAllAdmins = async (req, res) => {
+  try {
+    const {
+      page = 1,
+      limit = 10,
+      search,
+      role,
+      status,
+      startDate,
+      endDate,
+    } = req.query;
+
+    const query = {};
+
+    query.role = {
+  $in: [
+    "admin",
+    "agent",
+    "BUS_AGENT",
+    "HOTEL_AGENT",
+    "CAMP_AGENT",
+    "FLYGHT_AGENT",
+    "TRAIN_AGENT",
+    "TRAVEL_AGENT",
+    "CAR_AGENT",
+  ],
+};
+
+    // Search by name, email, phone, agent_id
+    if (search) {
+      query.$or = [
+        { name: { $regex: search, $options: "i" } },
+        { email: { $regex: search, $options: "i" } },
+        { phone: { $regex: search, $options: "i" } },
+        { agent_id: { $regex: search, $options: "i" } },
+      ];
+    }
+
+    // Role filter
+    if (role) {
+      query.role = role;
+    }
+
+    // Status filter
+    if (status) {
+      query.status = status;
+    }
+
+    // Date range filter
+    if (startDate || endDate) {
+      query.createdAt = {};
+
+      if (startDate) {
+        query.createdAt.$gte = new Date(startDate);
+      }
+
+      if (endDate) {
+        const end = new Date(endDate);
+        end.setHours(23, 59, 59, 999);
+        query.createdAt.$lte = end;
+      }
+    }
+
+    const total = await User.countDocuments(query);
+
+    const users = await User.find(query)
+      .select("-password -otp -otpExpiry")
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * Number(limit))
+      .limit(Number(limit));
+
+    return res.status(200).json({
+      success: true,
+      total,
+      currentPage: Number(page),
+      totalPages: Math.ceil(total / limit),
+      data: users,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const getUserById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const user = await User.findById(id).select("-password -otp");
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const changeUserStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    const allowedStatus = ["active", "inactive", "banned"];
+
+    if (!allowedStatus.includes(status)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid status",
+      });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      id,
+      { status },
+      {
+        new: true,
+        runValidators: true,
+      }
+    ).select("-password -otp");
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: `User status changed to ${status}`,
+      data: user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const user = await User.findByIdAndDelete(id);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "User deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
       success: false,
       message: error.message,
     });
