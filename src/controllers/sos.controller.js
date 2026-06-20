@@ -7,7 +7,6 @@ import { calculateNearbySOSCount } from "../utils/helper.js";
 import { getAffectedCamps } from "../utils/helper.js";
 import { getDistanceInKm } from "../utils/helper.js";
 
-
 export const createSOS = async (req, res) => {
   try {
     const sos = await SOS.create({
@@ -211,7 +210,11 @@ export const getAgentSOS = async (req, res) => {
     // =========================
     // SOS FILTER
     // =========================
-    const sosFilter = {};
+    const sosFilter = {
+      rejectedBy: {
+        $nin: [userId],
+      },
+    };
 
     if (sosType) {
       sosFilter.sosType = sosType;
@@ -270,7 +273,6 @@ export const getAgentSOS = async (req, res) => {
   }
 };
 
-
 export const approveSOS = async (req, res) => {
   try {
     // console.log(req.user)
@@ -278,7 +280,6 @@ export const approveSOS = async (req, res) => {
     const userId = req.user.id;
     const role = req.user.role;
 
-    
     const { sosId } = req.params;
 
     const sos = await SOS.findById(sosId);
@@ -394,296 +395,260 @@ export const approveSOS = async (req, res) => {
   }
 };
 
-
 export const rejectSOS = async (req, res) => {
-    try {
+  try {
+    console.log(req.user);
+    const userId = req.user.id;
+    const role = req.user.role;
 
-        console.log(req.user)
-        const userId = req.user.id;
-        const role = req.user.role;
+    const { sosId } = req.params;
 
-        const { sosId } = req.params;
+    const sos = await SOS.findById(sosId);
 
-        const sos = await SOS.findById(sosId);
-
-        if (!sos) {
-            return res.status(404).json({
-                success: false,
-                message: "SOS not found"
-            });
-        }
-
-        // Once approved nobody can reject
-        if (sos.status === "accepted") {
-            return res.status(400).json({
-                success: false,
-                message: "Approved SOS cannot be rejected"
-            });
-        }
-
-        // =========================
-        // AGENT
-        // =========================
-        if (role === "CAMP_AGENT") {
-
-            const camp = await Camp.findOne({
-                createdBy: userId
-            });
-
-            if (!camp) {
-                return res.status(404).json({
-                    success: false,
-                    message: "Camp not found"
-                });
-            }
-
-            const alreadyRejected = sos.rejectedBy.some(
-                id => id.toString() === camp._id.toString()
-            );
-
-            if (alreadyRejected) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Camp already rejected this SOS"
-                });
-            }
-
-            sos.rejectedBy.push(camp._id);
-        }
-
-        // =========================
-        // VOLUNTEER
-        // =========================
-        else if (role === "Volunteer") {
-
-            const volunteer = await Volunteer.findOne({
-                _id: userId
-            });
-
-            if (!volunteer) {
-                return res.status(404).json({
-                    success: false,
-                    message: "Volunteer not found"
-                });
-            }
-
-            const volunteerRejected =
-                sos.rejectedBy.some(
-                    id =>
-                        id.toString() ===
-                        volunteer._id.toString()
-                );
-
-            const campRejected =
-                sos.rejectedBy.some(
-                    id =>
-                        id.toString() ===
-                        volunteer.campId.toString()
-                );
-
-            if (volunteerRejected || campRejected) {
-                return res.status(400).json({
-                    success: false,
-                    message:
-                        "Volunteer or camp already rejected this SOS"
-                });
-            }
-
-            sos.rejectedBy.push(
-                // volunteer._id,
-                volunteer.campId
-            );
-        }
-
-        else {
-            return res.status(403).json({
-                success: false,
-                message: "Unauthorized"
-            });
-        }
-
-        await sos.save();
-
-        return res.status(200).json({
-            success: true,
-            message: "SOS rejected successfully",
-            data: sos
-        });
-
-    } catch (error) {
-
-        console.error(
-            "rejectSOS Error:",
-            error
-        );
-
-        return res.status(500).json({
-            success: false,
-            message: error.message
-        });
+    if (!sos) {
+      return res.status(404).json({
+        success: false,
+        message: "SOS not found",
+      });
     }
+
+    // Once approved nobody can reject
+    if (sos.status === "accepted") {
+      return res.status(400).json({
+        success: false,
+        message: "Approved SOS cannot be rejected",
+      });
+    }
+
+    // =========================
+    // AGENT
+    // =========================
+    if (role === "CAMP_AGENT") {
+      const camp = await Camp.findOne({
+        createdBy: userId,
+      });
+
+      if (!camp) {
+        return res.status(404).json({
+          success: false,
+          message: "Camp not found",
+        });
+      }
+
+      const alreadyRejected = sos.rejectedBy.some(
+        (id) => id.toString() === camp._id.toString(),
+      );
+
+      if (alreadyRejected) {
+        return res.status(400).json({
+          success: false,
+          message: "Camp already rejected this SOS",
+        });
+      }
+
+      sos.rejectedBy.push(camp._id);
+    }
+
+    // =========================
+    // VOLUNTEER
+    // =========================
+    else if (role === "Volunteer") {
+      const volunteer = await Volunteer.findOne({
+        _id: userId,
+      });
+
+      if (!volunteer) {
+        return res.status(404).json({
+          success: false,
+          message: "Volunteer not found",
+        });
+      }
+
+      const volunteerRejected = sos.rejectedBy.some(
+        (id) => id.toString() === volunteer._id.toString(),
+      );
+
+      const campRejected = sos.rejectedBy.some(
+        (id) => id.toString() === volunteer.campId.toString(),
+      );
+
+      if (volunteerRejected || campRejected) {
+        return res.status(400).json({
+          success: false,
+          message: "Volunteer or camp already rejected this SOS",
+        });
+      }
+
+      sos.rejectedBy.push(
+        // volunteer._id,
+        volunteer.campId,
+      );
+    } else {
+      return res.status(403).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
+    await sos.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "SOS rejected successfully",
+      data: sos,
+    });
+  } catch (error) {
+    console.error("rejectSOS Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
 
 export const transferSOS = async (req, res) => {
-    try {
+  try {
+    const userId = req.user._id;
+    const role = req.user.role;
+    const { latitude, longitude } = req.body;
 
-        const userId = req.user._id;
-        const role = req.user.role;
-        const {latitude, longitude} = req.body
+    const { sosId } = req.params;
 
-        const { sosId } = req.params;
+    const sos = await SOS.findById(sosId);
 
-        const sos = await SOS.findById(sosId);
-
-        if (!sos) {
-            return res.status(404).json({
-                success: false,
-                message: "SOS not found"
-            });
-        }
-
-        let campId;
-
-        // Agent
-        if (role === "CAMP_AGENT") {
-
-            const camp = await Camp.findOne({
-                createdBy: userId
-            });
-
-            if (!camp) {
-                return res.status(404).json({
-                    success: false,
-                    message: "Camp not found"
-                });
-            }
-
-            campId = camp._id;
-        }
-
-        // Volunteer
-        else if (role === "Volunteer") {
-
-            const volunteer = await Volunteer.findById(userId);
-
-            if (!volunteer) {
-                return res.status(404).json({
-                    success: false,
-                    message: "Volunteer not found"
-                });
-            }
-
-            campId = volunteer.campId;
-        }
-
-        else {
-            return res.status(403).json({
-                success: false,
-                message: "Unauthorized"
-            });
-        }
-
-        // Only assigned camp can transfer
-        if (
-            sos.assignedCamp &&
-            sos.assignedCamp.toString() !== campId.toString()
-        ) {
-            return res.status(403).json({
-                success: false,
-                message: "Only assigned camp can transfer this SOS"
-            });
-        }
-
-        // Transfer SOS
-        sos.status = "pending";
-        sos.assigned = false;
-        sos.assignedCamp = null;
-        sos.volunteerId = null;
-        sos.rejectedBy = [];
-        sos.transferredBy = campId;
-        sos.latitude = latitude;
-        sos.longitude = longitude;
-
-
-        await sos.save();
-
-        // Get camp details
-        const camp = await Camp.findById(campId);
-
-        if (camp) {
-
-            // Count all SOS within 5km radius
-            const allSOS = await SOS.find();
-
-            let totalSOS = 0;
-
-            for (const item of allSOS) {
-
-                const distance = getDistanceInKm(
-                    camp.latitude,
-                    camp.longitude,
-                    item.latitude,
-                    item.longitude
-                );
-
-                if (distance <= 5) {
-                    totalSOS++;
-                }
-            }
-
-            // Emit dashboard update
-            getIO()
-                .to("all-camps")
-                .emit("camp-sos-count-updated", {
-                    campId: camp._id,
-                    campName: camp.campName,
-                    totalSOS,
-                    missed: "missed"
-                });
-        }
-
-        return res.status(200).json({
-            success: true,
-            message: "SOS transferred successfully",
-            data: sos
-        });
-
-    } catch (error) {
-
-        console.error("transferSOS Error:", error);
-
-        return res.status(500).json({
-            success: false,
-            message: error.message
-        });
+    if (!sos) {
+      return res.status(404).json({
+        success: false,
+        message: "SOS not found",
+      });
     }
+
+    let campId;
+
+    // Agent
+    if (role === "CAMP_AGENT") {
+      const camp = await Camp.findOne({
+        createdBy: userId,
+      });
+
+      if (!camp) {
+        return res.status(404).json({
+          success: false,
+          message: "Camp not found",
+        });
+      }
+
+      campId = camp._id;
+    }
+
+    // Volunteer
+    else if (role === "Volunteer") {
+      const volunteer = await Volunteer.findById(userId);
+
+      if (!volunteer) {
+        return res.status(404).json({
+          success: false,
+          message: "Volunteer not found",
+        });
+      }
+
+      campId = volunteer.campId;
+    } else {
+      return res.status(403).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
+    // Only assigned camp can transfer
+    if (sos.assignedCamp && sos.assignedCamp.toString() !== campId.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: "Only assigned camp can transfer this SOS",
+      });
+    }
+
+    // Transfer SOS
+    sos.status = "pending";
+    sos.assigned = false;
+    sos.assignedCamp = null;
+    sos.volunteerId = null;
+    sos.rejectedBy = [];
+    sos.transferredBy = campId;
+    sos.latitude = latitude;
+    sos.longitude = longitude;
+
+    await sos.save();
+
+    // Get camp details
+    const camp = await Camp.findById(campId);
+
+    if (camp) {
+      // Count all SOS within 5km radius
+      const allSOS = await SOS.find();
+
+      let totalSOS = 0;
+
+      for (const item of allSOS) {
+        const distance = getDistanceInKm(
+          camp.latitude,
+          camp.longitude,
+          item.latitude,
+          item.longitude,
+        );
+
+        if (distance <= 5) {
+          totalSOS++;
+        }
+      }
+
+      // Emit dashboard update
+      getIO().to("all-camps").emit("camp-sos-count-updated", {
+        campId: camp._id,
+        campName: camp.campName,
+        totalSOS,
+        missed: "missed",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "SOS transferred successfully",
+      data: sos,
+    });
+  } catch (error) {
+    console.error("transferSOS Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
 
 export const getSOSByCamp = async (req, res) => {
-    try {
+  try {
+    const { campId } = req.params;
 
-        const { campId } = req.params;
+    const sosList = await SOS.find({
+      assignedCamp: campId,
+    })
+      .populate("userId", "name phone")
+      .populate("assignedCamp", "campName campType")
+      .populate("volunteerId", "name phone");
 
-        const sosList = await SOS.find({
-            assignedCamp: campId
-        })
-        .populate("userId", "name phone")
-        .populate("assignedCamp", "campName campType")
-        .populate("volunteerId", "name phone");
+    return res.status(200).json({
+      success: true,
+      count: sosList.length,
+      data: sosList,
+    });
+  } catch (error) {
+    console.error("getSOSByCamp Error:", error);
 
-        return res.status(200).json({
-            success: true,
-            count: sosList.length,
-            data: sosList
-        });
-
-    } catch (error) {
-
-        console.error("getSOSByCamp Error:", error);
-
-        return res.status(500).json({
-            success: false,
-            message: error.message
-        });
-    }
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
