@@ -309,7 +309,7 @@ export const approveSOS = async (req, res) => {
     // =====================
     // AGENT APPROVAL
     // =====================
-    if (role.toLowerCase() === "CAMP_AGENT") {
+    if (role === "CAMP_AGENT") {
       const camp = await Camp.findOne({
         createdBy: userId,
       });

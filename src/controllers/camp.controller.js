@@ -401,11 +401,11 @@ const totalVolunteerCount = await Volunteer.countDocuments({
 
     return res.status(200).json({
       success: true,
-      totalActiveUsers: uniqueUsers.size,
-      totalCampCount,
-      totalNearbySOS,
-      acceptedSOSCount,
-        totalVolunteerCount,
+      totalActiveUsers: uniqueUsers.size || 0,
+      totalCampCount:totalCampCount || 0,
+      totalNearbySOS: totalNearbySOS || 0,
+      acceptedSOSCount : acceptedSOSCount || 0,
+      totalVolunteerCount: totalVolunteerCount || 0,
     });
   } catch (error) {
     return res.status(500).json({
