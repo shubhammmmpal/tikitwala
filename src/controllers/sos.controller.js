@@ -199,6 +199,7 @@ export const getAgentSOS = async (req, res) => {
       });
     }
 
+    console.log(camps);
     if (!camps.length) {
       return res.status(200).json({
         success: true,
@@ -210,9 +211,11 @@ export const getAgentSOS = async (req, res) => {
     // =========================
     // SOS FILTER
     // =========================
+
+    const campIds = camps.map((camp) => camp._id);
     const sosFilter = {
       rejectedBy: {
-        $nin: [userId],
+        $nin: campIds,
       },
     };
 

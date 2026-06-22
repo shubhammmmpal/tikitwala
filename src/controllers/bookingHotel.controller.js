@@ -1,13 +1,17 @@
-import BookingHotel from '../models/BookingHotel.model.js';
-import Room from '../models/room.model.js';
-import RoomAvailability from '../models/RoomAvailability.model.js';
-import Hotel from '../models/hotel.model.js';
+import BookingHotel from "../models/BookingHotel.model.js";
+import Room from "../models/room.model.js";
+import RoomAvailability from "../models/RoomAvailability.model.js";
+import Hotel from "../models/hotel.model.js";
 // import Payment from '../models/payment.model.js';
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
+import HotelAgentDashboard from "../models/hotelAgentDashboard.model.js";
 
 // ====================== HELPER FUNCTION ======================
 const calculateTotalPrice = (rooms, nights) => {
-  return rooms.reduce((total, item) => total + (item.pricePerNight * nights * item.quantity), 0);
+  return rooms.reduce(
+    (total, item) => total + item.pricePerNight * nights * item.quantity,
+    0,
+  );
 };
 
 // ====================== PUBLIC / AUTHENTICATED APIS ======================
@@ -101,7 +105,7 @@ export const createHotelBooking = async (req, res) => {
   //   res.status(500).json({ success: false, message: error.message });
   // }
 
-   const session = await mongoose.startSession();
+  const session = await mongoose.startSession();
   session.startTransaction();
 
   try {
@@ -112,10 +116,11 @@ export const createHotelBooking = async (req, res) => {
       checkOutDate,
       guestDetails,
       source,
-      customerId
+      customerId,
     } = req.body;
 
-    const userId = req.user._id;
+    const userId = req.user.id;
+    const role = req.user.role;
 
     // 🔴 Basic validation
     if (new Date(checkInDate) >= new Date(checkOutDate)) {
@@ -128,8 +133,7 @@ export const createHotelBooking = async (req, res) => {
 
     // 🧮 Nights
     const nights =
-      (new Date(checkOutDate) - new Date(checkInDate)) /
-      (1000 * 60 * 60 * 24);
+      (new Date(checkOutDate) - new Date(checkInDate)) / (1000 * 60 * 60 * 24);
 
     let totalPrice = 0;
     let roomData = [];
@@ -145,14 +149,14 @@ export const createHotelBooking = async (req, res) => {
         "rooms.room": item.roomId,
         status: { $ne: "CANCELLED" },
         checkInDate: { $lt: checkOutDate },
-        checkOutDate: { $gt: checkInDate }
+        checkOutDate: { $gt: checkInDate },
       }).session(session);
 
       let bookedQty = 0;
 
-      bookings.forEach(b => {
+      bookings.forEach((b) => {
         const matchedRoom = b.rooms.find(
-          r => r.room.toString() === item.roomId
+          (r) => r.room.toString() === item.roomId,
         );
         if (matchedRoom) bookedQty += matchedRoom.quantity;
       });
@@ -164,15 +168,14 @@ export const createHotelBooking = async (req, res) => {
       }
 
       // 💰 Price calculation
-      const price =
-        room.discountPricePerNight || room.basePricePerNight;
+      const price = room.discountPricePerNight || room.basePricePerNight;
 
       totalPrice += price * nights * item.quantity;
 
       roomData.push({
         room: item.roomId,
         quantity: item.quantity,
-        pricePerNight: price
+        pricePerNight: price,
       });
     }
 
@@ -183,37 +186,71 @@ export const createHotelBooking = async (req, res) => {
     const finalAmount = totalPrice + tax + serviceFee;
 
     // 💾 Create booking
-    const booking = await BookingHotel.create([{
-      bookedById: userId,
-      source,
-      customerId: source === "AGENT" ? customerId : null,
-      hotel: hotelId,
-      rooms: roomData,
-      checkInDate,
-      checkOutDate,
-      guestDetails,
-      otherCharges: {
-        tax,
-        serviceFee,
-        convinenceFee: 0
-      },
-      totalPrice: finalAmount
-    }], { session });
+    const booking = await BookingHotel.create(
+      [
+        {
+          bookedById: userId,
+          source,
+          customerId: source === "AGENT" ? customerId : null,
+          hotel: hotelId,
+          rooms: roomData,
+          checkInDate,
+          checkOutDate,
+          guestDetails,
+          otherCharges: {
+            tax,
+            serviceFee,
+            convinenceFee: 0,
+          },
+          totalPrice: finalAmount,
+        },
+      ],
+      { session },
+    );
+
+    if (role === "HOTEL_AGENT") {
+      const today = new Date();
+
+      const bookedRoomsCount = roomData.reduce(
+        (sum, room) => sum + room.quantity,
+        0,
+      );
+
+      const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+
+      await HotelAgentDashboard.findOneAndUpdate(
+        { agentId: userId },
+        {
+          $inc: {
+            totalBookedRooms: bookedRoomsCount,
+            totalRevenue: finalAmount,
+            currentMonthRevenue: finalAmount,
+            currentMonthBookedRooms: bookedRoomsCount,
+            todayRevenue: finalAmount,
+            todayBookedRooms: bookedRoomsCount,
+          },
+        },
+        {
+          upsert: true,
+          new: true,
+          session,
+        },
+      );
+    }
 
     await session.commitTransaction();
     session.endSession();
 
     res.status(201).json({
       message: "Hotel booked successfully",
-      booking: booking[0]
+      booking: booking[0],
     });
-
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
 
     res.status(400).json({
-      message: error.message
+      message: error.message,
     });
   }
 };
@@ -226,8 +263,8 @@ export const getMyHotelBookings = async (req, res) => {
     if (status) query.status = status;
 
     const bookings = await BookingHotel.find(query)
-      .populate('hotel', 'name address')
-      .populate('rooms.room', 'name roomType')
+      .populate("hotel", "name address")
+      .populate("rooms.room", "name roomType")
       .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(Number(limit));
@@ -239,7 +276,7 @@ export const getMyHotelBookings = async (req, res) => {
       total,
       totalPages: Math.ceil(total / limit),
       currentPage: Number(page),
-      bookings
+      bookings,
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -249,16 +286,21 @@ export const getMyHotelBookings = async (req, res) => {
 export const getHotelBookingById = async (req, res) => {
   try {
     const booking = await BookingHotel.findById(req.params.id)
-      .populate('hotel', 'name address images')
-      .populate('rooms.room', 'name roomType basePricePerNight');
+      .populate("hotel", "name address images")
+      .populate("rooms.room", "name roomType basePricePerNight");
 
     if (!booking) {
-      return res.status(404).json({ success: false, message: 'Booking not found' });
+      return res
+        .status(404)
+        .json({ success: false, message: "Booking not found" });
     }
 
     // Allow only owner or admin
-    if (booking.bookedById.toString() !== req.user.id.toString() && req.user.role !== 'ADMIN') {
-      return res.status(403).json({ success: false, message: 'Access denied' });
+    if (
+      booking.bookedById.toString() !== req.user.id.toString() &&
+      req.user.role !== "ADMIN"
+    ) {
+      return res.status(403).json({ success: false, message: "Access denied" });
     }
 
     res.status(200).json({ success: true, booking });
@@ -274,27 +316,31 @@ export const cancelHotelBooking = async (req, res) => {
 
     const booking = await BookingHotel.findById(id);
     if (!booking) {
-      return res.status(404).json({ success: false, message: 'Booking not found' });
+      return res
+        .status(404)
+        .json({ success: false, message: "Booking not found" });
     }
 
     if (booking.bookedById.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ success: false, message: 'Access denied' });
+      return res.status(403).json({ success: false, message: "Access denied" });
     }
 
-    if (booking.status === 'CANCELLED') {
-      return res.status(400).json({ success: false, message: 'Booking already cancelled' });
+    if (booking.status === "CANCELLED") {
+      return res
+        .status(400)
+        .json({ success: false, message: "Booking already cancelled" });
     }
 
-    booking.status = 'CANCELLED';
-    booking.cancellationReason = reason || 'Cancelled by user';
+    booking.status = "CANCELLED";
+    booking.cancellationReason = reason || "Cancelled by user";
     await booking.save();
 
     // TODO: Release inventory & process refund (later)
 
     res.status(200).json({
       success: true,
-      message: 'Booking cancelled successfully',
-      booking
+      message: "Booking cancelled successfully",
+      booking,
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -305,11 +351,10 @@ export const cancelHotelBooking = async (req, res) => {
 
 export const createAgentHotelBooking = async (req, res) => {
   // Same logic as createBooking but with extra validation for agents
-  console.log(req)
-//   req.body.source = 'AGENT';
+  console.log(req);
+  //   req.body.source = 'AGENT';
   return createHotelBooking(req, res);
 };
-
 
 // ====================== ADMIN ONLY ======================
 
@@ -323,9 +368,9 @@ export const getAllHotelBookings = async (req, res) => {
     if (source) query.source = source;
 
     const bookings = await BookingHotel.find(query)
-      .populate('hotel', 'name address.city')
-      .populate('bookedById', 'firstName lastName email phone role')
-      .populate('customerId', 'firstName lastName')
+      .populate("hotel", "name address.city")
+      .populate("bookedById", "firstName lastName email phone role")
+      .populate("customerId", "firstName lastName")
       .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(Number(limit));
@@ -337,7 +382,7 @@ export const getAllHotelBookings = async (req, res) => {
       total,
       totalPages: Math.ceil(total / limit),
       currentPage: Number(page),
-      bookings
+      bookings,
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -352,17 +397,19 @@ export const updateHotelBookingStatus = async (req, res) => {
     const booking = await BookingHotel.findByIdAndUpdate(
       id,
       { status },
-      { new: true }
-    ).populate('hotel', 'name');
+      { new: true },
+    ).populate("hotel", "name");
 
     if (!booking) {
-      return res.status(404).json({ success: false, message: 'Booking not found' });
+      return res
+        .status(404)
+        .json({ success: false, message: "Booking not found" });
     }
 
     res.status(200).json({
       success: true,
       message: `Booking status updated to ${status}`,
-      booking
+      booking,
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -375,21 +422,23 @@ export const markCheckIn = async (req, res) => {
 
     const booking = await BookingHotel.findByIdAndUpdate(
       id,
-      { 
-        status: 'CHECKED_IN',
-        checkedInAt: new Date()
+      {
+        status: "CHECKED_IN",
+        checkedInAt: new Date(),
       },
-      { new: true }
+      { new: true },
     );
 
     if (!booking) {
-      return res.status(404).json({ success: false, message: 'Booking not found' });
+      return res
+        .status(404)
+        .json({ success: false, message: "Booking not found" });
     }
 
     res.status(200).json({
       success: true,
-      message: 'Guest checked in successfully',
-      booking
+      message: "Guest checked in successfully",
+      booking,
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

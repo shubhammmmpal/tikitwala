@@ -66,6 +66,7 @@ try {
 export const createCamp = async (req, res) => {
   try {
     const userId = req.body.id;
+    console.log(userId)
 
      // Check if agent already created a camp
     const existingCamp = await Camp.findOne({
