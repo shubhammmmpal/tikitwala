@@ -187,7 +187,7 @@ export const signin = async (req, res) => {
       if (!isMatch) {
         return res.status(401).json({
           success: false,
-          message: "Invalid email or password",
+          message: "Invalid Agent ID or password",
         });
       }
 
@@ -222,14 +222,14 @@ export const signin = async (req, res) => {
     // =========================
     // Try Volunteer Login
     // =========================
-    const volunteer = await Volunteer.findOne({ email });
+    const volunteer = await Volunteer.findOne({ agent_id });
 
     console.log(volunteer);
 
     if (!volunteer) {
       return res.status(401).json({
         success: false,
-        message: "Invalid email or password",
+        message: "Invalid Agent ID or password",
       });
     }
 
@@ -238,7 +238,7 @@ export const signin = async (req, res) => {
     if (!isMatch) {
       return res.status(401).json({
         success: false,
-        message: "Invalid email or password",
+        message: "Invalid Agent ID or password",
       });
     }
 
@@ -377,7 +377,7 @@ export const updateUser = async (req, res) => {
     console.log("BODY:", req.body);
     console.log("FILE:", req.file);
 
-    const { name, email, phone } = req.body;
+    const { name, email, phone, address } = req.body;
 
     const user = await User.findById(userId);
 
@@ -424,6 +424,7 @@ export const updateUser = async (req, res) => {
 
     // Update basic fields
     if (name) user.name = name;
+    if (address) user.address = address;
 
     // Update profile image
     if (req.file) {

@@ -12,6 +12,9 @@ const userSchema = new mongoose.Schema({
     unique: true,
     sparse: true,           // Allows null values
   },
+  address:{
+    type: String,
+  },
   // email: {
   //   type: String,
   //   required: [true, 'Please add an email'],

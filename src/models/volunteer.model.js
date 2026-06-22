@@ -7,6 +7,11 @@ const volunteerSchema = new mongoose.Schema(
       ref: "Camp",
       required: true,
     },
+    agent_id:{
+    type: String,
+    unique: true,
+    sparse: true
+  },
 
     name: {
       type: String,

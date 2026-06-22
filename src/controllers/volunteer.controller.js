@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 
 export const createVolunteer = async (req, res) => {
   try {
-    const { campId, name, phone, email, role, password,age,batchNo } = req.body;
+    const { campId, name, phone, email, role,agent_id, password,age,batchNo } = req.body;
 
     const camp = await Camp.findById(campId);
 
@@ -36,6 +36,7 @@ export const createVolunteer = async (req, res) => {
       role,
       age,
       batchNo,
+      agent_id,
       password: hashedPassword,
       image: req.file?.path || "",
       createdBy: req.user.id,
