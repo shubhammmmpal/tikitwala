@@ -10,8 +10,6 @@ import path from "path";
 // @route   GET /api/buses/search
 // @access  Public
 
-
-
 // @desc    Search buses based on startPoint, endPoint and date
 // @route   GET /api/buses/search
 // @access  Public
@@ -23,7 +21,7 @@ export const searchBuses = async (req, res) => {
     if (!startPoint || !endPoint || !date) {
       return res.status(400).json({
         success: false,
-        message: "startPoint, endPoint and date are required"
+        message: "startPoint, endPoint and date are required",
       });
     }
 
@@ -32,24 +30,22 @@ export const searchBuses = async (req, res) => {
       startPoint: { $regex: new RegExp(`^${startPoint}$`, "i") }, // case-insensitive
       endPoint: { $regex: new RegExp(`^${endPoint}$`, "i") },
       departureDate: date,
-      status: "active"
+      status: "active",
     }).populate("bus"); // optional
 
     return res.status(200).json({
       success: true,
       count: buses.length,
-      data: buses
+      data: buses,
     });
-
   } catch (error) {
     console.error("Search Bus Error:", error);
     return res.status(500).json({
       success: false,
-      message: "Internal Server Error"
+      message: "Internal Server Error",
     });
   }
 };
-
 
 export const createBus = async (req, res) => {
   try {
@@ -58,13 +54,11 @@ export const createBus = async (req, res) => {
     // Assuming auth middleware adds user in req.user
     busData.createdBy = req.user.id;
 
-     // Store uploaded image paths
+    // Store uploaded image paths
     if (req.files && req.files.length > 0) {
-
-      busData.images = req.files.map(file => {
+      busData.images = req.files.map((file) => {
         return `/uploads/buses/${file.filename}`;
       });
-
     }
 
     const newBus = new Bus(busData);
@@ -73,13 +67,12 @@ export const createBus = async (req, res) => {
     res.status(201).json({
       success: true,
       message: "Bus created successfully",
-      data: newBus
+      data: newBus,
     });
-
   } catch (error) {
     res.status(400).json({
       success: false,
-      message: error.message || "Error creating bus"
+      message: error.message || "Error creating bus",
     });
   }
 };
@@ -87,20 +80,13 @@ export const createBus = async (req, res) => {
 // Get All Buses (with pagination and filters)
 export const getBusList = async (req, res) => {
   try {
-    console.log(req.user)
+    console.log(req.user);
     const userId = req.user.id;
-    
 
-    const {
-      page = 1,
-      limit = 10,
-      search = "",
-      status,
-      busType
-    } = req.query;
+    const { page = 1, limit = 10, search = "", status, busType } = req.query;
 
     const query = {
-      createdBy: userId
+      createdBy: userId,
     };
 
     // Search by Bus Name or Bus Number
@@ -109,15 +95,15 @@ export const getBusList = async (req, res) => {
         {
           busName: {
             $regex: search.trim(),
-            $options: "i"
-          }
+            $options: "i",
+          },
         },
         {
           busNo: {
             $regex: search.trim(),
-            $options: "i"
-          }
-        }
+            $options: "i",
+          },
+        },
       ];
     }
 
@@ -140,17 +126,55 @@ export const getBusList = async (req, res) => {
 
     const total = await Bus.countDocuments(query);
 
+    const now = new Date();
+
+    const busesWithTripInfo = await Promise.all(
+      buses.map(async (bus) => {
+        // Find nearest upcoming trip
+        let trip = await BusTrip.findOne({
+          bus: bus._id,
+          departureDateTime: { $gte: now },
+        })
+          .populate("startPoint", "city_name")
+          .populate("endPoint", "city_name")
+          .sort({ departureDateTime: 1 });
+
+        // If no upcoming trip found
+        if (!trip) {
+          trip = await BusTrip.findOne({
+            bus: bus._id,
+          })
+            .populate("startPoint", "city_name")
+            .populate("endPoint", "city_name")
+            .sort({ departureDateTime: -1 });
+        }
+
+        return {
+          ...bus.toObject(),
+
+          routeInfo: trip
+            ? {
+                startPoint: trip.startPoint,
+                endPoint: trip.endPoint,
+                departureDateTime: trip.departureDateTime,
+                tripId: trip._id,
+              }
+            : null,
+        };
+      }),
+    );
+
     return res.status(200).json({
       success: true,
       total,
       currentPage: Number(page),
       totalPages: Math.ceil(total / Number(limit)),
-      data: buses
+      data: busesWithTripInfo,
     });
   } catch (error) {
     return res.status(500).json({
       success: false,
-      message: error.message || "Error fetching buses"
+      message: error.message || "Error fetching buses",
     });
   }
 };
@@ -158,24 +182,26 @@ export const getBusList = async (req, res) => {
 // Get Bus by ID
 export const getBusById = async (req, res) => {
   try {
-    const bus = await Bus.findById(req.params.id)
-      .populate("travelAgency", "name email contactNumber address");
+    const bus = await Bus.findById(req.params.id).populate(
+      "travelAgency",
+      "name email contactNumber address",
+    );
 
     if (!bus) {
       return res.status(404).json({
         success: false,
-        message: "Bus not found"
+        message: "Bus not found",
       });
     }
 
     res.status(200).json({
       success: true,
-      data: bus
+      data: bus,
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Error fetching bus details"
+      message: "Error fetching bus details",
     });
   }
 };
@@ -190,7 +216,7 @@ export const updateBus = async (req, res) => {
     if (!bus) {
       return res.status(404).json({
         success: false,
-        message: "Bus not found"
+        message: "Bus not found",
       });
     }
 
@@ -201,9 +227,7 @@ export const updateBus = async (req, res) => {
 
     // Update uploaded images
     if (req.files && req.files.length > 0) {
-      bus.images = req.files.map(
-        file => `/uploads/buses/${file.filename}`
-      );
+      bus.images = req.files.map((file) => `/uploads/buses/${file.filename}`);
     }
 
     await bus.save();
@@ -211,13 +235,12 @@ export const updateBus = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Bus updated successfully",
-      data: bus
+      data: bus,
     });
-
   } catch (error) {
     return res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
 };
@@ -230,7 +253,7 @@ export const deleteBus = async (req, res) => {
     if (!bus) {
       return res.status(404).json({
         success: false,
-        message: "Bus not found"
+        message: "Bus not found",
       });
     }
 
@@ -250,13 +273,12 @@ export const deleteBus = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: "Bus and associated images deleted successfully"
+      message: "Bus and associated images deleted successfully",
     });
-
   } catch (error) {
     return res.status(500).json({
       success: false,
-      message: error.message || "Error deleting bus"
+      message: error.message || "Error deleting bus",
     });
   }
 };
@@ -269,32 +291,32 @@ export const changeBusStatus = async (req, res) => {
     if (!["ACTIVE", "MAINTENANCE", "INACTIVE"].includes(status)) {
       return res.status(400).json({
         success: false,
-        message: "Invalid status"
+        message: "Invalid status",
       });
     }
 
     const bus = await Bus.findByIdAndUpdate(
       req.params.id,
       { status },
-      { new: true }
+      { new: true },
     );
 
     if (!bus) {
       return res.status(404).json({
         success: false,
-        message: "Bus not found"
+        message: "Bus not found",
       });
     }
 
     res.status(200).json({
       success: true,
       message: `Bus status changed to ${status}`,
-      data: bus
+      data: bus,
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Error changing bus status"
+      message: "Error changing bus status",
     });
   }
 };
@@ -352,7 +374,7 @@ export const changeBusStatus = async (req, res) => {
 //           });
 //         }
 //       }
-//     } 
+//     }
 //     else {
 //       // ==================== SLEEPER BUS ====================
 //       if (!seatType || !lowerDeckRows || !upperDeckRows) {
@@ -437,7 +459,6 @@ export const changeBusStatus = async (req, res) => {
 //   }
 // };
 
-
 export const generateBusSeats = async (req, res) => {
   try {
     const { busId } = req.params;
@@ -448,42 +469,43 @@ export const generateBusSeats = async (req, res) => {
     if (!bus) {
       return res.status(404).json({
         success: false,
-        message: "Bus not found"
+        message: "Bus not found",
       });
     }
 
-    if (!seat_layout || !Array.isArray(seat_layout) || seat_layout.length === 0) {
+    if (
+      !seat_layout ||
+      !Array.isArray(seat_layout) ||
+      seat_layout.length === 0
+    ) {
       return res.status(400).json({
         success: false,
-        message: "seat_layout is required"
+        message: "seat_layout is required",
       });
     }
 
     const seats = seat_layout.map((seat) => ({
-      seatName : seat.seatName,
+      seatName: seat.seatName,
       seatNumber: seat.seatId,
       row: seat.row,
       column: seat.column || 1,
 
-      deck: seat.deck?.toUpperCase() ,
-       
+      deck: seat.deck?.toUpperCase(),
 
       section: seat.section?.toUpperCase() || "LEFT",
 
-      type: bus.busType.includes("Sleeper")
-        ? "SLEEPER"
-        : "SEATER",
+      type: bus.busType.includes("Sleeper") ? "SLEEPER" : "SEATER",
 
       isWindow: seat.isWindow || false,
       isAisle: seat.isAisle || false,
 
       category: seat.category || "REGULAR",
 
-      basePrice: seat.price || bus.baseFare
+      basePrice: seat.price || bus.baseFare,
     }));
 
     bus.seatStructure = {
-      seats
+      seats,
     };
 
     bus.totalSeats = seats.length;
@@ -494,14 +516,12 @@ export const generateBusSeats = async (req, res) => {
       success: true,
       message: "Seat structure generated successfully",
       totalSeats: seats.length,
-      data: bus
+      data: bus,
     });
-
   } catch (error) {
     return res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
 };
-

@@ -221,7 +221,7 @@ export const createHotelBooking = async (req, res) => {
 export const getMyHotelBookings = async (req, res) => {
   try {
     const { page = 1, limit = 10, status } = req.query;
-    const query = { bookedById: req.user._id };
+    const query = { bookedById: req.user.id };
 
     if (status) query.status = status;
 
@@ -257,7 +257,7 @@ export const getHotelBookingById = async (req, res) => {
     }
 
     // Allow only owner or admin
-    if (booking.bookedById.toString() !== req.user._id.toString() && req.user.role !== 'ADMIN') {
+    if (booking.bookedById.toString() !== req.user.id.toString() && req.user.role !== 'ADMIN') {
       return res.status(403).json({ success: false, message: 'Access denied' });
     }
 

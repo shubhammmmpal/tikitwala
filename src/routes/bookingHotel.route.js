@@ -19,8 +19,8 @@ const router = express.Router();
 // router.use(protect); // All booking routes require authentication
 
 router.post('/',protect, createHotelBooking);
-router.get('/', getMyHotelBookings);
-router.get('/:id', getHotelBookingById);
+router.get('/',protect, getMyHotelBookings);
+router.get('/:id',protect, getHotelBookingById);
 // router.patch('/:id/cancel', cancelBooking);
 // router.get('/admin', protect, restrictTo('ADMIN'), getAllBookings);
 // router.patch('/admin/:id/status', protect, restrictTo('ADMIN'), updateBookingStatus);

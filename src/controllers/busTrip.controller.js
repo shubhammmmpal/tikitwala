@@ -1,13 +1,11 @@
 import BusTrip from "../models/BusTrip.model.js";
 import Bus from "../models/Bus.model.js";
 import Agency from "../models/Agency.model.js";
-import City from "../models/city.model.js"
-
+import City from "../models/city.model.js";
 
 export const createBusTrip = async (req, res) => {
   try {
-
-    const userId  = req.user.id;
+    const userId = req.user.id;
 
     const {
       busId,
@@ -28,10 +26,8 @@ export const createBusTrip = async (req, res) => {
 
       creationType,
       endDate,
-      dates
-
+      dates,
     } = req.body;
-
 
     // =========================
     // CHECK BUS
@@ -42,17 +38,16 @@ export const createBusTrip = async (req, res) => {
     if (!bus) {
       return res.status(404).json({
         success: false,
-        message: "Bus not found"
+        message: "Bus not found",
       });
     }
 
     if (!bus.seatStructure?.seats?.length) {
       return res.status(400).json({
         success: false,
-        message: "Seat structure not generated for this bus yet."
+        message: "Seat structure not generated for this bus yet.",
       });
     }
-
 
     // =========================
     // PREPARE DATES
@@ -61,18 +56,8 @@ export const createBusTrip = async (req, res) => {
     let tripDates = [];
 
     if (creationType === "single") {
-
-      tripDates.push(
-        new Date(req.body.departureDateTime)
-      );
-
-    }
-
-    else if (
-      creationType === "daily" ||
-      creationType === "custom"
-    ) {
-
+      tripDates.push(new Date(req.body.departureDateTime));
+    } else if (creationType === "daily" || creationType === "custom") {
       const start = new Date(req.body.departureDateTime);
 
       const end = new Date(endDate);
@@ -80,70 +65,47 @@ export const createBusTrip = async (req, res) => {
       let current = new Date(start);
 
       while (current <= end) {
+        tripDates.push(new Date(current));
 
-        tripDates.push(
-          new Date(current)
-        );
-
-        current.setDate(
-          current.getDate() + 1
-        );
+        current.setDate(current.getDate() + 1);
       }
-
+    } else if (creationType === "random") {
+      tripDates = dates.map((d) => new Date(d));
     }
-
-    else if (creationType === "random") {
-
-      tripDates = dates.map(
-        d => new Date(d)
-      );
-
-    }
-
 
     // =========================
     // REMOVE DUPLICATES
     // =========================
 
     const uniqueDates = [
-      ...new Set(
-        tripDates.map(
-          d => d.toISOString().split('T')[0]
-        )
-      )
+      ...new Set(tripDates.map((d) => d.toISOString().split("T")[0])),
     ];
-
 
     const createdTrips = [];
     const skippedTrips = [];
-
 
     // =========================
     // LOOP DATES
     // =========================
 
     for (let dateStr of uniqueDates) {
-
-
       // =========================
       // CHECK DUPLICATE TRIP
       // =========================
 
       const existingTrip = await BusTrip.findOne({
         bus: busId,
-        departureDate: dateStr
+        departureDate: dateStr,
       });
 
       if (existingTrip) {
-
         skippedTrips.push({
           date: dateStr,
-          reason: "Trip already exists for this bus on this date"
+          reason: "Trip already exists for this bus on this date",
         });
 
         continue;
       }
-
 
       // =========================
       // CREATE DEPARTURE DATETIME
@@ -151,67 +113,39 @@ export const createBusTrip = async (req, res) => {
 
       const depDate = new Date(dateStr);
 
-      const [depHour, depMin] = departureTime
-        .split(":")
-        .map(Number);
+      const [depHour, depMin] = departureTime.split(":").map(Number);
 
       const finalDeparture = new Date(depDate);
 
-      finalDeparture.setHours(
-        depHour,
-        depMin,
-        0,
-        0
-      );
-
+      finalDeparture.setHours(depHour, depMin, 0, 0);
 
       // =========================
       // CREATE ARRIVAL DATETIME
       // =========================
 
-      const [arrHour, arrMin] = arrivalTime
-        .split(":")
-        .map(Number);
+      const [arrHour, arrMin] = arrivalTime.split(":").map(Number);
 
       let finalArrival = new Date(depDate);
 
       // NEXT DAY ARRIVAL
 
-      if (
-        arrHour < depHour ||
-        (
-          arrHour === depHour &&
-          arrMin < depMin
-        )
-      ) {
-
-        finalArrival.setDate(
-          finalArrival.getDate() + 1
-        );
+      if (arrHour < depHour || (arrHour === depHour && arrMin < depMin)) {
+        finalArrival.setDate(finalArrival.getDate() + 1);
       }
 
-      finalArrival.setHours(
-        arrHour,
-        arrMin,
-        0,
-        0
-      );
-
+      finalArrival.setHours(arrHour, arrMin, 0, 0);
 
       // =========================
       // GENERATE SEATS
       // =========================
 
-      const tripSeats = bus.seatStructure.seats.map(seat => ({
-
+      const tripSeats = bus.seatStructure.seats.map((seat) => ({
         seatNo: seat.seatNumber,
 
         seatName: seat.seatName,
         deck: seat.deck,
 
-        seatPrice:
-          pricePerSeat?.[seat.deck] ||
-          basePrice,
+        seatPrice: pricePerSeat?.[seat.deck] || basePrice,
 
         seatType: seat.type,
 
@@ -221,88 +155,66 @@ export const createBusTrip = async (req, res) => {
 
         bookedBy: null,
 
-        genderBooked: null
-
+        genderBooked: null,
       }));
-
 
       // =========================
       // FORMAT STOP POINTS
       // =========================
 
       const formattedStopPoints = stopPoints.map((stop, index) => ({
-
         city: stop.city,
 
-        arrivalTime: stop.arrivalTime
-          ? new Date(stop.arrivalTime)
-          : null,
+        arrivalTime: stop.arrivalTime ? new Date(stop.arrivalTime) : null,
 
-        departureTime: stop.departureTime
-          ? new Date(stop.departureTime)
-          : null,
+        departureTime: stop.departureTime ? new Date(stop.departureTime) : null,
 
         order: stop.order || index + 1,
-        address: stop.address || ""
-
+        address: stop.address || "",
       }));
-
 
       // =========================
       // FORMAT PICKUP POINTS
       // =========================
 
-      const formattedPickupPoints = pickupPoints.map(item => ({
-
+      const formattedPickupPoints = pickupPoints.map((item) => ({
         city: item.city,
 
-        points: item.points.map(point => ({
-
+        points: item.points.map((point) => ({
           name: point.name,
 
           datetime: new Date(point.datetime),
 
-          address: point.address || ""
-
-        }))
-
+          address: point.address || "",
+        })),
       }));
-
 
       // =========================
       // FORMAT DROP POINTS
       // =========================
 
-      const formattedDropPoints = dropPoints.map(item => ({
-
+      const formattedDropPoints = dropPoints.map((item) => ({
         city: item.city,
 
-        points: item.points.map(point => ({
-
+        points: item.points.map((point) => ({
           name: point.name,
 
           datetime: new Date(point.datetime),
 
-          address: point.address || ""
-
-        }))
-
+          address: point.address || "",
+        })),
       }));
-
 
       // =========================
       // CREATE TRIP
       // =========================
 
       const newTrip = new BusTrip({
-
         bus: busId,
 
-        tripCode:
-          `${bus.busNo}-${dateStr.replace(/-/g, '')}`,
+        tripCode: `${bus.busNo}-${dateStr.replace(/-/g, "")}`,
 
         platformType: "BUS",
-
 
         // =========================
         // ROUTE
@@ -314,7 +226,6 @@ export const createBusTrip = async (req, res) => {
 
         stopPoints: formattedStopPoints,
 
-
         // =========================
         // DATETIME
         // =========================
@@ -325,8 +236,7 @@ export const createBusTrip = async (req, res) => {
 
         departureDate: dateStr,
 
-        arrivalDate:
-          finalArrival.toISOString().split('T')[0],
+        arrivalDate: finalArrival.toISOString().split("T")[0],
 
         departureTime,
 
@@ -334,87 +244,70 @@ export const createBusTrip = async (req, res) => {
 
         travelDuration,
 
-
         // =========================
         // PRICE
         // =========================
 
         basePrice,
 
-        pricePerSeat:
-          pricePerSeat || {},
-
+        pricePerSeat: pricePerSeat || {},
 
         // =========================
         // BUS DATA
         // =========================
 
-        amenities:
-          bus.amenities || [],
+        amenities: bus.amenities || [],
 
-        features:
-          bus.features || [],
+        features: bus.features || [],
 
-        busImages:
-          bus.images || [],
-
+        busImages: bus.images || [],
 
         // =========================
         // RATINGS
         // =========================
 
         ratings: {
+          average: bus.ratings?.average || 0,
 
-          average:
-            bus.ratings?.average || 0,
+          totalReviews: bus.ratings?.totalReviews || 0,
 
-          totalReviews:
-            bus.ratings?.totalReviews || 0,
+          distribution: bus.ratings?.distribution || {
+            1: {
+              count: 0,
+              percentage: 0,
+            },
 
-          distribution:
-            bus.ratings?.distribution || {
+            2: {
+              count: 0,
+              percentage: 0,
+            },
 
-              1: {
-                count: 0,
-                percentage: 0
-              },
+            3: {
+              count: 0,
+              percentage: 0,
+            },
 
-              2: {
-                count: 0,
-                percentage: 0
-              },
+            4: {
+              count: 0,
+              percentage: 0,
+            },
 
-              3: {
-                count: 0,
-                percentage: 0
-              },
-
-              4: {
-                count: 0,
-                percentage: 0
-              },
-
-              5: {
-                count: 0,
-                percentage: 0
-              }
-
-            }
-
+            5: {
+              count: 0,
+              percentage: 0,
+            },
+          },
         },
-
 
         // =========================
         // PICKUP & DROP
         // =========================
 
-        pickupPoints:
-          formattedPickupPoints,
+        pickupPoints: formattedPickupPoints,
 
-        dropPoints:
-          formattedDropPoints,
-          
-        createdBy : userId,  
+        dropPoints: formattedDropPoints,
+
+        createdBy: userId,
 
         // =========================
         // SEATS
@@ -422,14 +315,10 @@ export const createBusTrip = async (req, res) => {
 
         seats: tripSeats,
 
-        totalSeats:
-          tripSeats.length,
+        totalSeats: tripSeats.length,
 
-        availableSeats:
-          tripSeats.length
-
+        availableSeats: tripSeats.length,
       });
-
 
       // =========================
       // SAVE
@@ -438,50 +327,33 @@ export const createBusTrip = async (req, res) => {
       await newTrip.save();
 
       createdTrips.push(newTrip);
-
     }
-
 
     // =========================
     // RESPONSE
     // =========================
 
     return res.status(201).json({
-
       success: true,
 
-      message:
-        `${createdTrips.length} trip(s) created successfully`,
+      message: `${createdTrips.length} trip(s) created successfully`,
 
-      totalCreated:
-        createdTrips.length,
+      totalCreated: createdTrips.length,
 
-      skipped:
-        skippedTrips.length,
+      skipped: skippedTrips.length,
 
       createdTrips,
 
-      skippedTrips
-
+      skippedTrips,
     });
-
-  }
-
-  catch (error) {
-
-    console.error(
-      "Create Trip Error:",
-      error
-    );
+  } catch (error) {
+    console.error("Create Trip Error:", error);
 
     return res.status(500).json({
-
       success: false,
 
-      message: error.message
-
+      message: error.message,
     });
-
   }
 };
 
@@ -494,7 +366,7 @@ export const getBusTrips = async (req, res) => {
       departureDate,
       status,
       startPoint,
-      endPoint
+      endPoint,
     } = req.query;
 
     // return
@@ -521,52 +393,65 @@ export const getBusTrips = async (req, res) => {
         select: "travelAgency busNo busName busType registrationNumber",
         populate: {
           path: "travelAgency",
-          select: "name"
-        }
+          select: "name",
+        },
       })
       .populate({
         path: "startPoint",
         model: "City",
-        select: "city_name city_id state_id"
+        select: "city_name city_id state_id",
       })
       .populate({
         path: "endPoint",
         model: "City",
-        select: "city_name city_id state_id"
+        select: "city_name city_id state_id",
       })
       .populate({
         path: "stopPoints.city",
         model: "City",
-        select: "city_name city_id state_id"
+        select: "city_name city_id state_id",
       })
       .populate({
         path: "pickupPoints.city",
         model: "City",
-        select: "city_name city_id state_id"
+        select: "city_name city_id state_id",
       })
       .populate({
         path: "dropPoints.city",
         model: "City",
-        select: "city_name city_id state_id"
+        select: "city_name city_id state_id",
       })
       .sort({ departureDateTime: 1 })
       .skip((pageNumber - 1) * limitNumber)
       .limit(limitNumber);
 
     const total = await BusTrip.countDocuments(query);
+    const tripsWithSeatStats = trips.map((trip) => {
+      const totalSeats = trip.seats.length;
+
+      const bookedSeats = trip.seats.filter(
+        (seat) => seat.status === "booked",
+      ).length;
+
+      return {
+        ...trip.toObject(),
+        totalSeats,
+        bookedSeats,
+        availableSeats: totalSeats - bookedSeats,
+      };
+    });
 
     return res.status(200).json({
       success: true,
       total,
       totalPages: Math.ceil(total / limitNumber),
       currentPage: pageNumber,
-      data: trips
+      data: tripsWithSeatStats,
     });
-
   } catch (error) {
     return res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
 };
@@ -574,7 +459,6 @@ export const getBusTrips = async (req, res) => {
 // ====================== GET BUS TRIP BY ID ======================
 export const getBusTripById = async (req, res) => {
   try {
-
     const trip = await BusTrip.findById(req.params.id)
 
       // ======================
@@ -587,8 +471,8 @@ export const getBusTripById = async (req, res) => {
           "travelAgency busNo busName busType registrationNumber ratings images amenities features",
         populate: {
           path: "travelAgency",
-          select: "name"
-        }
+          select: "name",
+        },
       })
 
       // ======================
@@ -598,7 +482,7 @@ export const getBusTripById = async (req, res) => {
       .populate({
         path: "startPoint",
         model: "City",
-        select: "city_name city_id state_id"
+        select: "city_name city_id state_id",
       })
 
       // ======================
@@ -608,7 +492,7 @@ export const getBusTripById = async (req, res) => {
       .populate({
         path: "endPoint",
         model: "City",
-        select: "city_name city_id state_id"
+        select: "city_name city_id state_id",
       })
 
       // ======================
@@ -618,7 +502,7 @@ export const getBusTripById = async (req, res) => {
       .populate({
         path: "stopPoints.city",
         model: "City",
-        select: "city_name city_id state_id"
+        select: "city_name city_id state_id",
       })
 
       // ======================
@@ -628,7 +512,7 @@ export const getBusTripById = async (req, res) => {
       .populate({
         path: "pickupPoints.city",
         model: "City",
-        select: "city_name city_id state_id"
+        select: "city_name city_id state_id",
       })
 
       // ======================
@@ -638,29 +522,47 @@ export const getBusTripById = async (req, res) => {
       .populate({
         path: "dropPoints.city",
         model: "City",
-        select: "city_name city_id state_id"
+        select: "city_name city_id state_id",
       });
-
 
     if (!trip) {
       return res.status(404).json({
         success: false,
-        message: "Bus trip not found"
+        message: "Bus trip not found",
       });
     }
 
+    const totalSeats = trip.seats.length;
+
+    const bookedSeats = trip.seats.filter(
+      (seat) => seat.status === "booked",
+    ).length;
+
+    const availableSeats = trip.seats.filter(
+      (seat) => seat.status === "available",
+    ).length;
+
+    const blockedSeats = trip.seats.filter(
+      (seat) => seat.status === "blocked",
+    ).length;
+
     return res.status(200).json({
       success: true,
-      data: trip
+      data: {
+        ...trip.toObject(),
+        seatStats: {
+          totalSeats,
+          bookedSeats,
+          availableSeats,
+          blockedSeats,
+        },
+      },
     });
-
   } catch (error) {
-
     return res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
-
   }
 };
 
@@ -676,20 +578,21 @@ export const updateBusTrip = async (req, res) => {
     delete updateData.availableSeats;
     delete updateData.bus;
 
-    const updatedTrip = await BusTrip.findByIdAndUpdate(
-      id,
-      updateData,
-      { new: true, runValidators: true }
-    ).populate("bus", "busNo busType");
+    const updatedTrip = await BusTrip.findByIdAndUpdate(id, updateData, {
+      new: true,
+      runValidators: true,
+    }).populate("bus", "busNo busType");
 
     if (!updatedTrip) {
-      return res.status(404).json({ success: false, message: "Bus trip not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Bus trip not found" });
     }
 
     res.status(200).json({
       success: true,
       message: "Bus trip updated successfully",
-      data: updatedTrip
+      data: updatedTrip,
     });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
@@ -702,23 +605,27 @@ export const changeBusTripStatus = async (req, res) => {
     const { status } = req.body;
 
     if (!["active", "cancelled", "completed", "delayed"].includes(status)) {
-      return res.status(400).json({ success: false, message: "Invalid status" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid status" });
     }
 
     const trip = await BusTrip.findByIdAndUpdate(
       req.params.id,
       { status },
-      { new: true }
+      { new: true },
     );
 
     if (!trip) {
-      return res.status(404).json({ success: false, message: "Bus trip not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Bus trip not found" });
     }
 
     res.status(200).json({
       success: true,
       message: `Bus trip status changed to ${status}`,
-      data: trip
+      data: trip,
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -731,15 +638,17 @@ export const deleteBusTrip = async (req, res) => {
     const trip = await BusTrip.findById(req.params.id);
 
     if (!trip) {
-      return res.status(404).json({ success: false, message: "Bus trip not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Bus trip not found" });
     }
 
     // Safety Check: Don't delete if seats are booked
-    const bookedSeats = trip.seats.filter(s => s.status === "booked").length;
+    const bookedSeats = trip.seats.filter((s) => s.status === "booked").length;
     if (bookedSeats > 0) {
       return res.status(400).json({
         success: false,
-        message: `Cannot delete trip. ${bookedSeats} seats are already booked.`
+        message: `Cannot delete trip. ${bookedSeats} seats are already booked.`,
       });
     }
 
@@ -747,7 +656,7 @@ export const deleteBusTrip = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: "Bus trip deleted successfully"
+      message: "Bus trip deleted successfully",
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -757,15 +666,8 @@ export const deleteBusTrip = async (req, res) => {
 // ====================== SEARCH BUS TRIPS ======================
 export const searchBusTrips = async (req, res) => {
   try {
-
-    const {
-      startPoint,
-      endPoint,
-      departureDate,
-      busType,
-      minPrice,
-      maxPrice
-    } = req.query;
+    const { startPoint, endPoint, departureDate, busType, minPrice, maxPrice } =
+      req.query;
 
     // =========================
     // VALIDATION
@@ -774,7 +676,7 @@ export const searchBusTrips = async (req, res) => {
     if (!startPoint || !endPoint || !departureDate) {
       return res.status(400).json({
         success: false,
-        message: "startPoint, endPoint and departureDate are required"
+        message: "startPoint, endPoint and departureDate are required",
       });
     }
 
@@ -787,24 +689,22 @@ export const searchBusTrips = async (req, res) => {
       status: "active",
 
       $and: [
-
         // =========================
         // START POINT CONDITION
         // =========================
 
         {
           $or: [
-
             // exact start city
             {
-              startPoint: startPoint
+              startPoint: startPoint,
             },
 
             // stop point city
             {
-              "stopPoints.city": startPoint
-            }
-          ]
+              "stopPoints.city": startPoint,
+            },
+          ],
         },
 
         // =========================
@@ -813,19 +713,18 @@ export const searchBusTrips = async (req, res) => {
 
         {
           $or: [
-
             // exact end city
             {
-              endPoint: endPoint
+              endPoint: endPoint,
             },
 
             // stop point city
             {
-              "stopPoints.city": endPoint
-            }
-          ]
-        }
-      ]
+              "stopPoints.city": endPoint,
+            },
+          ],
+        },
+      ],
     };
 
     // =========================
@@ -833,7 +732,6 @@ export const searchBusTrips = async (req, res) => {
     // =========================
 
     if (minPrice || maxPrice) {
-
       query.basePrice = {};
 
       if (minPrice) {
@@ -857,38 +755,38 @@ export const searchBusTrips = async (req, res) => {
           "travelAgency busNo busName busType registrationNumber ratings images amenities features manufacturer model",
         populate: {
           path: "travelAgency",
-          select: "name"
-        }
+          select: "name",
+        },
       })
 
       .populate({
         path: "startPoint",
         model: "City",
-        select: "city_name city_id"
+        select: "city_name city_id",
       })
 
       .populate({
         path: "endPoint",
         model: "City",
-        select: "city_name city_id"
+        select: "city_name city_id",
       })
 
       .populate({
         path: "stopPoints.city",
         model: "City",
-        select: "city_name city_id"
+        select: "city_name city_id",
       })
 
       .populate({
         path: "pickupPoints.city",
         model: "City",
-        select: "city_name city_id"
+        select: "city_name city_id",
       })
 
       .populate({
         path: "dropPoints.city",
         model: "City",
-        select: "city_name city_id"
+        select: "city_name city_id",
       })
 
       .select("-seats")
@@ -900,9 +798,7 @@ export const searchBusTrips = async (req, res) => {
     // =========================
 
     if (busType) {
-      trips = trips.filter(
-        trip => trip.bus?.busType === busType
-      );
+      trips = trips.filter((trip) => trip.bus?.busType === busType);
     }
 
     // =========================
@@ -913,142 +809,125 @@ export const searchBusTrips = async (req, res) => {
     // Example:
     // Hyderabad -> Dewas should NOT work
 
-trips = trips
-  .filter(trip => {
+    trips = trips
+      .filter((trip) => {
+        const route = [
+          trip.startPoint?._id?.toString(),
 
-    const route = [
-      trip.startPoint?._id?.toString(),
+          ...trip.stopPoints.map((stop) => stop.city?._id?.toString()),
 
-      ...trip.stopPoints.map(
-        stop => stop.city?._id?.toString()
-      ),
+          trip.endPoint?._id?.toString(),
+        ];
 
-      trip.endPoint?._id?.toString()
-    ];
+        const startIndex = route.indexOf(startPoint);
+        const endIndex = route.indexOf(endPoint);
 
-    const startIndex = route.indexOf(startPoint);
-    const endIndex = route.indexOf(endPoint);
+        return startIndex !== -1 && endIndex !== -1 && startIndex < endIndex;
+      })
 
-    return (
-      startIndex !== -1 &&
-      endIndex !== -1 &&
-      startIndex < endIndex
-    );
-  })
+      .map((trip) => {
+        // =========================
+        // FULL ROUTE
+        // =========================
 
-  .map(trip => {
+        const fullRoute = [
+          {
+            type: "start",
+            city: trip.startPoint,
+          },
 
-    // =========================
-    // FULL ROUTE
-    // =========================
+          ...trip.stopPoints.map((stop) => ({
+            type: "stop",
+            city: stop.city,
+            arrivalTime: stop.arrivalTime,
+            departureTime: stop.departureTime,
+            order: stop.order,
+          })),
 
-    const fullRoute = [
+          {
+            type: "end",
+            city: trip.endPoint,
+          },
+        ];
 
-      {
-        type: "start",
-        city: trip.startPoint
-      },
+        // =========================
+        // FIND START INDEX
+        // =========================
 
-      ...trip.stopPoints.map(stop => ({
-        type: "stop",
-        city: stop.city,
-        arrivalTime: stop.arrivalTime,
-        departureTime: stop.departureTime,
-        order: stop.order
-      })),
+        const startIndex = fullRoute.findIndex(
+          (item) => item?.city?._id?.toString() === startPoint,
+        );
 
-      {
-        type: "end",
-        city: trip.endPoint
-      }
-    ];
+        // =========================
+        // FIND END INDEX
+        // =========================
 
-    // =========================
-    // FIND START INDEX
-    // =========================
+        const endIndex = fullRoute.findIndex(
+          (item) => item?.city?._id?.toString() === endPoint,
+        );
 
-    const startIndex = fullRoute.findIndex(
-      item =>
-        item?.city?._id?.toString() === startPoint
-    );
+        // =========================
+        // ROUTE SLICE
+        // =========================
 
-    // =========================
-    // FIND END INDEX
-    // =========================
+        const selectedRoute = fullRoute.slice(startIndex, endIndex + 1);
 
-    const endIndex = fullRoute.findIndex(
-      item =>
-        item?.city?._id?.toString() === endPoint
-    );
+        // =========================
+        // START & END
+        // =========================
 
-    // =========================
-    // ROUTE SLICE
-    // =========================
+        const newStartPoint = selectedRoute[0]?.city || null;
 
-    const selectedRoute = fullRoute.slice(
-      startIndex,
-      endIndex + 1
-    );
+        const newEndPoint =
+          selectedRoute[selectedRoute.length - 1]?.city || null;
 
-    // =========================
-    // START & END
-    // =========================
+        // =========================
+        // STOPS
+        // =========================
 
-    const newStartPoint =
-      selectedRoute[0]?.city || null;
+        const newStopPoints = selectedRoute
+          .filter((item) => item?.type === "stop")
+          .map((item) => ({
+            city: item.city,
+            arrivalTime: item.arrivalTime,
+            departureTime: item.departureTime,
+            order: item.order,
+          }));
 
-    const newEndPoint =
-      selectedRoute[selectedRoute.length - 1]?.city || null;
+        // =========================
+        // PICKUP POINTS
+        // =========================
 
-    // =========================
-    // STOPS
-    // =========================
+        const pickupPoints = trip.pickupPoints.filter(
+          (point) => point?.city?._id?.toString() === startPoint,
+        );
 
-    const newStopPoints = selectedRoute
-      .filter(item => item?.type === "stop")
-      .map(item => ({
-        city: item.city,
-        arrivalTime: item.arrivalTime,
-        departureTime: item.departureTime,
-        order: item.order
-      }));
+        // =========================
+        // DROP POINTS
+        // =========================
 
-    // =========================
-    // PICKUP POINTS
-    // =========================
+        const dropPoints = trip.dropPoints.filter(
+          (point) => point?.city?._id?.toString() === endPoint,
+        );
 
-    const pickupPoints = trip.pickupPoints.filter(
-      point =>
-        point?.city?._id?.toString() === startPoint
-    );
+        // =========================
+        // RETURN
+        // =========================
 
-    // =========================
-    // DROP POINTS
-    // =========================
+        return {
+          ...trip.toObject(),
 
-    const dropPoints = trip.dropPoints.filter(
-      point =>
-        point?.city?._id?.toString() === endPoint
-    );
+          startPoint: newStartPoint,
 
-    // =========================
-    // RETURN
-    // =========================
+          endPoint: newEndPoint,
 
-    return {
-      ...trip.toObject(),
+          stopPoints: newStopPoints,
 
-      startPoint: newStartPoint,
+          pickupPoints,
 
-      endPoint: newEndPoint,
-
-      stopPoints: newStopPoints,
-
-      pickupPoints,
-
-      dropPoints
-    };
-  });
+          dropPoints,
+        };
+      });
 
     // =========================
     // RESPONSE
@@ -1060,19 +939,16 @@ trips = trips
       departureDate,
       startPoint,
       endPoint,
-      data: trips
+      data: trips,
     });
-
   } catch (error) {
-
     console.error(error);
 
     return res.status(500).json({
       success: false,
       message: "Error searching bus trips",
-      error: error.message
+      error: error.message,
     });
-
   }
 };
 
@@ -1082,7 +958,6 @@ trips = trips
 
 export const updateSeatPrice = async (req, res) => {
   try {
-
     const { busTripId, seats, seatPrice } = req.body;
 
     // ==========================================
@@ -1092,21 +967,21 @@ export const updateSeatPrice = async (req, res) => {
     if (!busTripId) {
       return res.status(400).json({
         success: false,
-        message: "busTripId is required"
+        message: "busTripId is required",
       });
     }
 
     if (!Array.isArray(seats) || seats.length === 0) {
       return res.status(400).json({
         success: false,
-        message: "Seats array is required"
+        message: "Seats array is required",
       });
     }
 
     if (seatPrice == null) {
       return res.status(400).json({
         success: false,
-        message: "seatPrice is required"
+        message: "seatPrice is required",
       });
     }
 
@@ -1115,26 +990,25 @@ export const updateSeatPrice = async (req, res) => {
     // ==========================================
 
     const updatedTrip = await BusTrip.findOneAndUpdate(
-
       {
-        _id: busTripId
+        _id: busTripId,
       },
 
       {
         $set: {
-          "seats.$[elem].seatPrice": seatPrice
-        }
+          "seats.$[elem].seatPrice": seatPrice,
+        },
       },
 
       {
         arrayFilters: [
           {
-            "elem.seatNo": { $in: seats }
-          }
+            "elem.seatNo": { $in: seats },
+          },
         ],
 
-        new: true
-      }
+        new: true,
+      },
     );
 
     // ==========================================
@@ -1144,7 +1018,7 @@ export const updateSeatPrice = async (req, res) => {
     if (!updatedTrip) {
       return res.status(404).json({
         success: false,
-        message: "Bus trip not found"
+        message: "Bus trip not found",
       });
     }
 
@@ -1155,17 +1029,15 @@ export const updateSeatPrice = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Seat prices updated successfully",
-      data: updatedTrip
+      data: updatedTrip,
     });
-
   } catch (error) {
-
     console.error("Update Seat Price Error:", error);
 
     return res.status(500).json({
       success: false,
       message: "Internal server error",
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -1174,8 +1046,6 @@ export const updateSeatPrice = async (req, res) => {
 // UPDATE SEAT TYPE
 // ==========================================
 
-
-
 export const getFareSummary = async (req, res) => {
   try {
     const { tripId, selectedSeats } = req.body;
@@ -1183,7 +1053,7 @@ export const getFareSummary = async (req, res) => {
     if (!tripId || !selectedSeats?.length) {
       return res.status(400).json({
         success: false,
-        message: "Trip ID and seats are required"
+        message: "Trip ID and seats are required",
       });
     }
 
@@ -1192,26 +1062,26 @@ export const getFareSummary = async (req, res) => {
     if (!trip) {
       return res.status(404).json({
         success: false,
-        message: "Trip not found"
+        message: "Trip not found",
       });
     }
 
     // Get selected seat details
     const seats = trip.seats.filter((seat) =>
-      selectedSeats.includes(seat.seatNo)
+      selectedSeats.includes(seat.seatNo),
     );
 
     if (!seats.length) {
       return res.status(400).json({
         success: false,
-        message: "No valid seats found"
+        message: "No valid seats found",
       });
     }
 
     // Total seat amount
     const totalSeatAmount = seats.reduce(
       (sum, seat) => sum + seat.seatPrice,
-      0
+      0,
     );
 
     // Charges
@@ -1220,14 +1090,12 @@ export const getFareSummary = async (req, res) => {
 
     // const taxableAmount =
     //   totalSeatAmount +
-    //   convenienceFee 
+    //   convenienceFee
     //   // platformFee;
 
     const gstAmount = totalSeatAmount * 0.18;
 
-    const totalAmount = totalSeatAmount + 
-      convenienceFee +
-      gstAmount;
+    const totalAmount = totalSeatAmount + convenienceFee + gstAmount;
 
     return res.status(200).json({
       success: true,
@@ -1240,23 +1108,20 @@ export const getFareSummary = async (req, res) => {
         selectedSeats: seats.map((seat) => ({
           seatNo: seat.seatNo,
           seatName: seat.seatName,
-          price: seat.seatPrice
-        }))
-      }
+          price: seat.seatPrice,
+        })),
+      },
     });
-
   } catch (error) {
     return res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
 };
 
 export const updateSeatType = async (req, res) => {
-
   try {
-
     const { busTripId, seats, seatType } = req.body;
 
     // ==========================================
@@ -1266,21 +1131,21 @@ export const updateSeatType = async (req, res) => {
     if (!busTripId) {
       return res.status(400).json({
         success: false,
-        message: "busTripId is required"
+        message: "busTripId is required",
       });
     }
 
     if (!Array.isArray(seats) || seats.length === 0) {
       return res.status(400).json({
         success: false,
-        message: "Seats array is required"
+        message: "Seats array is required",
       });
     }
 
     if (!seatType) {
       return res.status(400).json({
         success: false,
-        message: "seatType is required"
+        message: "seatType is required",
       });
     }
 
@@ -1288,17 +1153,13 @@ export const updateSeatType = async (req, res) => {
     // VALID SEAT TYPES
     // ==========================================
 
-    const validSeatTypes = [
-      "SEATER",
-      "SLEEPER",
-      "SEMI_SLEEPER"
-    ];
+    const validSeatTypes = ["SEATER", "SLEEPER", "SEMI_SLEEPER"];
 
     if (!validSeatTypes.includes(seatType)) {
       return res.status(400).json({
         success: false,
         message: "Invalid seatType",
-        allowed: validSeatTypes
+        allowed: validSeatTypes,
       });
     }
 
@@ -1307,28 +1168,27 @@ export const updateSeatType = async (req, res) => {
     // ==========================================
 
     const updatedTrip = await BusTrip.findOneAndUpdate(
-
       {
-        _id: busTripId
+        _id: busTripId,
       },
 
       {
         $set: {
-          "seats.$[elem].seatType": seatType
-        }
+          "seats.$[elem].seatType": seatType,
+        },
       },
 
       {
         arrayFilters: [
           {
             "elem.seatNo": {
-              $in: seats
-            }
-          }
+              $in: seats,
+            },
+          },
         ],
 
-        new: true
-      }
+        new: true,
+      },
     );
 
     // ==========================================
@@ -1338,7 +1198,7 @@ export const updateSeatType = async (req, res) => {
     if (!updatedTrip) {
       return res.status(404).json({
         success: false,
-        message: "Bus trip not found"
+        message: "Bus trip not found",
       });
     }
 
@@ -1349,17 +1209,15 @@ export const updateSeatType = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Seat types updated successfully",
-      data: updatedTrip
+      data: updatedTrip,
     });
-
   } catch (error) {
-
     console.error("Update Multiple Seat Types Error:", error);
 
     return res.status(500).json({
       success: false,
       message: "Internal server error",
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -1378,25 +1236,25 @@ export const getUpcomingTrips = async (req, res) => {
     // Search Cities
     if (search) {
       const cities = await City.find({
-        city_name: { $regex: search, $options: "i" }
+        city_name: { $regex: search, $options: "i" },
       }).select("_id");
 
-      cityIds = cities.map(city => city._id);
+      cityIds = cities.map((city) => city._id);
     }
 
     // Search Bus Names
     if (busName) {
       const buses = await Bus.find({
-        busName: { $regex: busName, $options: "i" }
+        busName: { $regex: busName, $options: "i" },
       }).select("_id");
 
-      busIds = buses.map(bus => bus._id);
+      busIds = buses.map((bus) => bus._id);
     }
 
     const query = {
       createdBy: userId,
       departureDateTime: { $gte: today },
-      status: "active"
+      status: "active",
     };
 
     const filters = [];
@@ -1404,14 +1262,12 @@ export const getUpcomingTrips = async (req, res) => {
     if (search) {
       filters.push(
         { startPoint: { $in: cityIds } },
-        { endPoint: { $in: cityIds } }
+        { endPoint: { $in: cityIds } },
       );
     }
 
     if (busName) {
-      filters.push(
-        { bus: { $in: busIds } }
-      );
+      filters.push({ bus: { $in: busIds } });
     }
 
     if (filters.length > 0) {
@@ -1423,20 +1279,19 @@ export const getUpcomingTrips = async (req, res) => {
       .populate("startPoint", "city_name")
       .populate("endPoint", "city_name")
       .select(
-        "bus startPoint endPoint departureDate departureDateTime arrivalDate"
+        "bus startPoint endPoint departureDate departureDateTime arrivalDate",
       )
       .sort({ departureDateTime: 1 });
 
     return res.status(200).json({
       success: true,
       count: trips.length,
-      data: trips
+      data: trips,
     });
-
   } catch (error) {
     return res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
 };
@@ -1450,19 +1305,19 @@ export const changeBusInTrip = async (req, res) => {
     if (!busId) {
       return res.status(400).json({
         success: false,
-        message: "Bus ID is required"
+        message: "Bus ID is required",
       });
     }
 
     const trip = await BusTrip.findOne({
       _id: tripId,
-      createdBy: userId
+      createdBy: userId,
     });
 
     if (!trip) {
       return res.status(404).json({
         success: false,
-        message: "Bus trip not found"
+        message: "Bus trip not found",
       });
     }
 
@@ -1471,7 +1326,7 @@ export const changeBusInTrip = async (req, res) => {
     if (!bus) {
       return res.status(404).json({
         success: false,
-        message: "Bus not found"
+        message: "Bus not found",
       });
     }
 
@@ -1482,12 +1337,12 @@ export const changeBusInTrip = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Bus changed successfully",
-      data: trip
+      data: trip,
     });
   } catch (error) {
     return res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
 };

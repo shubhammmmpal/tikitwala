@@ -4,6 +4,7 @@ import Volunteer from "../models/volunteer.model.js"
 
 export const protect = async (req, res, next) => {
   try {
+    
     const authHeader = req.headers.authorization;
 
     if (

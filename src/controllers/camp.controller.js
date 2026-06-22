@@ -67,6 +67,18 @@ export const createCamp = async (req, res) => {
   try {
     const userId = req.body.id;
 
+     // Check if agent already created a camp
+    const existingCamp = await Camp.findOne({
+      createdBy: userId,
+    });
+
+    if (existingCamp) {
+      return res.status(400).json({
+        success: false,
+        message: "You have already created a camp. Multiple camps are not allowed.",
+      });
+    }
+
     const {
       campName,
       campType,

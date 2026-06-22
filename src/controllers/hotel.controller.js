@@ -185,6 +185,7 @@ export const getHotelRooms = async (req, res) => {
 
 export const createHotel = async (req, res) => {
   try {
+    console.log(req)
 
     const adminId = req.user.id
 
