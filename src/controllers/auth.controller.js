@@ -459,7 +459,9 @@ export const updateUser = async (req, res) => {
 
 export const getProfile = async (req, res) => {
   try {
+    console.log("kjdvkfkvb")
     const userId = req.user.id;
+    console.log(userId)
 
     // Check User collection
     let profile = await User.findById(userId).select(

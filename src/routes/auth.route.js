@@ -25,7 +25,7 @@ const router = express.Router();
 // router.post('/google', googleAuth);
   router.get("/admins", getAllAdmins);
 
-
+router.get("/profile", protect, getProfile);
 router.get("/:id", getUserById);
 
 router.patch("/:id/status", changeUserStatus);
@@ -43,7 +43,6 @@ router.put(
   upload("users").single("profileImage"),
   updateUser,
 );
-router.get("/profile", protect, getProfile);
 
 router.get("/test-socket", (req, res) => {
   const io = getIO();

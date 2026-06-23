@@ -61,13 +61,72 @@ export const createTravelTrip = async (req, res) => {
 // =========================
 export const getAllTravelTrips = async (req, res) => {
   try {
-    const trips = await TravelTrip.find()
-      .populate("cityIds")
-      .populate("createdBy", "name email")
-      .sort({ createdAt: -1 });
+    const {
+      search,
+      cityId,
+      status,
+      startDate,
+      endDate,
+      page = 1,
+      limit = 10,
+    } = req.query;
+
+    const filter = {};
+
+    // Search by trip name
+    if (search) {
+      filter.tripName = {
+        $regex: search,
+        $options: "i",
+      };
+    }
+
+    // Filter by city
+    if (cityId) {
+      filter.cityIds = cityId;
+      // or:
+      // filter.cityIds = { $in: [cityId] };
+    }
+
+    // Filter by status
+    if (status) {
+      filter.status = status;
+    }
+
+    // Date range filter
+    if (startDate || endDate) {
+      filter.createdAt = {};
+
+      if (startDate) {
+        filter.createdAt.$gte = new Date(startDate);
+      }
+
+      if (endDate) {
+        const end = new Date(endDate);
+        end.setHours(23, 59, 59, 999);
+
+        filter.createdAt.$lte = end;
+      }
+    }
+
+    const skip = (Number(page) - 1) * Number(limit);
+
+    const [trips, total] = await Promise.all([
+      TravelTrip.find(filter)
+        .populate("cityIds")
+        .populate("createdBy", "name email")
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(Number(limit)),
+
+      TravelTrip.countDocuments(filter),
+    ]);
 
     res.status(200).json({
       success: true,
+      total,
+      currentPage: Number(page),
+      totalPages: Math.ceil(total / limit),
       count: trips.length,
       data: trips,
     });

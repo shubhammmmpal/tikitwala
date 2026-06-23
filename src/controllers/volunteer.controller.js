@@ -193,6 +193,7 @@ export const updateVolunteer = async (req, res) => {
 
 export const getVolunteersByCamp = async (req, res) => {
   try {
+    
     const { campId } = req.params;
 
     const volunteers = await Volunteer.find({ campId })
@@ -216,6 +217,7 @@ export const getVolunteersByCamp = async (req, res) => {
 export const getVolunteerById = async (req, res) => {
   try {
     const { id } = req.params;
+    
 
     const volunteer = await Volunteer.findById(id)
       .populate("campId")

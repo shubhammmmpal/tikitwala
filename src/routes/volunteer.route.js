@@ -20,7 +20,7 @@ router.post(
   createVolunteer,
 );
 router.get("/:id", getVolunteerById);
-router.get("/:campId", getVolunteersByCamp);
+router.get("/camp/:campId", getVolunteersByCamp);
 
 router.put("/:id", upload("volunteers").single("image"), updateVolunteer);
 

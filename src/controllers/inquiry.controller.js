@@ -70,21 +70,92 @@ export const createInquiry = async (req, res) => {
 // GET ALL INQUIRIES
 export const getAllInquiryList = async (req, res) => {
   try {
-    const inquiries = await Inquiry.find()
-        .populate({
+    const {
+      search,
+      startDate,
+      endDate,
+      page = 1,
+      limit = 10,
+    } = req.query;
+
+    const filter = {};
+
+    // Date Filter
+    if (startDate || endDate) {
+      filter.createdAt = {};
+
+      if (startDate) {
+        filter.createdAt.$gte = new Date(startDate);
+      }
+
+      if (endDate) {
+        const end = new Date(endDate);
+        end.setHours(23, 59, 59, 999);
+
+        filter.createdAt.$lte = end;
+      }
+    }
+
+    const skip =
+      (Number(page) - 1) * Number(limit);
+
+    let inquiries = await Inquiry.find(filter)
+      .populate({
         path: "travelTripId",
+        select: "tripName cityIds",
         populate: {
-        path: "cityIds",
-        model: "City",
-        select: "city_name"
-        }
-    })
-      .populate("userid")
-      .sort({ createdAt: -1 });
+          path: "cityIds",
+          model: "City",
+          select: "city_name",
+        },
+      })
+      .populate(
+        "userid",
+        "name email phone"
+      )
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(Number(limit));
+
+    // Search Filter
+    if (search) {
+      const searchValue =
+        search.toLowerCase();
+
+      inquiries = inquiries.filter(
+        (item) =>
+          item.name
+            ?.toLowerCase()
+            .includes(searchValue) ||
+          item.phone
+            ?.toString()
+            .includes(searchValue) ||
+          item.message
+            ?.toLowerCase()
+            .includes(searchValue) ||
+          item.userid?.name
+            ?.toLowerCase()
+            .includes(searchValue) ||
+          item.userid?.email
+            ?.toLowerCase()
+            .includes(searchValue) ||
+          item.travelTripId?.tripName
+            ?.toLowerCase()
+            .includes(searchValue)
+      );
+    }
+
+    const total =
+      await Inquiry.countDocuments(filter);
 
     return res.status(200).json({
       success: true,
-      total: inquiries.length,
+      total,
+      currentPage: Number(page),
+      totalPages: Math.ceil(
+        total / limit
+      ),
+      count: inquiries.length,
       data: inquiries,
     });
   } catch (error) {

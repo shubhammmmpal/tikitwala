@@ -18,6 +18,11 @@ const travelTripSchema = new mongoose.Schema({
   budget: String, // e.g., "Budget", "Mid-range", "Luxury"
   madeFor: [String], // e.g., "Couples", "Families", "Solo Travelers"
   inclusions: [String],
+  status:{
+    type: String,
+    enum: ["active", "inactive"],
+    default: "active"
+  },
 
   ratings: {
     average: { 
