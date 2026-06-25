@@ -80,46 +80,87 @@ export const createBus = async (req, res) => {
 // Get All Buses (with pagination and filters)
 export const getBusList = async (req, res) => {
   try {
-    console.log(req.user);
     const userId = req.user.id;
+    const userRole = req.user.role;
 
-    const { page = 1, limit = 10, search = "", status, busType } = req.query;
+    console.log(req.user.id, req.user.role);
 
-    const query = {
-      createdBy: userId,
-    };
+    const { page = 1, limit = 10, search = "", status, busType,createdBy,startDate,endDate } = req.query;
 
-    // Search by Bus Name or Bus Number
-    if (search?.trim()) {
-      query.$or = [
-        {
-          busName: {
-            $regex: search.trim(),
-            $options: "i",
-          },
-        },
-        {
-          busNo: {
-            $regex: search.trim(),
-            $options: "i",
-          },
-        },
-      ];
+    const countQuery = {};
+
+    // Generic agent can see only own buses
+    if (userRole !== "admin") {
+      countQuery.createdBy = userId;
     }
 
-    // Status filter
-    if (status) {
-      query.status = status;
-    }
+    const [totalBusCount, activeBusCount, inactiveBusCount] = await Promise.all(
+      [
+        Bus.countDocuments(countQuery),
+        Bus.countDocuments({
+          ...countQuery,
+          status: "ACTIVE",
+        }),
+        Bus.countDocuments({
+          ...countQuery,
+          status: "INACTIVE",
+        }),
+      ],
+    );
 
-    // Bus Type filter
-    if (busType) {
-      query.busType = busType;
-    }
+    let query = {};
+
+if (userRole !== "admin") {
+  query.createdBy = userId;
+}
+
+if (userRole === "admin" && createdBy) {
+  query.createdBy = createdBy;
+}
+
+if (search?.trim()) {
+  query.$or = [
+    {
+      busName: {
+        $regex: search.trim(),
+        $options: "i",
+      },
+    },
+    {
+      busNo: {
+        $regex: search.trim(),
+        $options: "i",
+      },
+    },
+  ];
+}
+
+if (status) {
+  query.status = status;
+}
+
+if (busType) {
+  query.busType = busType;
+}
+
+if (startDate || endDate) {
+  query.createdAt = {};
+
+  if (startDate) {
+    query.createdAt.$gte = new Date(startDate);
+  }
+
+  if (endDate) {
+    const end = new Date(endDate);
+    end.setHours(23, 59, 59, 999);
+
+    query.createdAt.$lte = end;
+  }
+}
 
     const buses = await Bus.find(query)
       .populate("travelAgency")
-      .populate("createdBy", "name email")
+      .populate("createdBy", "name email role")
       .sort({ createdAt: -1 })
       .skip((Number(page) - 1) * Number(limit))
       .limit(Number(limit));
@@ -130,7 +171,6 @@ export const getBusList = async (req, res) => {
 
     const busesWithTripInfo = await Promise.all(
       buses.map(async (bus) => {
-        // Find nearest upcoming trip
         let trip = await BusTrip.findOne({
           bus: bus._id,
           departureDateTime: { $gte: now },
@@ -139,7 +179,6 @@ export const getBusList = async (req, res) => {
           .populate("endPoint", "city_name")
           .sort({ departureDateTime: 1 });
 
-        // If no upcoming trip found
         if (!trip) {
           trip = await BusTrip.findOne({
             bus: bus._id,
@@ -151,7 +190,6 @@ export const getBusList = async (req, res) => {
 
         return {
           ...bus.toObject(),
-
           routeInfo: trip
             ? {
                 startPoint: trip.startPoint,
@@ -166,6 +204,11 @@ export const getBusList = async (req, res) => {
 
     return res.status(200).json({
       success: true,
+      counts: {
+        total: totalBusCount,
+        active: activeBusCount,
+        inactive: inactiveBusCount,
+      },
       total,
       currentPage: Number(page),
       totalPages: Math.ceil(total / Number(limit)),

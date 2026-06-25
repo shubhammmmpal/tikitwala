@@ -7,17 +7,21 @@ export const createInquiry = async (req, res) => {
       travelTripId,
       userid,
       travellers,
+      message,
       datefrom,
       dateto,
       name,
       phone,
     } = req.body;
 
+    console.log(req.body)
+
     // Validation
     if (
       !travelTripId ||
       !userid ||
       !travellers ||
+      
       !datefrom ||
       !dateto ||
       !name ||
@@ -45,6 +49,7 @@ export const createInquiry = async (req, res) => {
       travelTripId,
       userid,
       travellers,
+      message,
       datefrom,
       dateto,
       name,

@@ -362,6 +362,7 @@ export const getBusTrips = async (req, res) => {
     const {
       page = 1,
       limit = 10,
+      search = "",
       busId,
       departureDate,
       status,
@@ -369,24 +370,57 @@ export const getBusTrips = async (req, res) => {
       endPoint,
     } = req.query;
 
-    // return
     const pageNumber = Number(page) || 1;
     const limitNumber = Number(limit) || 10;
 
     const query = {};
 
     // Role-based filtering
-    if (req.user.role !== "Admin") {
+    if (req.user.role !== "admin") {
       query.createdBy = req.user.id;
     }
 
-    // Other filters
     if (busId) query.bus = busId;
     if (departureDate) query.departureDate = departureDate;
     if (status) query.status = status;
     if (startPoint) query.startPoint = startPoint;
     if (endPoint) query.endPoint = endPoint;
+    if (search) {
+      const matchingBuses = await Bus.find({
+        $or: [
+          {
+            busName: {
+              $regex: search,
+              $options: "i",
+            },
+          },
+          {
+            busNo: {
+              $regex: search,
+              $options: "i",
+            },
+          },
+        ],
+      }).select("_id");
 
+      query.$or = [
+        {
+          tripCode: {
+            $regex: search,
+            $options: "i",
+          },
+        },
+        {
+          bus: {
+            $in: matchingBuses.map((b) => b._id),
+          },
+        },
+      ];
+    }
+
+    // ==========================
+    // TRIPS LIST
+    // ==========================
     const trips = await BusTrip.find(query)
       .populate({
         path: "bus",
@@ -396,36 +430,71 @@ export const getBusTrips = async (req, res) => {
           select: "name",
         },
       })
-      .populate({
-        path: "startPoint",
-        model: "City",
-        select: "city_name city_id state_id",
-      })
-      .populate({
-        path: "endPoint",
-        model: "City",
-        select: "city_name city_id state_id",
-      })
-      .populate({
-        path: "stopPoints.city",
-        model: "City",
-        select: "city_name city_id state_id",
-      })
-      .populate({
-        path: "pickupPoints.city",
-        model: "City",
-        select: "city_name city_id state_id",
-      })
-      .populate({
-        path: "dropPoints.city",
-        model: "City",
-        select: "city_name city_id state_id",
-      })
+      .populate("startPoint", "city_name city_id state_id")
+      .populate("endPoint", "city_name city_id state_id")
+      .populate("stopPoints.city", "city_name city_id state_id")
+      .populate("pickupPoints.city", "city_name city_id state_id")
+      .populate("dropPoints.city", "city_name city_id state_id")
       .sort({ departureDateTime: 1 })
       .skip((pageNumber - 1) * limitNumber)
       .limit(limitNumber);
 
     const total = await BusTrip.countDocuments(query);
+
+    // ==========================
+    // DASHBOARD COUNTS
+    // ==========================
+
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+
+    const todayEnd = new Date();
+    todayEnd.setHours(23, 59, 59, 999);
+
+    const [
+      activeTrips,
+      cancelledTrips,
+      completedTrips,
+      delayedTrips,
+      todayTrips,
+      upcomingTrips,
+    ] = await Promise.all([
+      BusTrip.countDocuments({
+        ...query,
+        status: "active",
+      }),
+
+      BusTrip.countDocuments({
+        ...query,
+        status: "cancelled",
+      }),
+
+      BusTrip.countDocuments({
+        ...query,
+        status: "completed",
+      }),
+
+      BusTrip.countDocuments({
+        ...query,
+        status: "delayed",
+      }),
+
+      BusTrip.countDocuments({
+        ...query,
+        departureDateTime: {
+          $gte: todayStart,
+          $lte: todayEnd,
+        },
+      }),
+
+      BusTrip.countDocuments({
+        ...query,
+        departureDateTime: {
+          $gt: todayEnd,
+        },
+      }),
+    ]);
+
     const tripsWithSeatStats = trips.map((trip) => {
       const totalSeats = trip.seats.length;
 
@@ -443,6 +512,17 @@ export const getBusTrips = async (req, res) => {
 
     return res.status(200).json({
       success: true,
+
+      counts: {
+        totalTrips: total,
+        activeTrips,
+        cancelledTrips,
+        completedTrips,
+        delayedTrips,
+        todayTrips,
+        upcomingTrips,
+      },
+
       total,
       totalPages: Math.ceil(total / limitNumber),
       currentPage: pageNumber,

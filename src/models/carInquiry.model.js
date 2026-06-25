@@ -13,6 +13,7 @@ const carInquirySchema = new mongoose.Schema({
     },
     datefrom: { type: Date, required: true },
     dateto: { type: Date, required: true },
+    
 }, {
   timestamps: true
 });

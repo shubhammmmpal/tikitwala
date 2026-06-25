@@ -11,7 +11,7 @@ const inquirySchema = new mongoose.Schema({
     ref: "User",
     required: true
   },
-  travellers:{String},
+  travellers:{type:String},
   message: { type: String },
   datefrom: { type: Date, required: true },
   dateto: { type: Date, required: true },

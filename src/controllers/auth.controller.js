@@ -477,7 +477,7 @@ export const getProfile = async (req, res) => {
         .populate("campId", "name location")
         .populate("createdBy", "name email phone");
 
-      profileType = "volunteer";
+      profileType = "Volunteer";
     }
 
     if (!profile) {
