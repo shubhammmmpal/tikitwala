@@ -1,5 +1,5 @@
 import express from "express";
-import { getHotelAgentDashboard } from "../controllers/hotelAgentDashboard.controller.js";
+import { getHotelAgentDashboard } from "../controllers/hotelDashboard.controller.js";
 import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();

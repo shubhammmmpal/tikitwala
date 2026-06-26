@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Camp from "../models/camp.model.js";
 import User from "../models/User.model.js";
 import fs from "fs";
@@ -156,19 +157,43 @@ export const getCampsByUserId = async (req, res) => {
   try {
     const { userId } = req.params;
 
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid ID",
+      });
+    }
+
+    // Check if the ID belongs to a volunteer
+    const volunteer = await Volunteer.findById(userId);
+
+    if (volunteer) {
+      const camp = await Camp.findById(volunteer.campId).populate(
+        "createdBy",
+        "name email"
+      );
+
+      return res.status(200).json({
+        success: true,
+        count: camp ? 1 : 0,
+        data: camp ? [camp] : [],
+      });
+    }
+
+    // Otherwise treat it as a user id
     const camps = await Camp.find({
-      createdBy: userId
+      createdBy: userId,
     }).populate("createdBy", "name email");
 
     return res.status(200).json({
       success: true,
       count: camps.length,
-      data: camps
+      data: camps,
     });
   } catch (error) {
     return res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
 };

@@ -36,6 +36,7 @@ import volunteerRoutes from "./routes/volunteer.route.js"
 import passengerRoutes from "./routes/passenger.route.js";
 import BusDashboard from "./routes/busDashboard.route.js"
 import mapRouteRoutes from "./routes/mapRoute.route.js"
+import hotelDashboardRoutes from "./routes/hotelDashboard.route.js"
 
 // Load environment variables
 dotenv.config();
@@ -85,6 +86,7 @@ app.use("/api/volunteer", volunteerRoutes)
 app.use("/api/passengers", passengerRoutes);
 app.use("/api/bus-dashboard", BusDashboard);
 app.use("/api/map-routes", mapRouteRoutes);
+app.use("/api/hotel-dashboard", hotelDashboardRoutes);
 // app.use('/api/agent', agentRoutes);
 // app.use('/api/wishlist', wishlistRoutes);
 // app.use('/api/notifications', notificationRoutes);
