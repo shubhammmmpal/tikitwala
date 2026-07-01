@@ -3,7 +3,9 @@ import {
   createHotel,
   updateHotel,
   deleteHotel,
-  updateHotelStatus,getMyHotelInventories
+  updateHotelStatus,getMyHotelInventories,
+  getAllHotelsAdmin,
+  getHotelDetailsAdmin
 } from '../controllers/hotel.controller.js';
 // import { protect, restrictTo } from '../middleware/authMiddleware.js';
 import upload from '../middleware/uploadMiddleware.js';
@@ -29,5 +31,7 @@ router.put(
 router.delete('/:id', deleteHotel);
 router.patch('/:id/status', updateHotelStatus);
 router.get("/my-inventories", protect, getMyHotelInventories);
+router.get('/hotels', getAllHotelsAdmin);
+router.get('/hotels/:hotelId', getHotelDetailsAdmin);
 
 export default router;

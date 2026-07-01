@@ -52,26 +52,80 @@ export const createCarRent = async (req, res) => {
 
 // ============================
 // Get All Cars
-// ============================
 export const getAllCarList = async (req, res) => {
   try {
+    const {
+      page = 1,
+      limit = 10,
+      search = "",
+      status,
+      availability,
+      startDate,
+      endDate,
+    } = req.query;
 
-    const cars = await CarRent.find().sort({
-      createdAt: -1
-    });
+    const filter = {};
+
+    // Search
+    if (search) {
+      filter.$or = [
+        { carModel: { $regex: search, $options: "i" } },
+        { location: { $regex: search, $options: "i" } },
+        { fuelType: { $regex: search, $options: "i" } },
+        { transmission: { $regex: search, $options: "i" } },
+      ];
+    }
+
+    // Status Filter
+    if (status) {
+      filter.status = status;
+    }
+
+    // Availability Filter
+    if (availability !== undefined && availability !== "") {
+      filter.availability = availability === "true";
+    }
+
+    // Created Date Filter
+    if (startDate || endDate) {
+      filter.createdAt = {};
+
+      if (startDate) {
+        filter.createdAt.$gte = new Date(startDate);
+      }
+
+      if (endDate) {
+        const end = new Date(endDate);
+        end.setHours(23, 59, 59, 999); // Include the full end date
+        filter.createdAt.$lte = end;
+      }
+    }
+
+    const skip = (Number(page) - 1) * Number(limit);
+
+    const [cars, total] = await Promise.all([
+      CarRent.find(filter)
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(Number(limit)),
+      CarRent.countDocuments(filter),
+    ]);
 
     return res.status(200).json({
       success: true,
       data: cars,
+      pagination: {
+        page: Number(page),
+        limit: Number(limit),
+        total,
+        totalPages: Math.ceil(total / Number(limit)),
+      },
     });
-
   } catch (error) {
-
     return res.status(500).json({
       success: false,
       message: error.message,
     });
-
   }
 };
 

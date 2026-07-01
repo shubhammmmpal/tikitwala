@@ -98,6 +98,9 @@ const busSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+  seat_type:{
+    type: String,
+  },
 
   // 🔥 Better Seat Structure
   seatStructure: {

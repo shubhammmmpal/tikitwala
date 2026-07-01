@@ -239,6 +239,9 @@ const busTripSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  seat_type:{
+    type: String,
+  },
 
   creationType:{
     type: String,

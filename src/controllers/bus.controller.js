@@ -169,38 +169,58 @@ if (startDate || endDate) {
 
     const now = new Date();
 
-    const busesWithTripInfo = await Promise.all(
-      buses.map(async (bus) => {
-        let trip = await BusTrip.findOne({
-          bus: bus._id,
-          departureDateTime: { $gte: now },
-        })
-          .populate("startPoint", "city_name")
-          .populate("endPoint", "city_name")
-          .sort({ departureDateTime: 1 });
+const busesWithTripInfo = await Promise.all(
+  buses.map(async (bus) => {
+    let trip = await BusTrip.findOne({
+      bus: bus._id,
+      departureDateTime: { $gte: now },
+    })
+      .populate("startPoint", "city_name")
+      .populate("endPoint", "city_name")
+      .sort({ departureDateTime: 1 });
 
-        if (!trip) {
-          trip = await BusTrip.findOne({
-            bus: bus._id,
-          })
-            .populate("startPoint", "city_name")
-            .populate("endPoint", "city_name")
-            .sort({ departureDateTime: -1 });
-        }
+    if (!trip) {
+      trip = await BusTrip.findOne({
+        bus: bus._id,
+      })
+        .populate("startPoint", "city_name")
+        .populate("endPoint", "city_name")
+        .sort({ departureDateTime: -1 });
+    }
 
-        return {
-          ...bus.toObject(),
-          routeInfo: trip
-            ? {
-                startPoint: trip.startPoint,
-                endPoint: trip.endPoint,
-                departureDateTime: trip.departureDateTime,
-                tripId: trip._id,
-              }
-            : null,
-        };
-      }),
-    );
+    // Seat Counts
+    const totalSeats = trip?.seats?.length || 0;
+
+    const bookedSeats =
+      trip?.seats?.filter((seat) => seat.status === "booked").length || 0;
+
+    const availableSeats =
+      trip?.seats?.filter((seat) => seat.status === "available").length || 0;
+
+    const blockedSeats =
+      trip?.seats?.filter((seat) => seat.status === "blocked").length || 0;
+
+    return {
+      ...bus.toObject(),
+
+      seatInfo: {
+        totalSeats,
+        bookedSeats,
+        availableSeats,
+        blockedSeats,
+      },
+
+      routeInfo: trip
+        ? {
+            startPoint: trip.startPoint,
+            endPoint: trip.endPoint,
+            departureDateTime: trip.departureDateTime,
+            tripId: trip._id,
+          }
+        : null,
+    };
+  })
+);
 
     return res.status(200).json({
       success: true,
@@ -505,7 +525,7 @@ export const changeBusStatus = async (req, res) => {
 export const generateBusSeats = async (req, res) => {
   try {
     const { busId } = req.params;
-    const { seat_layout } = req.body;
+    const { seat_layout,seat_type } = req.body;
 
     const bus = await Bus.findById(busId);
 
@@ -526,6 +546,8 @@ export const generateBusSeats = async (req, res) => {
         message: "seat_layout is required",
       });
     }
+
+    bus.seat_type = seat_type
 
     const seats = seat_layout.map((seat) => ({
       seatName: seat.seatName,

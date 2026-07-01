@@ -2,7 +2,8 @@ import { Router } from "express";
 import { addCountry,getAllCountries,getStatesByCountryId,getCitiesByStateId,getCityList,  addPickupPoint,
   addDropPoint,
   getAllPickupPointByCityId,
-  getAllDropPointByCityId } from "../controllers/location.controller.js";
+  getAllDropPointByCityId,
+getStates } from "../controllers/location.controller.js";
 
 const router = Router();
 
@@ -16,6 +17,8 @@ router.get("/cities/state/:state_id", getCitiesByStateId);
 
 router.get("/city-list", getCityList);
 router.post("/add-pickup-point", addPickupPoint);
+router.get("/state", getStates);
+
 
 router.post("/add-drop-point", addDropPoint);
 

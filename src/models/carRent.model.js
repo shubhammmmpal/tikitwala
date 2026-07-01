@@ -10,6 +10,11 @@ const carRentSchema = new mongoose.Schema({
   availability: { type: Boolean, default: true },
   location: { type: String, required: true },
   features: [String], // e.g. ["GPS", "Air Conditioning"]
+  status: {
+    type: String,
+    enum: ["ACTIVE","INACTIVE","MAINTANACE"],
+    default : "ACTIVE"
+  },
   images: [],
 }, {
   timestamps: true

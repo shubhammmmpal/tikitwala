@@ -223,6 +223,7 @@ export const createBusTrip = async (req, res) => {
         startPoint,
 
         endPoint,
+        seat_type: bus.seat_type,
 
         stopPoints: formattedStopPoints,
 

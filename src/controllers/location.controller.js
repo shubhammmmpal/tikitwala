@@ -161,69 +161,113 @@ export const getCitiesByStateId = async (req, res) => {
 
 // controllers/city.controller.js
 
+export const getStates = async (req, res) => {
+  try {
+    const { stateId, search, page, limit } = req.query;
 
+    const filter = {};
+
+    // Get state by state_id
+    if (stateId) {
+      filter.state_id = Number(stateId);
+    }
+
+    // Search by state name
+    if (search) {
+      filter.state_name = {
+        $regex: search,
+        $options: "i",
+      };
+    }
+
+    const skip = (page - 1) * limit;
+
+    const states = await State.find(filter)
+      .sort({ state_name: 1 })
+      .skip(skip)
+      .limit(Number(limit));
+
+    const total = await State.countDocuments(filter);
+
+    return res.status(200).json({
+      success: true,
+      total,
+      page: Number(page),
+      totalPages: Math.ceil(total / limit),
+      data: states,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 
 export const getCityList = async (req, res) => {
   try {
-    const { search = "" } = req.query;
+    const { stateId, search = "" } = req.query;
 
     const matchStage = {};
+
+    // Filter by state_id
+    if (stateId) {
+      matchStage.state_id = Number(stateId);
+    }
 
     // Search by city name
     if (search) {
       matchStage.city_name = {
         $regex: search,
-        $options: "i"
+        $options: "i",
       };
     }
 
     const cities = await City.aggregate([
       {
-        $match: matchStage
+        $match: matchStage,
       },
       {
         $lookup: {
           from: "states",
           localField: "state_id",
           foreignField: "state_id",
-          as: "state"
-        }
+          as: "state",
+        },
       },
       {
         $unwind: {
           path: "$state",
-          preserveNullAndEmptyArrays: true
-        }
+          preserveNullAndEmptyArrays: true,
+        },
       },
       {
         $project: {
           _id: 1,
-        //   city_id: 1,
+          city_id: 1,
           city_name: 1,
-
-        //   state_object_id: "$state._id",
-        //   state_id: "$state.state_id",
-          state_name: "$state.state_name"
-        }
+          state_id: 1,
+          state_name: "$state.state_name",
+        },
       },
       {
         $sort: {
-          city_name: 1
-        }
-      }
+          city_name: 1,
+        },
+      },
     ]);
 
     return res.status(200).json({
       success: true,
       count: cities.length,
-      data: cities
+      data: cities,
     });
   } catch (error) {
-    console.log("Get City List Error:", error);
+    console.error("Get City List Error:", error);
 
     return res.status(500).json({
       success: false,
-      message: "Server Error"
+      message: "Server Error",
     });
   }
 };

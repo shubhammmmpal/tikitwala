@@ -4,7 +4,7 @@ import {
   nearbyHotels,
   getHotelById,
   getHotelRooms,
-  advancedHotelSearch
+  advancedHotelSearch,
 } from '../controllers/hotel.controller.js';
 
 const router = express.Router();
@@ -15,6 +15,7 @@ router.post('/search', advancedHotelSearch);
 router.get('/nearby', nearbyHotels);
 router.get('/:id', getHotelById);
 router.get('/:id/rooms', getHotelRooms);
+
 
 
 export default router;

@@ -2,6 +2,7 @@ import Hotel from '../models/hotel.model.js';
 import Room from '../models/room.model.js';
 import RoomAvailability from '../models/RoomAvailability.model.js';
 import InventoryHotel from '../models/inventoryHotel.model.js '
+import mongoose from 'mongoose';
 
 // ====================== PUBLIC APIS ======================
 
@@ -317,7 +318,6 @@ export const updateHotel = async (req, res) => {
   }
 };
 
-
 export const deleteHotel = async (req, res) => {
    
   try {
@@ -530,7 +530,6 @@ if (availabilities.length === 0) {
   }
 };
 
-
 export const getMyHotelInventories = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -558,4 +557,335 @@ export const getMyHotelInventories = async (req, res) => {
   }
 };
 
+export const getAllHotelsAdmin = async (req, res) => {
+  try {
+    const {
+      page = 1,
+      limit = 10,
+      search,
+      status,
+      startDate,
+      endDate,
+    } = req.query;
 
+    const currentPage = Number(page);
+    const pageSize = Number(limit);
+    const skip = (currentPage - 1) * pageSize;
+
+    // ----------------------------
+    // Build Filter
+    // ----------------------------
+
+    const filter = {};
+
+    // Search
+    if (search) {
+      filter.$or = [
+        {
+          name: {
+            $regex: search,
+            $options: "i",
+          },
+        },
+        {
+          "address.street": {
+            $regex: search,
+            $options: "i",
+          },
+        },
+      ];
+    }
+
+    // Status
+    if (status && status !== "ALL") {
+      filter.status = status;
+    }
+
+    // Date Filter
+    if (startDate || endDate) {
+      filter.createdAt = {};
+
+      if (startDate) {
+        filter.createdAt.$gte = new Date(startDate);
+      }
+
+      if (endDate) {
+        const end = new Date(endDate);
+        end.setHours(23, 59, 59, 999);
+
+        filter.createdAt.$lte = end;
+      }
+    }
+
+    // Today's count
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const [
+      totalHotels,
+      activeHotels,
+      inactiveHotels,
+      todayHotels,
+      hotelResult,
+    ] = await Promise.all([
+      Hotel.countDocuments(),
+
+      Hotel.countDocuments({
+        status: "ACTIVE",
+      }),
+
+      Hotel.countDocuments({
+        status: "INACTIVE",
+      }),
+
+      Hotel.countDocuments({
+        createdAt: {
+          $gte: today,
+        },
+      }),
+
+      Hotel.aggregate([
+        {
+          $match: filter,
+        },
+
+        {
+          $lookup: {
+            from: "rooms",
+            localField: "_id",
+            foreignField: "hotel",
+            as: "rooms",
+          },
+        },
+
+        {
+          $lookup: {
+            from: "inventoryhotels",
+            localField: "_id",
+            foreignField: "hotelId",
+            as: "inventory",
+          },
+        },
+        {
+  $lookup: {
+    from: "cities",
+    localField: "address.city",
+    foreignField: "_id",
+    as: "city"
+  }
+},
+{
+  $lookup: {
+    from: "states",
+    localField: "address.state",
+    foreignField: "_id",
+    as: "state"
+  }
+},
+{
+  $addFields: {
+    "address.city": { $arrayElemAt: ["$city", 0] },
+    "address.state": { $arrayElemAt: ["$state", 0] }
+  }
+},
+
+        {
+          $project: {
+            name: 1,
+            description: 1,
+            status: 1,
+            address: 1,
+            ratings: 1,
+            createdAt: 1,
+
+            roomCount: {
+              $size: "$rooms",
+            },
+
+            inventory: {
+              $cond: [
+                {
+                  $gt: [
+                    {
+                      $size: "$inventory",
+                    },
+                    0,
+                  ],
+                },
+                {
+                  $map: {
+                    input: {
+                      $arrayElemAt: [
+                        "$inventory.inventory",
+                        0,
+                      ],
+                    },
+                    as: "item",
+                    in: {
+                      roomType: "$$item.roomType",
+                      totalCount: "$$item.totalCount",
+                      bookedCount: "$$item.bookedCount",
+                      available: {
+                        $subtract: [
+                          "$$item.totalCount",
+                          "$$item.bookedCount",
+                        ],
+                      },
+                      basePrice: "$$item.basePrice",
+                      dealPrice: "$$item.dealPrice",
+                    },
+                  },
+                },
+                [],
+              ],
+            },
+          },
+        },
+
+        {
+          $sort: {
+            createdAt: -1,
+          },
+        },
+
+        {
+          $facet: {
+            data: [
+              {
+                $skip: skip,
+              },
+              {
+                $limit: pageSize,
+              },
+            ],
+
+            total: [
+              {
+                $count: "count",
+              },
+            ],
+          },
+        },
+      ]),
+    ]);
+
+    const hotels = hotelResult[0].data;
+    const totalFiltered = hotelResult[0].total[0]?.count || 0;
+
+    return res.status(200).json({
+      success: true,
+
+      counts: {
+        totalHotels,
+        activeHotels,
+        inactiveHotels,
+        todayHotels,
+      },
+
+      pagination: {
+        page: currentPage,
+        limit: pageSize,
+        totalRecords: totalFiltered,
+        totalPages: Math.ceil(totalFiltered / pageSize),
+      },
+
+      hotels,
+    });
+  } catch (err) {
+    console.log(err);
+
+    return res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
+export const getHotelDetailsAdmin = async (req, res) => {
+  try {
+    const { hotelId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(hotelId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid Hotel Id"
+      });
+    }
+
+    const hotel = await Hotel.aggregate([
+      {
+        $match: {
+          _id: new mongoose.Types.ObjectId(hotelId)
+        }
+      },
+
+      {
+        $lookup: {
+          from: "cities",
+          localField: "address.city",
+          foreignField: "_id",
+          as: "city"
+        }
+      },
+
+      {
+        $lookup: {
+          from: "states",
+          localField: "address.state",
+          foreignField: "_id",
+          as: "state"
+        }
+      },
+
+      {
+        $lookup: {
+          from: "rooms",
+          localField: "_id",
+          foreignField: "hotel",
+          as: "rooms"
+        }
+      },
+
+      {
+        $lookup: {
+          from: "inventoryhotels",
+          localField: "_id",
+          foreignField: "hotelId",
+          as: "inventory"
+        }
+      },
+
+      {
+        $addFields: {
+          city: {
+            $arrayElemAt: ["$city", 0]
+          },
+          state: {
+            $arrayElemAt: ["$state", 0]
+          },
+          inventory: {
+            $arrayElemAt: ["$inventory", 0]
+          }
+        }
+      }
+    ]);
+
+    if (!hotel.length) {
+      return res.status(404).json({
+        success: false,
+        message: "Hotel not found"
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: hotel[0]
+    });
+
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: err.message
+    });
+  }
+};
